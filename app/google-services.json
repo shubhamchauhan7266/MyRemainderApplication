@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "256305844760",
+    "firebase_url": "https://myremainderapplication-7115a.firebaseio.com",
+    "project_id": "myremainderapplication-7115a",
+    "storage_bucket": "myremainderapplication-7115a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256305844760:android:bf9132e50cbefbce",
+        "android_client_info": {
+          "package_name": "com.myremainderapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "256305844760-dhg2h52p2udtee56jbvd1tcquisebu9u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myremainderapplication",
+            "certificate_hash": "f21577b6e5d7759fee811f0e5cc414776e91facb"
+          }
+        },
+        {
+          "client_id": "256305844760-m93ma3jbtc52i567ti3f6hha4fntts5h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1glvlcv8lm0oUsCgqX9M8PT16qu6TXRg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "256305844760-m93ma3jbtc52i567ti3f6hha4fntts5h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

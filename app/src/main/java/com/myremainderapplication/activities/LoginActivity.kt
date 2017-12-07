@@ -16,6 +16,7 @@ class LoginActivity : AppCompatActivity() ,View.OnClickListener {
         setContentView(R.layout.activity_login)
 
         btSignUp.setOnClickListener(this)
+        btLogin.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {

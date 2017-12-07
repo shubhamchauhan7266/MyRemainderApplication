@@ -15,16 +15,17 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 class SignUpActivity : AppCompatActivity(), TextWatcher {
 
     private var isChecked: Boolean = false
-    private var currentId:String = ""
+    private var currentId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
         val database = FirebaseDatabase.getInstance().reference
-        database.addValueEventListener(object :ValueEventListener{
+
+        database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                currentId= dataSnapshot?.child(AppConstant.CURRENT_ID)?.value.toString()
+                currentId = dataSnapshot?.child(AppConstant.CURRENT_ID)?.value.toString()
             }
 
             override fun onCancelled(dataSnapshot: DatabaseError?) {
@@ -33,7 +34,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         })
 
         btSubmit.setOnClickListener {
-            if (checkValidation()){
+            if (checkValidation()) {
 
                 finish()
             }
@@ -72,19 +73,19 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
      * if user missed above field and type on next field then it will show error on above field.
      */
     private fun checkValidationBeforeTextChanged() {
-        if (etMobileNumber.hasFocus() || etEmail.hasFocus()||etPassword.hasFocus()||etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
+        if (etMobileNumber.hasFocus() || etEmail.hasFocus() || etPassword.hasFocus() || etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
             checkValidationForName()
         }
 
-        if (etEmail.hasFocus() || etZip.hasFocus() ||etPassword.hasFocus()||etPasswordConfirm.hasFocus()|| etZip.hasFocus()) {
+        if (etEmail.hasFocus() || etZip.hasFocus() || etPassword.hasFocus() || etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
             checkValidationForMobileNumber()
         }
 
-        if (etPassword.hasFocus()||etPasswordConfirm.hasFocus()||etZip.hasFocus()) {
+        if (etPassword.hasFocus() || etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
             checkValidatioForEmail()
         }
 
-        if (etPasswordConfirm.hasFocus()||etZip.hasFocus()) {
+        if (etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
             checkValidationForPassword()
         }
 
@@ -194,6 +195,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
             inputLayoutPasswordConfirm.setErrorEnabled(false)
         }
     }
+
     /*
      * This method will check validation for Zip.
      */

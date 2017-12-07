@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.myremainderapplication.R
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
@@ -20,8 +19,8 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val database = FirebaseDatabase.getInstance()
-        val myRef = database.getReference("message")
+        val database = FirebaseDatabase.getInstance().reference
+        val myRef=database.child("data")
 
         myRef.setValue("Hello, World!")
 

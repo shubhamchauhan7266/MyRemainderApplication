@@ -24,6 +24,10 @@ class LoginActivity : AppCompatActivity() ,View.OnClickListener {
                 val intent=Intent(this@LoginActivity,SignUpActivity::class.java)
                 startActivity(intent)
             }
+            R.id.btLogin->{
+                val intent=Intent(this@LoginActivity,HomeActivity::class.java)
+                startActivity(intent)
+            }
             else->{
                 Log.d(TAG,"Wrong case selection")
             }

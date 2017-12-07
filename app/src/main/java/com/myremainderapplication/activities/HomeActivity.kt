@@ -8,9 +8,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
-
-
-
+import com.myremainderapplication.interfaces.AppConstant
 
 
 class HomeActivity : AppCompatActivity() {
@@ -20,9 +18,9 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         val database = FirebaseDatabase.getInstance().reference
-        val myRef=database.child("data")
+        val myRef=database.child(AppConstant.MEMBERS)
+        val memberList=myRef.child(AppConstant.MEMBERS_LIST)
 
-        myRef.setValue("Hello, World!")
 
         // Read from the database
         myRef.addValueEventListener(object : ValueEventListener {

@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "256305844760",
-    "firebase_url": "https://myremainderapplication-7115a.firebaseio.com",
-    "project_id": "myremainderapplication-7115a",
-    "storage_bucket": "myremainderapplication-7115a.appspot.com"
+    "project_number": "303119189109",
+    "firebase_url": "https://myremainderapplication.firebaseio.com",
+    "project_id": "myremainderapplication",
+    "storage_bucket": "myremainderapplication.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:256305844760:android:bf9132e50cbefbce",
+        "mobilesdk_app_id": "1:303119189109:android:bf9132e50cbefbce",
         "android_client_info": {
           "package_name": "com.myremainderapplication"
         }
       },
       "oauth_client": [
         {
-          "client_id": "256305844760-dhg2h52p2udtee56jbvd1tcquisebu9u.apps.googleusercontent.com",
+          "client_id": "303119189109-fhaqgv7l8g5i73uhvjthinb93l6ktrev.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.myremainderapplication",
-            "certificate_hash": "f21577b6e5d7759fee811f0e5cc414776e91facb"
+            "certificate_hash": "fa9ce5fb2167de25bd30081d1dd31c98ec0ffc2f"
           }
         },
         {
-          "client_id": "256305844760-m93ma3jbtc52i567ti3f6hha4fntts5h.apps.googleusercontent.com",
+          "client_id": "303119189109-979qip91ig8gp0kmqujuluh6rfl6j71h.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA1glvlcv8lm0oUsCgqX9M8PT16qu6TXRg"
+          "current_key": "AIzaSyD6ra6aVNTzVPLBxzvWXS25PMexltIxfvY"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "256305844760-m93ma3jbtc52i567ti3f6hha4fntts5h.apps.googleusercontent.com",
+              "client_id": "303119189109-979qip91ig8gp0kmqujuluh6rfl6j71h.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

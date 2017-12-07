@@ -20,10 +20,16 @@ interface AppConstant {
         val ZIP_VALIDATION_ERROR = "please enter zip"
         val PASSWORD_NOT_MATCH_ERROR = "Password and Confirm Password not matched!!!"
         val EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
-        val ZIP = "Zip - "
-        val EMAIL = "Email - "
-        val MOBILE_NUMBER = "Mobile Number - "
-        val NAME = "Name - "
+        val MEMBER_ID = "id"
+        val EMAIL_ID = "email"
+        val PHONE_NUMBER = "phoneNo"
+        val MEMBER_NAME = "name"
+        val GENDER = "gender"
+        val MEMBERS = "members"
+        val MEMBERS_LIST = "membersList"
+        val FRIEND_LIST="friendList"
+        val CURRENT_ID="CurrentId"
+
     }
 
 

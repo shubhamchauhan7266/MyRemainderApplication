@@ -4,21 +4,39 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.myremainderapplication.R
 import com.myremainderapplication.interfaces.AppConstant
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : AppCompatActivity(), TextWatcher {
 
-    private var mIsChecked: Boolean = false
+    private var isChecked: Boolean = false
+    private var currentId:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
+        val database = FirebaseDatabase.getInstance().reference
+        database.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                currentId= dataSnapshot?.child(AppConstant.CURRENT_ID)?.value.toString()
+            }
+
+            override fun onCancelled(dataSnapshot: DatabaseError?) {
+            }
+
+        })
+
         btSubmit.setOnClickListener {
-            if (checkValidation())
+            if (checkValidation()){
+
                 finish()
+            }
         }
     }
 
@@ -39,14 +57,14 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
      * return true if all required field are valid otherwise return false.
      */
     private fun checkValidation(): Boolean {
-        mIsChecked = true
+        isChecked = true
         checkValidationForName()
         checkValidationForMobileNumber()
         checkValidatioForEmail()
         checkValidationForPassword()
         checkValidationForConfirmPassword()
         checkValidatioForZip()
-        return mIsChecked
+        return isChecked
     }
 
     /*
@@ -111,7 +129,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         if (etName.getText().toString().trim({ it <= ' ' }).length == 0) {
             inputLayoutName.setError(AppConstant.NAME_VALIDATION_ERROR)
             inputLayoutName.setErrorEnabled(true)
-            mIsChecked = false
+            isChecked = false
         } else {
             inputLayoutName.setErrorEnabled(false)
         }
@@ -124,11 +142,11 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         if (etMobileNumber.getText().toString().trim({ it <= ' ' }).length == 0) {
             inputLayoutMobile.setError(AppConstant.MOBILE_NUMBER_VALIDATION_ERROR)
             inputLayoutMobile.setErrorEnabled(true)
-            mIsChecked = false
+            isChecked = false
         } else if (etMobileNumber.getText().toString().trim({ it <= ' ' }).length < 10) {
             inputLayoutMobile.setError(AppConstant.NOT_VALID_MOBILE_NUMBER_ERROR)
             inputLayoutMobile.setErrorEnabled(true)
-            mIsChecked = false
+            isChecked = false
         } else {
             inputLayoutMobile.setErrorEnabled(false)
         }
@@ -141,11 +159,11 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         if (etEmail.getText().toString().trim({ it <= ' ' }).length == 0) {
             inputLayoutEmail.setError(AppConstant.EMAIL_ID_VALIDATION_ERROR)
             inputLayoutEmail.setErrorEnabled(true)
-            mIsChecked = false
+            isChecked = false
         } else if (!etEmail.getText().toString().trim({ it <= ' ' }).matches(AppConstant.EMAIL_PATTERN.toRegex())) {
             inputLayoutEmail.setError(AppConstant.NOT_VALID_EMAIL_ID_ERROR)
             inputLayoutEmail.setErrorEnabled(true)
-            mIsChecked = false
+            isChecked = false
         } else {
             inputLayoutEmail.setErrorEnabled(false)
         }
@@ -158,7 +176,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         if (etPassword.getText().toString().trim({ it <= ' ' }).length == 0) {
             inputLayoutPassword.setError(AppConstant.NAME_VALIDATION_ERROR)
             inputLayoutPassword.setErrorEnabled(true)
-            mIsChecked = false
+            isChecked = false
         } else {
             inputLayoutPassword.setErrorEnabled(false)
         }
@@ -171,7 +189,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         if (etPasswordConfirm.getText().toString().trim({ it <= ' ' }).length == 0) {
             inputLayoutPasswordConfirm.setError(AppConstant.CONFIRM_PASSWORD_VALIDATION_ERROR)
             inputLayoutPasswordConfirm.setErrorEnabled(true)
-            mIsChecked = false
+            isChecked = false
         } else {
             inputLayoutPasswordConfirm.setErrorEnabled(false)
         }
@@ -183,7 +201,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         if (etZip.getText().toString().trim({ it <= ' ' }).length == 0) {
             inputLayoutZip.setError(AppConstant.ZIP_VALIDATION_ERROR)
             inputLayoutZip.setErrorEnabled(true)
-            mIsChecked = false
+            isChecked = false
         } else {
             inputLayoutZip.setErrorEnabled(false)
         }

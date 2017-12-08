@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.myremainderapplication.R
 import com.myremainderapplication.interfaces.AppConstant
+import com.myremainderapplication.models.MemberIdNameModel
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : AppCompatActivity(), TextWatcher {

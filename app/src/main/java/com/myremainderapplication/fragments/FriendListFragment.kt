@@ -17,7 +17,7 @@ import com.myremainderapplication.R
 import com.myremainderapplication.adapters.FriendListAdapter
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberIdNameModel
-import kotlinx.android.synthetic.main.fragment_friend_list.*
+import kotlinx.android.synthetic.main.fragment_friend_list.view.*
 
 /**
  * A simple [Fragment] subclass.
@@ -27,37 +27,25 @@ import kotlinx.android.synthetic.main.fragment_friend_list.*
  * Use the [FriendListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FriendListFragment : Fragment(),FriendListAdapter.IFriendListAdapterCallBack {
+class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallBack {
     private var friendList: ArrayList<MemberIdNameModel>? = null
     private lateinit var friendListAdapter: FriendListAdapter
     private var mContext: Context? = null
 
-    // TODO: Rename and change types of parameters
-    private var mParam1: String? = null
-    private var mParam2: String? = null
-
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        mContext=context
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (arguments != null) {
-//            mParam1 = arguments!!.getString(ARG_PARAM1)
-//            mParam2 = arguments!!.getString(ARG_PARAM2)
-        }
+        mContext = context
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view= inflater.inflate(R.layout.fragment_friend_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_friend_list, container, false)
 
-        friendList= ArrayList()
-        friendListAdapter=FriendListAdapter(this, friendList!!)
-        recyclerView.layoutManager=LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
-        recyclerView.adapter=friendListAdapter
+        friendList = ArrayList()
+        friendListAdapter = FriendListAdapter(this, friendList!!)
+
+        view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
+        view.recyclerView.adapter = friendListAdapter
 
         setFriendListData()
         return view
@@ -67,31 +55,25 @@ class FriendListFragment : Fragment(),FriendListAdapter.IFriendListAdapterCallBa
         val database = FirebaseDatabase.getInstance().reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                friendList = dataSnapshot?.child(AppConstant.MEMBERS)?.child(AppConstant.MEMBERS_LIST)?.value as? ArrayList<MemberIdNameModel>
+                val memberList = dataSnapshot?.child(AppConstant.MEMBERS)?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
+                val size = memberList.size
+
+                var index = 0
+                while (index < size) {
+                    val hashMap = memberList.get(index) as HashMap<String, String>
+                    val id = hashMap.get(AppConstant.MEMBER_ID).toString()
+                    val name = hashMap.get(AppConstant.MEMBER_NAME)
+                    friendList!!.add(MemberIdNameModel(id, name!!))
+                    index++
+                }
+                friendList?.let { friendListAdapter.setFriendList(it) }
+                friendListAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(dataSnapshot: DatabaseError?) {
             }
 
         })
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FriendListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    fun newInstance(param1: String, param2: String): FriendListFragment {
-        val fragment = FriendListFragment()
-        val args = Bundle()
-//            args.putString(ARG_PARAM1, param1)
-//            args.putString(ARG_PARAM2, param2)
-        fragment.arguments = args
-        return fragment
     }
 
     override fun onViewClick(position: Int) {

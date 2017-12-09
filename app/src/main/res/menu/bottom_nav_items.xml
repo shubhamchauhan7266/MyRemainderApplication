@@ -14,4 +14,9 @@
         android:id="@+id/action_notification"
         android:icon="@drawable/back"
         android:title="Notification" />
+
+    <item
+        android:id="@+id/action_friends"
+        android:icon="@drawable/back"
+        android:title="Friends" />
 </menu>

@@ -12,9 +12,12 @@ import kotlinx.android.synthetic.main.friend_item_row.view.*
 /**
  * Created by user on 8/12/17.
  */
-class FriendListAdapter(val context: FriendListFragment, val friendList:ArrayList<MemberIdNameModel>) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
+class FriendListAdapter(val context: FriendListFragment, private var friendList:ArrayList<MemberIdNameModel>) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
     private val iFriendListAdapterCallBack: IFriendListAdapterCallBack? = context
 
+    fun setFriendList(localFriendList: ArrayList<MemberIdNameModel>){
+        friendList=localFriendList
+    }
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int):FriendListAdapter.ViewHolder{
         val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row, parent, false)
         return ViewHolder(view)

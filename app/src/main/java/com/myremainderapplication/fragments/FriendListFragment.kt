@@ -1,6 +1,8 @@
 package com.myremainderapplication.fragments
 
+import android.app.FragmentManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -14,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 import com.myremainderapplication.R
+import com.myremainderapplication.activities.ProfileActivity
 import com.myremainderapplication.adapters.FriendListAdapter
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberIdNameModel
@@ -77,6 +80,7 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
     }
 
     override fun onViewClick(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+       val intent=Intent(mContext,ProfileActivity::class.java)
+        startActivity(intent)
     }
 }

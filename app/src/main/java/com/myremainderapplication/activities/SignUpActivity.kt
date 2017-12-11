@@ -22,8 +22,28 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        val database = FirebaseDatabase.getInstance().reference
+        setTextChangeListener()
+        setDatabaseData()
 
+        btSubmit.setOnClickListener {
+            if (checkValidation()) {
+
+                finish()
+            }
+        }
+    }
+
+    private fun setTextChangeListener() {
+        etName.addTextChangedListener(this)
+        etMobileNumber.addTextChangedListener(this)
+        etEmail.addTextChangedListener(this)
+        etPassword.addTextChangedListener(this)
+        etPasswordConfirm.addTextChangedListener(this)
+        etZip.addTextChangedListener(this)
+    }
+
+    private fun setDatabaseData() {
+        val database = FirebaseDatabase.getInstance().reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 currentId = dataSnapshot?.child(AppConstant.CURRENT_ID)?.value.toString()
@@ -33,13 +53,6 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
             }
 
         })
-
-        btSubmit.setOnClickListener {
-            if (checkValidation()) {
-
-                finish()
-            }
-        }
     }
 
     override fun afterTextChanged(p0: Editable?) {
@@ -78,7 +91,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
             checkValidationForName()
         }
 
-        if (etEmail.hasFocus() || etZip.hasFocus() || etPassword.hasFocus() || etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
+        if (etEmail.hasFocus() || etPassword.hasFocus() || etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
             checkValidationForMobileNumber()
         }
 

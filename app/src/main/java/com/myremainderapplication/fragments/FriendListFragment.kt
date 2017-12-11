@@ -80,7 +80,9 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
     }
 
     override fun onViewClick(position: Int) {
-       val intent=Intent(mContext,ProfileActivity::class.java)
+        val memberIdNameModel = friendList!!.get(position)
+        val intent = Intent(mContext, ProfileActivity::class.java)
+        intent.putExtra(AppConstant.MEMBER_ID, memberIdNameModel.memberId)
         startActivity(intent)
     }
 }

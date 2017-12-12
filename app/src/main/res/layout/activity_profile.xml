@@ -9,20 +9,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:background="@drawable/layout_border"
         android:elevation="4dp"
-        android:background="@drawable/layout_border">
+        android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/profile_image"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:src="@drawable/profile"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            app:civ_border_width="2dp"
-            app:civ_border_color="#FF000000"/>
+            android:src="@drawable/profile"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
 
         <TextView
             android:id="@+id/tvName"
@@ -30,8 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:textSize="20dp"
-            android:hint="@string/full_name"/>
+            android:hint="@string/full_name"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/tvMobileNumber"
@@ -39,8 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:textSize="20dp"
-            android:hint="@string/mobile_number"/>
+            android:hint="@string/mobile_number"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/tvEmail"
@@ -49,8 +48,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="20dp"
-            android:textSize="20dp"
-            android:hint="@string/email_id"/>
+            android:hint="@string/email_id"
+            android:textSize="20dp" />
 
     </LinearLayout>
 

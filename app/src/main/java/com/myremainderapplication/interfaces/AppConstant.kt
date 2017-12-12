@@ -29,6 +29,7 @@ interface AppConstant {
         val MEMBERS_LIST = "membersList"
         val FRIEND_LIST="friendList"
         val CURRENT_ID="CurrentId"
+        val PASSWORD = "password"
 
     }
 

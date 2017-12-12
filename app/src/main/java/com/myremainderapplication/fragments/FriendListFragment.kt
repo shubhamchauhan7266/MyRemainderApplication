@@ -1,6 +1,5 @@
 package com.myremainderapplication.fragments
 
-import android.app.FragmentManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -20,15 +19,11 @@ import com.myremainderapplication.activities.ProfileActivity
 import com.myremainderapplication.adapters.FriendListAdapter
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberIdNameModel
+import com.myremainderapplication.utils.ModelInfoUtils
 import kotlinx.android.synthetic.main.fragment_friend_list.view.*
 
 /**
  * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [FriendListFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [FriendListFragment.newInstance] factory method to
- * create an instance of this fragment.
  */
 class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallBack {
     private var friendList: ArrayList<MemberIdNameModel>? = null
@@ -44,33 +39,20 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_friend_list, container, false)
 
-        friendList = ArrayList()
-        friendListAdapter = FriendListAdapter(this, friendList!!)
-
-        view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
-        view.recyclerView.adapter = friendListAdapter
-
-        setFriendListData()
+        setFriendListData(view)
         return view
     }
 
-    private fun setFriendListData() {
+    private fun setFriendListData(view: View) {
         val database = FirebaseDatabase.getInstance().reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 val memberList = dataSnapshot?.child(AppConstant.MEMBERS)?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
-                val size = memberList.size
+                friendList = ModelInfoUtils.Companion.getMemberIdNaneModel(memberList)
+                friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
 
-                var index = 0
-                while (index < size) {
-                    val hashMap = memberList.get(index) as HashMap<String, String>
-                    val id = hashMap.get(AppConstant.MEMBER_ID).toString()
-                    val name = hashMap.get(AppConstant.MEMBER_NAME)
-                    friendList!!.add(MemberIdNameModel(id, name!!))
-                    index++
-                }
-                friendList?.let { friendListAdapter.setFriendList(it) }
-                friendListAdapter.notifyDataSetChanged()
+                view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
+                view.recyclerView.adapter = friendListAdapter
             }
 
             override fun onCancelled(dataSnapshot: DatabaseError?) {
@@ -80,7 +62,7 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
     }
 
     override fun onViewClick(position: Int) {
-        val memberIdNameModel = friendList!!.get(position)
+        val memberIdNameModel = friendList!![position]
         val intent = Intent(mContext, ProfileActivity::class.java)
         intent.putExtra(AppConstant.MEMBER_ID, memberIdNameModel.memberId)
         startActivity(intent)

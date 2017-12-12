@@ -1,5 +1,6 @@
 package com.myremainderapplication.activities
 
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -8,20 +9,29 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import com.myremainderapplication.R
 import com.myremainderapplication.interfaces.AppConstant
-import com.myremainderapplication.models.MemberIdNameModel
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import com.google.firebase.storage.StorageReference
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.storage.UploadTask
+import com.google.android.gms.tasks.OnSuccessListener
+import java.io.File
+import com.google.firebase.storage.FileDownloadTask
+
 
 class SignUpActivity : AppCompatActivity(), TextWatcher {
 
     private var isChecked: Boolean = false
     private var currentId: String = ""
+    private var mStorageRef: StorageReference? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         setTextChangeListener()
         setDatabaseData()
 
@@ -30,6 +40,30 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
                 finish()
             }
+        }
+    }
+
+    private fun uplodeProfileImage() {
+
+        val file = Uri.fromFile(File("path/to/images/rivers.jpg"))
+        val riversRef = mStorageRef!!.child("images/rivers.jpg")
+
+        riversRef.putFile(file)
+                .addOnSuccessListener { taskSnapshot ->
+                    val downloadUrl = taskSnapshot.downloadUrl
+                }.addOnFailureListener { exception ->
+            // Handle unsuccessful uploads
+            // ...
+        }
+    }
+
+    private fun downloadProfileImage() {
+        val riversRef = mStorageRef!!.child("images/rivers.jpg")
+        val localFile = File.createTempFile("images", "jpg")
+        riversRef.getFile(localFile)
+                .addOnSuccessListener { taskSnapshot ->
+
+                }.addOnFailureListener { exception ->
         }
     }
 

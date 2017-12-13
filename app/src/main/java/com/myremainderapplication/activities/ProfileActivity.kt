@@ -2,8 +2,7 @@ package com.myremainderapplication.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
+
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -61,7 +60,7 @@ class ProfileActivity : AppCompatActivity() {
                     val url=uri.toString()
                     Picasso.with(this)
                             .load(url)
-                            .into(ivProfile);
+                            .into(ivProfile)
                 }.addOnFailureListener { exception ->
         }
     }

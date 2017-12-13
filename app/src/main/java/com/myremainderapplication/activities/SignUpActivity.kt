@@ -14,11 +14,7 @@ import com.myremainderapplication.R
 import com.myremainderapplication.interfaces.AppConstant
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import com.google.firebase.storage.StorageReference
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.firebase.storage.UploadTask
-import com.google.android.gms.tasks.OnSuccessListener
 import java.io.File
-import com.google.firebase.storage.FileDownloadTask
 
 
 class SignUpActivity : AppCompatActivity(), TextWatcher {
@@ -43,25 +39,14 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
-    private fun uplodeProfileImage() {
+    private fun uplodeProfileImage(path:String) {
 
-        val file = Uri.fromFile(File("path/to/images/rivers.jpg"))
+        val file = Uri.fromFile(File(path))
         val riversRef = mStorageRef!!.child("images/rivers.jpg")
 
         riversRef.putFile(file)
                 .addOnSuccessListener { taskSnapshot ->
                     val downloadUrl = taskSnapshot.downloadUrl
-                }.addOnFailureListener { exception ->
-            // Handle unsuccessful uploads
-            // ...
-        }
-    }
-
-    private fun downloadProfileImage() {
-        val riversRef = mStorageRef!!.child("images/rivers.jpg")
-        val localFile = File.createTempFile("images", "jpg")
-        riversRef.getFile(localFile)
-                .addOnSuccessListener { taskSnapshot ->
 
                 }.addOnFailureListener { exception ->
         }

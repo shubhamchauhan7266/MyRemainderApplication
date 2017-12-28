@@ -23,7 +23,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage!!.data.size > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
             title=remoteMessage.data!!.get("title")!!
-            title=remoteMessage.data!!.get("body")!!
+            body=remoteMessage.data!!.get("body")!!
         }
 
         // Check if message contains a notification payload.

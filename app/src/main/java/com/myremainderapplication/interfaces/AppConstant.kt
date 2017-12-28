@@ -10,6 +10,10 @@ package com.myremainderapplication.interfaces
 interface AppConstant {
     companion object {
         val SPLASH_TIME_OUT = 3000
+        val APP_ID="1:303119189109:android:bf9132e50cbefbce"
+        val SENDER_ID="303119189109"
+        val PROJECT_ID="myremainderapplication"
+        val LEGACY_SERVER_KEY="AIzaSyDKBMR1gRQrZhARcTvAhZb4PkvcNlLGGQE"
         val NAME_VALIDATION_ERROR = "please enter name"
         val MOBILE_NUMBER_VALIDATION_ERROR = "please enter mobile number"
         val NOT_VALID_MOBILE_NUMBER_ERROR = "please enter valid mobile number"

@@ -4,39 +4,52 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.messaging.RemoteMessage
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.support.v4.app.NotificationCompat
+import com.myremainderapplication.R
+import com.myremainderapplication.activities.HomeActivity
 
 
 /**
- * Created by user on 21/12/17.
+ * Created by Shubham Chauhan on 21/12/17.
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
-        // ...
-
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage!!.from!!)
-
-        // Check if message contains a data payload.
-        if (remoteMessage.data.size > 0) {
+       var title: String? =null
+        var body:String?=null
+        if (remoteMessage!!.data.size > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
-
-            /*if (*//* Check if data needs to be processed by long running job *//* true) {
-                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-                scheduleJob()
-            } else {
-                // Handle message within 10 seconds
-                handleNow()
-            }*/
-
         }
 
         // Check if message contains a notification payload.
         if (remoteMessage.notification != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.notification!!.body!!)
-        }
+            title=remoteMessage.notification!!.title!!
+            body=remoteMessage.notification!!.body!!
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
+            Log.d(TAG, "Message Notification Title: " + title)
+            Log.d(TAG, "Message Notification Body: " + body)
+        }
+            sendNotification(title,body)
+    }
+
+    fun sendNotification(title:String?,body:String?){
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(this, 1410,
+                intent, PendingIntent.FLAG_ONE_SHOT)
+
+        val notificationBuilder = NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.profile)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        notificationManager.notify(1410, notificationBuilder.build())
     }
 }

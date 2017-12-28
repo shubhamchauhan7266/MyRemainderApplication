@@ -19,4 +19,8 @@ class MyFirebaseInstanceIdService : FirebaseInstanceIdService() {
         // Instance ID token to your app server.
 //        sendRegistrationToServer(refreshedToken)
     }
+
+   /* private fun sendRegistrationToServer(refreshedToken: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }*/
 }

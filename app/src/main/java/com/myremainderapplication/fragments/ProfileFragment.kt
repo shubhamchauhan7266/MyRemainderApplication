@@ -1,6 +1,7 @@
 package com.myremainderapplication.fragments
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +20,12 @@ import com.myremainderapplication.utils.ModelInfoUtils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import com.google.firebase.storage.UploadTask
+import com.google.android.gms.tasks.OnSuccessListener
+import android.support.annotation.NonNull
+import com.google.android.gms.tasks.OnFailureListener
+import java.io.File
+
 
 /**
  * A simple [Fragment] subclass.
@@ -77,6 +84,18 @@ class ProfileFragment : Fragment() {
                             .load(url)
                             .into(ivProfile)
                 }.addOnFailureListener { exception ->
+        }
+    }
+
+    private fun uploadProfileImage(){
+        val file = Uri.fromFile(File("path/to/images/rivers.jpg"))
+        val riversRef = mStorageRef!!.child("images/" + file.getLastPathSegment())
+        val uploadTask = riversRef.putFile(file)
+
+        uploadTask.addOnFailureListener{exception->
+            // Handle unsuccessful uploads
+        }.addOnSuccessListener{ taskSnapshot ->
+            val downloadUrl = taskSnapshot.downloadUrl
         }
     }
 }

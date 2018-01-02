@@ -32,24 +32,10 @@ class ProfileActivity : AppCompatActivity() {
     private var id: String = ""
     private var memberInfoModel: MemberInfoModel? = null
     private var mStorageRef: StorageReference? = null
-    private lateinit var photoPath: File
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-
-
-        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED&&ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED&&ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(
-                    arrayOf(Manifest.permission.CAMERA,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.INTERNET), 10)
-            return
-        }*/
-        ivProfile.setOnClickListener{
-            selectImageDialog()
-        }
 
         mStorageRef = FirebaseStorage.getInstance().reference
         downloadProfileImage()
@@ -90,74 +76,4 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun selectImageDialog(){
-        val items= arrayOf("Take Photo", "Choose from Library", "Cancel")
-        val builder=AlertDialog.Builder(this)
-        builder.setTitle("Add Photo!")
-        builder.setItems(items){dialog,item->
-            if(items[item].equals("Take Photo")){
-                takePhotoFromCamera()
-            }else if(items[item].equals("Choose from Library")){
-                selectImageFromAlbum()
-            }else{
-                dialog.dismiss()
-            }
-        }
-        builder.show()
-    }
-
-    private fun selectImageFromAlbum(){
-        val intent= Intent()
-        intent.setAction(Intent.ACTION_GET_CONTENT)
-        intent.setType("image/*")
-        startActivityForResult(intent,REQUEST_SELECT_IMAGE_FROM_ALBUM)
-    }
-
-    private fun takePhotoFromCamera(){
-        val imagesFolder = File(Environment.getExternalStorageDirectory(), "MyImages")
-        imagesFolder.mkdir()
-        photoPath = File(imagesFolder, memberInfoModel!!.memberId + ".jpg")
-        val intent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoPath))
-        startActivityForResult(intent, REQUEST_TAKE_PHOTO)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode== Activity.RESULT_OK){
-            var uri: Uri? =null
-            when(requestCode){
-                REQUEST_SELECT_IMAGE_FROM_ALBUM->{
-                    uri = data!!.data
-                }
-                REQUEST_TAKE_PHOTO->{
-                    uri= Uri.fromFile(photoPath)
-                }
-                else->{
-
-                }
-            }
-            uploadProfileImage(uri!!)
-        }
-    }
-
-    private fun uploadProfileImage(file:Uri){
-        val childRef = mStorageRef!!.child("images/" + file.lastPathSegment)
-        val uploadTask = childRef.putFile(file)
-
-        uploadTask.addOnFailureListener{exception->
-            // Handle unsuccessful uploads
-        }.addOnSuccessListener{ taskSnapshot ->
-            val downloadUrl = taskSnapshot.downloadUrl
-        }
-    }
-
-    /*override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 10) {
-            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            }
-        }
-    }*/
 }

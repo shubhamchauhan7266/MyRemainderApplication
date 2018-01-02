@@ -20,23 +20,19 @@ import com.google.firebase.storage.StorageReference
 import com.myremainderapplication.interfaces.AppConstant.Companion.REQUEST_SELECT_IMAGE_FROM_ALBUM
 import com.myremainderapplication.interfaces.AppConstant.Companion.REQUEST_TAKE_PHOTO
 import com.squareup.picasso.Picasso
-import android.Manifest
 import android.app.AlertDialog
-import android.content.DialogInterface
-import android.support.v4.app.ActivityCompat
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.support.annotation.RequiresApi
-import android.support.v4.content.ContextCompat
 import java.io.File
-import java.net.URI
 
 
 class ProfileActivity : AppCompatActivity() {
     private var id: String = ""
     private var memberInfoModel: MemberInfoModel? = null
     private var mStorageRef: StorageReference? = null
+    private lateinit var photoPath: File
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,14 +110,16 @@ class ProfileActivity : AppCompatActivity() {
         val intent= Intent()
         intent.setAction(Intent.ACTION_GET_CONTENT)
         intent.setType("image/*")
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"),REQUEST_SELECT_IMAGE_FROM_ALBUM)
+        startActivityForResult(intent,REQUEST_SELECT_IMAGE_FROM_ALBUM)
     }
 
     private fun takePhotoFromCamera(){
-        val intent= Intent()
-        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE)
-        intent.setType("image/*")
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_TAKE_PHOTO)
+        val imagesFolder = File(Environment.getExternalStorageDirectory(), "MyImages")
+        imagesFolder.mkdir()
+        photoPath = File(imagesFolder, memberInfoModel!!.memberId + ".jpg")
+        val intent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoPath))
+        startActivityForResult(intent, REQUEST_TAKE_PHOTO)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -133,7 +131,7 @@ class ProfileActivity : AppCompatActivity() {
                     uri = data!!.data
                 }
                 REQUEST_TAKE_PHOTO->{
-                    uri= data!!.data
+                    uri= Uri.fromFile(photoPath)
                 }
                 else->{
 

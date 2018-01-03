@@ -38,6 +38,7 @@ interface AppConstant {
         val CURRENT_ID = "CurrentId"
         val PASSWORD = "password"
 
+        val SEND_NOTIFICATION_URL = "https://fcm.googleapis.com/fcm/send"
     }
 
 

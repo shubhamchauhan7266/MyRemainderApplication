@@ -21,13 +21,13 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
     private var isChecked: Boolean = false
     private var currentId: String = ""
-    private var mStorageRef: StorageReference? = null
+    private var storageRef: StorageReference? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        storageRef = FirebaseStorage.getInstance().getReference();
         setTextChangeListener()
         setDatabaseData()
 
@@ -42,7 +42,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     private fun uplodeProfileImage(path:String) {
 
         val file = Uri.fromFile(File(path))
-        val riversRef = mStorageRef!!.child("images/rivers.jpg")
+        val riversRef = storageRef!!.child("images/rivers.jpg")
 
         riversRef.putFile(file)
                 .addOnSuccessListener { taskSnapshot ->

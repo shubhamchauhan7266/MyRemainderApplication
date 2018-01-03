@@ -9,17 +9,16 @@ import com.myremainderapplication.R
 import kotlinx.android.synthetic.main.activity_login.*
 import com.google.firebase.auth.FirebaseAuth
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseUser
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private val TAG = LoginActivity::class.java.simpleName
-    private var mAuth: FirebaseAuth? = null
+    private var auth: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        mAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         /*createAcount("","")
 
@@ -51,12 +50,12 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun signInWithEmailId(emailId: String, password: String) {
-        mAuth!!.signInWithEmailAndPassword(emailId, password)
+        auth!!.signInWithEmailAndPassword(emailId, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("", "signInWithEmail:success")
-                        val user = mAuth!!.getCurrentUser()
+                        val user = auth!!.getCurrentUser()
 //                        updateUI(user)
                     } else {
                         // If sign in fails, display a message to the user.
@@ -71,12 +70,12 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun createAcount(emailId: String, password: String) {
-        mAuth!!.createUserWithEmailAndPassword(emailId, password)
+        auth!!.createUserWithEmailAndPassword(emailId, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("", "createUserWithEmail:success")
-                        val user = mAuth!!.getCurrentUser()
+                        val user = auth!!.getCurrentUser()
 //                        updateUI(user)
                     } else {
                         // If sign in fails, display a message to the user.
@@ -97,7 +96,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = mAuth!!.getCurrentUser()
+        val currentUser = auth!!.getCurrentUser()
 //        updateUI(currentUser)
     }
 

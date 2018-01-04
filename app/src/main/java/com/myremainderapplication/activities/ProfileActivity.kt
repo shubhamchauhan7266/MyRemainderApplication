@@ -1,5 +1,6 @@
 package com.myremainderapplication.activities
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
@@ -31,6 +32,11 @@ class ProfileActivity : AppCompatActivity() {
 
         id = intent.getStringExtra(AppConstant.MEMBER_ID)
         setDatabaseData()
+
+        etCreateEvent.setOnClickListener{
+            val intent=Intent(this@ProfileActivity,EventActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setDatabaseData() {

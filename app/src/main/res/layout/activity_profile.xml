@@ -59,5 +59,12 @@
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp" />
 
+    <Button
+        android:id="@+id/etCreateEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:text="Create Event"/>
+
 
 </FrameLayout>

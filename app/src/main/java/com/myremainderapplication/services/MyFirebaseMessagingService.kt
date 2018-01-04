@@ -1,5 +1,7 @@
 package com.myremainderapplication.services
 
+import android.annotation.SuppressLint
+import android.app.AlarmManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import android.content.ContentValues.TAG
 import android.util.Log
@@ -11,6 +13,8 @@ import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import com.myremainderapplication.R
 import com.myremainderapplication.activities.HomeActivity
+import com.myremainderapplication.models.CalenderModel
+import java.util.*
 
 
 /**
@@ -18,26 +22,53 @@ import com.myremainderapplication.activities.HomeActivity
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
-       var title: String? =null
-        var body:String?=null
+        var title: String? = null
+        var body: String? = null
+        val year: Int
+        val month: Int
+        val day: Int
+        val hour: Int
+        val minute: Int
+
         if (remoteMessage!!.data.size > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
-            title=remoteMessage.data!!.get("title")!!
-            body=remoteMessage.data!!.get("body")!!
+            title = remoteMessage.data!!.get("title")!!
+            body = remoteMessage.data!!.get("body")!!
+
+            year = remoteMessage.data!!.get("year")!!.toInt()
+            month = remoteMessage.data!!.get("month")!!.toInt()
+            day = remoteMessage.data!!.get("day")!!.toInt()
+            hour = remoteMessage.data!!.get("hour")!!.toInt()
+            minute = remoteMessage.data!!.get("minute")!!.toInt()
+
+            val calenderModel = CalenderModel(year, month, day, hour, minute)
+            setEventAlarm(title, body, calenderModel)
         }
 
         // Check if message contains a notification payload.
         if (remoteMessage.notification != null) {
-            title=remoteMessage.notification!!.title!!
-            body=remoteMessage.notification!!.body!!
+            title = remoteMessage.notification!!.title!!
+            body = remoteMessage.notification!!.body!!
 
             Log.d(TAG, "Message Notification Title: " + title)
             Log.d(TAG, "Message Notification Body: " + body)
         }
-            sendNotification(title,body)
+        sendNotification(title, body)
     }
 
-    fun sendNotification(title:String?,body:String?){
+    @SuppressLint("WrongConstant")
+    private fun setEventAlarm(title: String?, body: String?, calenderModel: CalenderModel) {
+
+        val intent = Intent("com.myremainderapplication.activities.alarmactivity")
+        val pendingIntent = PendingIntent.getActivity(baseContext, 0, intent, Intent.FLAG_ACTIVITY_NEW_TASK)
+        val alarmManager: AlarmManager = baseContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val calendar = GregorianCalendar(calenderModel.year, calenderModel.month, calenderModel.day,
+                calenderModel.hour, calenderModel.minute)
+        val alarmTime = calendar.timeInMillis
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
+    }
+
+    fun sendNotification(title: String?, body: String?) {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 1410,

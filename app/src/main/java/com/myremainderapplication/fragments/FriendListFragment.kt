@@ -48,7 +48,7 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 val memberList = dataSnapshot?.child(AppConstant.MEMBERS)?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
-                friendList = ModelInfoUtils.Companion.getMemberIdNaneModel(memberList)
+                friendList = ModelInfoUtils.Companion.getMemberIdNameModel(memberList)
                 friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
 
                 view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)

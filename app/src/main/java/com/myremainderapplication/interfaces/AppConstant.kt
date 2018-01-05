@@ -37,6 +37,8 @@ interface AppConstant {
         val FRIEND_LIST = "friendList"
         val CURRENT_ID = "CurrentId"
         val PASSWORD = "password"
+        val REGISTRATION_TOKEN="registrationToken"
+        val IMAGE_PATH="imagePath"
 
         val SEND_NOTIFICATION_URL = "https://fcm.googleapis.com/fcm/send"
     }

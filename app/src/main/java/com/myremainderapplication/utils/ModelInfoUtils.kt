@@ -16,12 +16,12 @@ class ModelInfoUtils {
             val emailId = data[AppConstant.EMAIL_ID].toString()
             val password = data[AppConstant.PASSWORD].toString()
             val friendDataList = data[AppConstant.FRIEND_LIST] as ArrayList<*>
-            val friendList = getMemberIdNaneModel(friendDataList)
+            val friendList = getMemberIdNameModel(friendDataList)
 
             return MemberInfoModel(id, name, emailId, phoneNumber, password, friendList)
         }
 
-        fun getMemberIdNaneModel(friendDataList: ArrayList<*>): ArrayList<MemberIdNameModel> {
+        fun getMemberIdNameModel(friendDataList: ArrayList<*>): ArrayList<MemberIdNameModel> {
             val size = friendDataList.size
             var index = 0
             val friendList = ArrayList<MemberIdNameModel>()

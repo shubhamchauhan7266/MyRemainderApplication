@@ -43,18 +43,20 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
         return view
     }
 
+
     private fun setFriendListData(view: View) {
         val database = FirebaseDatabase.getInstance().reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                val memberList = dataSnapshot?.child(AppConstant.MEMBERS)?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
-                friendList = ModelInfoUtils.Companion.getMemberIdNameModel(memberList)
-                friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
+                if(dataSnapshot?.child(AppConstant.MEMBERS)!!.hasChild(AppConstant.MEMBERS_LIST)){
+                    val memberList = dataSnapshot.child(AppConstant.MEMBERS)?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
+                    friendList = ModelInfoUtils.Companion.getMemberIdNameModel(memberList)
+                    friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
 
-                view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
-                view.recyclerView.adapter = friendListAdapter
+                    view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
+                    view.recyclerView.adapter = friendListAdapter
+                }
             }
-
             override fun onCancelled(dataSnapshot: DatabaseError?) {
             }
 

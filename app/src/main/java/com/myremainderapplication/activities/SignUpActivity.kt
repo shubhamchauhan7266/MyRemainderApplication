@@ -51,7 +51,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     }
 
     private fun uploadNewUserData() {
-        val newId=(currentId.toInt()+1).toString()
+        val newId="4041"
 
         val databaseRef:DatabaseReference = FirebaseDatabase.getInstance().reference
         val databaseCurrentIdRef=databaseRef.child(AppConstant.CURRENT_ID)
@@ -60,7 +60,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
         val hasMapUser= HashMap<String,String>()
         hasMapUser.put(AppConstant.MEMBER_ID,newId)
-        hasMapUser.put(AppConstant.MEMBER_NAME,"rohan")
+        hasMapUser.put(AppConstant.MEMBER_NAME,"shubham")
         hasMapUser.put(AppConstant.PHONE_NUMBER,"8769567487")
         hasMapUser.put(AppConstant.EMAIL_ID,"rohan@gmail.com")
         hasMapUser.put(AppConstant.PASSWORD,"12345")
@@ -70,7 +70,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
         val hasMapUserNode=HashMap<String,HashMap<String,String>>()
         hasMapUserNode.put(newId,hasMapUser)
-        databaseMembersRef.setValue(hasMapUserNode as Map<String, Any>?)
+        databaseMembersRef.updateChildren(hasMapUserNode as Map<String, Any>?)
     }
 
     private fun uploadProfileImage(file:Uri){

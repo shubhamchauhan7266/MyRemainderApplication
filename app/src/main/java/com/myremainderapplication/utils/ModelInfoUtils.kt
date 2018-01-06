@@ -15,10 +15,12 @@ class ModelInfoUtils {
             val phoneNumber = data[AppConstant.PHONE_NUMBER].toString()
             val emailId = data[AppConstant.EMAIL_ID].toString()
             val password = data[AppConstant.PASSWORD].toString()
-            val friendDataList = data[AppConstant.FRIEND_LIST] as ArrayList<*>
-            val friendList = getMemberIdNameModel(friendDataList)
-
-            return MemberInfoModel(id, name, emailId, phoneNumber, password, friendList)
+            return if(data.containsKey(AppConstant.FRIEND_LIST)){
+                val friendDataList = data[AppConstant.FRIEND_LIST] as ArrayList<*>
+                val friendList = getMemberIdNameModel(friendDataList)
+                MemberInfoModel(id, name, emailId, phoneNumber, password, friendList)
+            }else
+                MemberInfoModel(id, name, emailId, phoneNumber, password)
         }
 
         fun getMemberIdNameModel(friendDataList: ArrayList<*>): ArrayList<MemberIdNameModel> {

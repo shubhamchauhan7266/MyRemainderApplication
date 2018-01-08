@@ -27,9 +27,6 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        storageRef = FirebaseStorage.getInstance().reference
-        downloadProfileImage()
-
         id = intent.getStringExtra(AppConstant.MEMBER_ID)
         setDatabaseData()
 
@@ -57,18 +54,10 @@ class ProfileActivity : AppCompatActivity() {
         tvName.text = memberFullInfoModel!!.memberName
         tvEmail.text = memberFullInfoModel!!.emailId
         tvMobileNumber.text = memberFullInfoModel!!.phoneNumber
-    }
-
-    private fun downloadProfileImage() {
-        val imageRef = storageRef!!.child("images/3788.jpg")
-        imageRef.downloadUrl
-                .addOnSuccessListener {uri ->
-                    val url=uri.toString()
-                    Picasso.with(this)
-                            .load(url)
-                            .into(ivProfile)
-                }.addOnFailureListener { exception ->
-        }
+        val url=memberFullInfoModel!!.imagePath
+        Picasso.with(this)
+                .load(url)
+                .into(ivProfile)
     }
 
 }

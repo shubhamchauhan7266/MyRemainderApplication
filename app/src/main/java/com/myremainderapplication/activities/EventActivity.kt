@@ -70,9 +70,9 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.btDate -> {
-                val datePickerDialog = DatePickerDialog(this@EventActivity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                val datePickerDialog = DatePickerDialog(this@EventActivity, DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in textbox
-                    btDate.setText(dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year)
+                    btDate.text = (dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year)
                     alarmYear=year
                     alarmMonth=monthOfYear
                     alarmDay=dayOfMonth
@@ -80,8 +80,8 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
                 datePickerDialog.show()
             }
             R.id.btTime -> {
-                val timePickerDialog = TimePickerDialog(this@EventActivity, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                    btTime.setText("" + hourOfDay + ":" + minute)
+                val timePickerDialog = TimePickerDialog(this@EventActivity, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                    btTime.text = (hourOfDay.toString() + ":" + minute)
                     alarmHour=hourOfDay
                     alarmMinute=minute
 

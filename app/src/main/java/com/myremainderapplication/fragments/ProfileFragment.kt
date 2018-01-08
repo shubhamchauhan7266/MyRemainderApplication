@@ -38,7 +38,6 @@ class ProfileFragment : Fragment() {
     private var mStorageRef: StorageReference? = null
     private lateinit var photoPath: File
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 

@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.myremainderapplication.R
 import com.myremainderapplication.fragments.FriendListFragment
-import com.myremainderapplication.models.MemberIdNameModel
+import com.myremainderapplication.models.MemberShortInfoModel
 import kotlinx.android.synthetic.main.friend_item_row.view.*
 
 /**
  * Created by user on 8/12/17.
  */
-class FriendListAdapter(val context: FriendListFragment, private var friendList:ArrayList<MemberIdNameModel>) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
+class FriendListAdapter(val context: FriendListFragment, private var friendList:ArrayList<MemberShortInfoModel>) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
     private val iFriendListAdapterCallBack: IFriendListAdapterCallBack? = context
 
-    fun setFriendList(localFriendList: ArrayList<MemberIdNameModel>){
+    fun setFriendList(localFriendList: ArrayList<MemberShortInfoModel>){
         friendList=localFriendList
     }
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int):FriendListAdapter.ViewHolder{
@@ -30,8 +30,8 @@ class FriendListAdapter(val context: FriendListFragment, private var friendList:
     override fun onBindViewHolder(holder: ViewHolder?, position: Int)= holder!!.bind(friendList[position],position,iFriendListAdapterCallBack)
 
     class ViewHolder(itemView:View) :RecyclerView.ViewHolder(itemView){
-        fun bind(memberIdNameModel: MemberIdNameModel, position: Int, iFriendListAdapterCallBack: IFriendListAdapterCallBack?) {
-            itemView.tvName.text=memberIdNameModel.memberName
+        fun bind(memberShortInfoModel: MemberShortInfoModel, position: Int, iFriendListAdapterCallBack: IFriendListAdapterCallBack?) {
+            itemView.tvName.text= memberShortInfoModel.memberName
             itemView.friendItemView.setOnClickListener {
                 iFriendListAdapterCallBack!!.onViewClick(position)
             }

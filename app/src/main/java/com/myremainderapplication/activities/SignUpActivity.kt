@@ -51,11 +51,11 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     }
 
     private fun uploadNewUserData() {
-        val newId="4041"
-
         val databaseRef:DatabaseReference = FirebaseDatabase.getInstance().reference
         val databaseCurrentIdRef=databaseRef.child(AppConstant.CURRENT_ID)
         val databaseMembersRef=databaseRef.child(AppConstant.MEMBERS)
+
+        val newId=(currentId.toInt()+1).toString()
         databaseCurrentIdRef.setValue(newId)
 
         val hasMapUser= HashMap<String,String>()

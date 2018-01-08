@@ -39,6 +39,9 @@ interface AppConstant {
         val PASSWORD = "password"
         val REGISTRATION_TOKEN="registrationToken"
         val IMAGE_PATH="imagePath"
+        val MESSAGE_ID="messageId"
+        val TITLE="title"
+        val BODY="body"
 
         val SEND_NOTIFICATION_URL = "https://fcm.googleapis.com/fcm/send"
     }

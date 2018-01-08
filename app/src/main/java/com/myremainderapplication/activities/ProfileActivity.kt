@@ -10,7 +10,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.myremainderapplication.R
 import com.myremainderapplication.interfaces.AppConstant
-import com.myremainderapplication.models.MemberInfoModel
+import com.myremainderapplication.models.MemberFullInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
 import kotlinx.android.synthetic.main.activity_profile.*
 import com.google.firebase.storage.FirebaseStorage
@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso
 
 class ProfileActivity : AppCompatActivity() {
     private var id: String = ""
-    private var memberInfoModel: MemberInfoModel? = null
+    private var memberFullInfoModel: MemberFullInfoModel? = null
     private var storageRef: StorageReference? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +43,7 @@ class ProfileActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                memberInfoModel = ModelInfoUtils.Companion.getMemberInfoModel(dataSnapshot, id)
+                memberFullInfoModel = ModelInfoUtils.Companion.getMemberInfoModel(dataSnapshot, id)
                 updateData()
             }
 
@@ -54,9 +54,9 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun updateData() {
-        tvName.text = memberInfoModel!!.memberName
-        tvEmail.text = memberInfoModel!!.emailId
-        tvMobileNumber.text = memberInfoModel!!.phoneNumber
+        tvName.text = memberFullInfoModel!!.memberName
+        tvEmail.text = memberFullInfoModel!!.emailId
+        tvMobileNumber.text = memberFullInfoModel!!.phoneNumber
     }
 
     private fun downloadProfileImage() {

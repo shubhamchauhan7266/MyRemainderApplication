@@ -2,39 +2,55 @@ package com.myremainderapplication.utils
 
 import com.google.firebase.database.DataSnapshot
 import com.myremainderapplication.interfaces.AppConstant
-import com.myremainderapplication.models.MemberIdNameModel
-import com.myremainderapplication.models.MemberInfoModel
+import com.myremainderapplication.models.MemberShortInfoModel
+import com.myremainderapplication.models.MemberFullInfoModel
+import com.myremainderapplication.models.MemberNotificationModel
 
 class ModelInfoUtils {
 
     companion object {
-        fun getMemberInfoModel(dataSnapshot: DataSnapshot?, memberId: String): MemberInfoModel {
+        fun getMemberInfoModel(dataSnapshot: DataSnapshot?, memberId: String): MemberFullInfoModel {
+            val memberInfoModel= MemberFullInfoModel()
             val data = dataSnapshot?.child(AppConstant.MEMBERS)!!.child(memberId).value as HashMap<*, *>
-            val id = data[AppConstant.MEMBER_ID].toString()
-            val name = data[AppConstant.MEMBER_NAME].toString()
-            val phoneNumber = data[AppConstant.PHONE_NUMBER].toString()
-            val emailId = data[AppConstant.EMAIL_ID].toString()
-            val password = data[AppConstant.PASSWORD].toString()
-            return if(data.containsKey(AppConstant.FRIEND_LIST)){
-                val friendDataList = data[AppConstant.FRIEND_LIST] as ArrayList<*>
-                val friendList = getMemberIdNameModel(friendDataList)
-                MemberInfoModel(id, name, emailId, phoneNumber, password, friendList)
-            }else
-                MemberInfoModel(id, name, emailId, phoneNumber, password)
+            memberInfoModel.memberId = data[AppConstant.MEMBER_ID].toString()
+            memberInfoModel.memberName  = data[AppConstant.MEMBER_NAME].toString()
+            memberInfoModel.phoneNumber = data[AppConstant.PHONE_NUMBER].toString()
+            memberInfoModel.emailId = data[AppConstant.EMAIL_ID].toString()
+            memberInfoModel.password = data[AppConstant.PASSWORD].toString()
+            memberInfoModel.registrationToken=data[AppConstant.REGISTRATION_TOKEN].toString()
+            memberInfoModel.imagePath=data[AppConstant.IMAGE_PATH].toString()
+             return memberInfoModel
         }
 
-        fun getMemberIdNameModel(friendDataList: ArrayList<*>): ArrayList<MemberIdNameModel> {
-            val size = friendDataList.size
+        fun getMemberListModel(memberDataList: ArrayList<*>): ArrayList<MemberShortInfoModel> {
+            val size = memberDataList.size
             var index = 0
-            val friendList = ArrayList<MemberIdNameModel>()
+            val memberList = ArrayList<MemberShortInfoModel>()
             while (index < size) {
-                val hashMap: HashMap<*, *> = friendDataList[index] as HashMap<*, *>
+                val hashMap: HashMap<*, *> = memberDataList[index] as HashMap<*, *>
                 val friendId = hashMap[AppConstant.MEMBER_ID].toString()
                 val friendName = hashMap[AppConstant.MEMBER_NAME].toString()
-                friendList.add(MemberIdNameModel(friendId, friendName))
+                val imagePath=hashMap[AppConstant.IMAGE_PATH].toString()
+                val registrationToken=hashMap[AppConstant.REGISTRATION_TOKEN].toString()
+                memberList.add(MemberShortInfoModel(friendId, friendName,imagePath,registrationToken))
                 index++
             }
-            return friendList
+            return memberList
+        }
+
+        fun getMemberNotificationModel(notificationDataList: ArrayList<*>): ArrayList<MemberNotificationModel> {
+            val size = notificationDataList.size
+            var index = 0
+            val notificationList = ArrayList<MemberNotificationModel>()
+            while (index < size) {
+                val hashMap: HashMap<*, *> = notificationDataList[index] as HashMap<*, *>
+                val messageId = hashMap[AppConstant.MESSAGE_ID].toString()
+                val title = hashMap[AppConstant.TITLE].toString()
+                val body=hashMap[AppConstant.BODY].toString()
+                notificationList.add(MemberNotificationModel(messageId,title,body))
+                index++
+            }
+            return notificationList
         }
     }
 

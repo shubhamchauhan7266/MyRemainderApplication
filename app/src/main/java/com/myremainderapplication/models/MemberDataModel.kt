@@ -6,30 +6,20 @@ import java.io.Serializable
  * Created by user on 7/12/17.
  */
 
-class MemberInfoModel : Serializable {
-    val memberId: String
-    val memberName: String
-    val emailId: String
-    var phoneNumber: String
-    var password: String
-    lateinit var friendList: ArrayList<MemberIdNameModel>
-
-    constructor(memberId: String, memberName: String, emailId: String, phoneNumber: String, password: String, friendList: ArrayList<MemberIdNameModel>) {
-        this.memberId = memberId
-        this.memberName = memberName
-        this.emailId = emailId
-        this.phoneNumber = phoneNumber
-        this.password = password
-        this.friendList = friendList
-    }
-    constructor(memberId: String, memberName: String, emailId: String, phoneNumber: String, password: String) {
-        this.memberId = memberId
-        this.memberName = memberName
-        this.emailId = emailId
-        this.phoneNumber = phoneNumber
-        this.password = password
-    }
+class MemberFullInfoModel() : Serializable {
+    lateinit var  memberId: String
+    lateinit var  memberName: String
+    lateinit var  emailId: String
+    lateinit var phoneNumber: String
+    lateinit var gender: String
+    lateinit var imagePath: String
+    lateinit var registrationToken:String
+    lateinit var password: String
+    lateinit var friendList: ArrayList<MemberShortInfoModel>
+    lateinit var notificationList:ArrayList<MemberNotificationModel>
 }
 
 
-class MemberIdNameModel(val memberId: String, val memberName: String):Serializable
+class MemberShortInfoModel(val memberId: String, val memberName: String, val imagePath:String, val registrationToken:String):Serializable
+
+class MemberNotificationModel(val messageId:String,val title:String,val body:String)

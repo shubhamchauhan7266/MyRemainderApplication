@@ -20,7 +20,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
 import com.myremainderapplication.R
-import com.myremainderapplication.models.MemberInfoModel
+import com.myremainderapplication.models.MemberFullInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
@@ -33,7 +33,7 @@ import java.io.File
  */
 class ProfileFragment : Fragment() {
     private var id: String = ""
-    private var memberInfoModel: MemberInfoModel? = null
+    private var memberFullInfoModel: MemberFullInfoModel? = null
     private var mContext: Context? = null
     private var mStorageRef: StorageReference? = null
     private lateinit var photoPath: File
@@ -72,7 +72,7 @@ class ProfileFragment : Fragment() {
         val database = FirebaseDatabase.getInstance().reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                memberInfoModel = ModelInfoUtils.Companion.getMemberInfoModel(dataSnapshot, id)
+                memberFullInfoModel = ModelInfoUtils.Companion.getMemberInfoModel(dataSnapshot, id)
                 updateData(view)
             }
 
@@ -83,9 +83,9 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateData(view: View) {
-        view.tvName.text = memberInfoModel!!.memberName
-        view.tvEmail.text = memberInfoModel!!.emailId
-        view.tvMobileNumber.text = memberInfoModel!!.phoneNumber
+        view.tvName.text = memberFullInfoModel!!.memberName
+        view.tvEmail.text = memberFullInfoModel!!.emailId
+        view.tvMobileNumber.text = memberFullInfoModel!!.phoneNumber
     }
 
     private fun downloadProfileImage(view: View) {
@@ -126,7 +126,7 @@ class ProfileFragment : Fragment() {
     private fun takePhotoFromCamera(){
         val imagesFolder = File(Environment.getExternalStorageDirectory(), "MyImages")
         imagesFolder.mkdir()
-        photoPath = File(imagesFolder, memberInfoModel!!.memberId + ".jpg")
+        photoPath = File(imagesFolder, memberFullInfoModel!!.memberId + ".jpg")
         val intent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoPath))
         startActivityForResult(intent, AppConstant.REQUEST_TAKE_PHOTO)

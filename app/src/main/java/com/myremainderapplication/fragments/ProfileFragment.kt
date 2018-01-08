@@ -54,7 +54,6 @@ class ProfileFragment : Fragment() {
 
         id = "4041"
         mStorageRef = FirebaseStorage.getInstance().reference
-        downloadProfileImage(view)
         setDatabaseData(view)
         view.ivProfile.setOnClickListener{
             selectImageDialog()
@@ -86,18 +85,10 @@ class ProfileFragment : Fragment() {
         view.tvName.text = memberFullInfoModel!!.memberName
         view.tvEmail.text = memberFullInfoModel!!.emailId
         view.tvMobileNumber.text = memberFullInfoModel!!.phoneNumber
-    }
-
-    private fun downloadProfileImage(view: View) {
-        val imageRef = mStorageRef!!.child("images/3788.jpg")
-        imageRef.downloadUrl
-                .addOnSuccessListener { uri ->
-                    val url = uri.toString()
-                    Picasso.with(mContext)
-                            .load(url)
-                            .into(view.ivProfile)
-                }.addOnFailureListener { exception ->
-        }
+        val url=memberFullInfoModel!!.imagePath
+        Picasso.with(mContext)
+                .load(url)
+                .into(view.ivProfile)
     }
 
     private fun selectImageDialog(){

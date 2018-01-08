@@ -6,7 +6,7 @@ import java.io.Serializable
  * Created by user on 7/12/17.
  */
 
-class MemberFullInfoModel() : Serializable {
+class MemberFullInfoModel : Serializable {
     lateinit var  memberId: String
     lateinit var  memberName: String
     lateinit var  emailId: String

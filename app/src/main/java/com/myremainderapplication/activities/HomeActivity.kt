@@ -7,7 +7,7 @@ import com.myremainderapplication.fragments.FriendListFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import com.myremainderapplication.fragments.ProfileFragment
 import com.myremainderapplication.fragments.HomeFragment
-import com.myremainderapplication.fragments.NotifactionFragment
+import com.myremainderapplication.fragments.NotificationFragment
 
 
 class HomeActivity : AppCompatActivity() {
@@ -65,7 +65,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun loadNotifactionFragment() {
-        val fragment = NotifactionFragment()
+        val fragment = NotificationFragment()
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.fragmentContainer, fragment)
         ft.commit()

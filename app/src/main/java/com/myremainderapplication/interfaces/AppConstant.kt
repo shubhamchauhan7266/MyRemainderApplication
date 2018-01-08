@@ -35,6 +35,7 @@ interface AppConstant {
         val MEMBERS = "members"
         val MEMBERS_LIST = "membersList"
         val FRIEND_LIST = "friendList"
+        val NOTIFICATION_LIST="notificationList"
         val CURRENT_ID = "CurrentId"
         val PASSWORD = "password"
         val REGISTRATION_TOKEN="registrationToken"

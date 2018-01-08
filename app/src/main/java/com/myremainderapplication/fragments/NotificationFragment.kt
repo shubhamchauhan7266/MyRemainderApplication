@@ -1,7 +1,6 @@
 package com.myremainderapplication.fragments
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -15,58 +14,52 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 import com.myremainderapplication.R
-import com.myremainderapplication.activities.ProfileActivity
-import com.myremainderapplication.adapters.FriendListAdapter
+import com.myremainderapplication.adapters.NotificationListAdapter
 import com.myremainderapplication.interfaces.AppConstant
-import com.myremainderapplication.models.MemberShortInfoModel
+import com.myremainderapplication.models.MemberNotificationModel
 import com.myremainderapplication.utils.ModelInfoUtils
-import kotlinx.android.synthetic.main.fragment_friend_list.view.*
+import kotlinx.android.synthetic.main.fragment_notifaction.view.*
 
 /**
  * A simple [Fragment] subclass.
+ * Activities that contain this fragment must implement the
+ * [NotificationFragment.OnFragmentInteractionListener] interface
+ * to handle interaction events.
+ * Use the [NotificationFragment.newInstance] factory method to
+ * create an instance of this fragment.
  */
-class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallBack {
-    private var friendList: ArrayList<MemberShortInfoModel>? = null
-    private lateinit var friendListAdapter: FriendListAdapter
+class NotificationFragment : Fragment() {
     private var mContext: Context? = null
+    private var notificationList: ArrayList<MemberNotificationModel>? = null
+    private lateinit var notificationListAdapter:NotificationListAdapter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         mContext = context
     }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_friend_list, container, false)
-
-        setFriendListData(view)
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_notifaction, container, false)
+        setNotificationListData(view)
         return view
     }
 
-
-    private fun setFriendListData(view: View) {
+    private fun setNotificationListData(view: View) {
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child("4041")
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                if(dataSnapshot?.hasChild(AppConstant.FRIEND_LIST)!!){
-                    val memberList = dataSnapshot.child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
-                    friendList = ModelInfoUtils.Companion.getMemberListModel(memberList)
-                    friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
+                if(dataSnapshot?.hasChild(AppConstant.NOTIFICATION_LIST)!!){
+                    val memberNotificationList = dataSnapshot.child(AppConstant.NOTIFICATION_LIST)?.value as ArrayList<*>
+                    notificationList = ModelInfoUtils.Companion.getMemberNotificationModel(memberNotificationList)
+                    notificationListAdapter = NotificationListAdapter(this@NotificationFragment, notificationList!!)
 
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
-                    view.recyclerView.adapter = friendListAdapter
+                    view.recyclerView.adapter = notificationListAdapter
                 }
             }
             override fun onCancelled(dataSnapshot: DatabaseError?) {
             }
 
-        })
-    }
-
-    override fun onViewClick(position: Int) {
-        val memberIdNameModel = friendList!![position]
-        val intent = Intent(mContext, ProfileActivity::class.java)
-        intent.putExtra(AppConstant.MEMBER_ID, memberIdNameModel.memberId)
-        startActivity(intent)
-    }
+        })    }
 }

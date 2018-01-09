@@ -102,7 +102,7 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         val request = getJsonBody(title, body, calenderModel)
         val jsonRequest = object : JsonObjectRequest(Request.Method.POST, AppConstant.SEND_NOTIFICATION_URL, request,
                 Response.Listener<JSONObject> { response: JSONObject? ->
-
+                    val success= response!!.getInt("success")
                 },
                 Response.ErrorListener { error: VolleyError? ->
 

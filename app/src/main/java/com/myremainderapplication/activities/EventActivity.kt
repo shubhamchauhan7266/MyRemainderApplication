@@ -17,6 +17,7 @@ import com.myremainderapplication.utils.VolleySingletonClass
 import org.json.JSONObject
 import com.android.volley.AuthFailureError
 import com.myremainderapplication.models.CalenderModel
+import com.myremainderapplication.utils.SharedPreferencesUtils
 import kotlinx.android.synthetic.main.activity_event.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import java.util.*
@@ -112,7 +113,7 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
             override fun getHeaders(): Map<String, String> {
                 val params = HashMap<String, String>()
                 params.put("Content-Type", "application/json")
-                params.put("Authorization", "key=AIzaSyDKBMR1gRQrZhARcTvAhZb4PkvcNlLGGQE")
+                params.put("Authorization", AppConstant.Authorization)
 
                 return params
             }
@@ -133,7 +134,7 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         jsonObjectData.put("minute", calenderModel.minute)
 
         jsonObjectRequestParams.put("data", jsonObjectData)
-        jsonObjectRequestParams.put("to", "e9seuSwKXNU:APA91bEVLRmORGAKMcJ6MNfPyuiOdcjnLJNuf3fPCtPt_7FBQtOZJMg3QnA7sgvnoTc59r3es8lQOcUuh0gKV8QF1MQbOIESYZ1zcLgNDBmBbbPDgHZgeQhzl0RLTyYol6ZyxaHUH71q")
+        jsonObjectRequestParams.put("to", SharedPreferencesUtils.getRegistrationKey(this))
 
         return jsonObjectRequestParams
     }

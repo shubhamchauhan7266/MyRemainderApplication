@@ -21,6 +21,8 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 import com.google.firebase.storage.StorageReference
 import java.io.File
 import com.google.firebase.database.DatabaseReference
+import com.myremainderapplication.utils.SharedPreferencesUtils
+import com.squareup.picasso.Picasso
 
 class SignUpActivity : AppCompatActivity(), TextWatcher {
 
@@ -66,7 +68,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         hasMapUser.put(AppConstant.PASSWORD,"12345")
         hasMapUser.put(AppConstant.GENDER,"Male")
         hasMapUser.put(AppConstant.IMAGE_PATH,downloadUrl)
-        hasMapUser.put(AppConstant.REGISTRATION_TOKEN,"")
+        hasMapUser.put(AppConstant.REGISTRATION_TOKEN, SharedPreferencesUtils.getRegistrationKey(this)!!)
 
         val hasMapUserNode=HashMap<String,HashMap<String,String>>()
         hasMapUserNode.put(newId,hasMapUser)
@@ -81,6 +83,9 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
             // Handle unsuccessful uploads
         }.addOnSuccessListener{ taskSnapshot ->
             downloadUrl = (taskSnapshot.downloadUrl).toString()
+            Picasso.with(this)
+                    .load(downloadUrl)
+                    .into(ivProfile)
         }
     }
 

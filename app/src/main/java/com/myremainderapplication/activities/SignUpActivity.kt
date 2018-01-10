@@ -143,7 +143,6 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         etEmail.addTextChangedListener(this)
         etPassword.addTextChangedListener(this)
         etPasswordConfirm.addTextChangedListener(this)
-        etZip.addTextChangedListener(this)
     }
 
     private fun setDatabaseData() {
@@ -182,7 +181,6 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         checkValidatioForEmail()
         checkValidationForPassword()
         checkValidationForConfirmPassword()
-        checkValidatioForZip()
         return isChecked
     }
 
@@ -191,25 +189,22 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
      * if user missed above field and type on next field then it will show error on above field.
      */
     private fun checkValidationBeforeTextChanged() {
-        if (etMobileNumber.hasFocus() || etEmail.hasFocus() || etPassword.hasFocus() || etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
+        if (etMobileNumber.hasFocus() || etEmail.hasFocus() || etPassword.hasFocus() || etPasswordConfirm.hasFocus()) {
             checkValidationForName()
         }
 
-        if (etEmail.hasFocus() || etPassword.hasFocus() || etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
+        if (etEmail.hasFocus() || etPassword.hasFocus() || etPasswordConfirm.hasFocus()) {
             checkValidationForMobileNumber()
         }
 
-        if (etPassword.hasFocus() || etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
+        if (etPassword.hasFocus() || etPasswordConfirm.hasFocus()) {
             checkValidatioForEmail()
         }
 
-        if (etPasswordConfirm.hasFocus() || etZip.hasFocus()) {
+        if (etPasswordConfirm.hasFocus()) {
             checkValidationForPassword()
         }
 
-        if (etZip.hasFocus()) {
-            checkValidationForConfirmPassword()
-        }
     }
 
     /*
@@ -236,9 +231,6 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
             checkValidationForConfirmPassword()
         }
 
-        if (etZip.hasFocus()) {
-            checkValidatioForZip()
-        }
     }
 
     /*
@@ -314,16 +306,4 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
-    /*
-     * This method will check validation for Zip.
-     */
-    internal fun checkValidatioForZip() {
-        if (etZip.getText().toString().trim({ it <= ' ' }).length == 0) {
-            inputLayoutZip.setError(AppConstant.ZIP_VALIDATION_ERROR)
-            inputLayoutZip.setErrorEnabled(true)
-            isChecked = false
-        } else {
-            inputLayoutZip.setErrorEnabled(false)
-        }
-    }
 }

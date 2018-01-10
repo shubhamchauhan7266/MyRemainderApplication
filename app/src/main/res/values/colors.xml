@@ -6,4 +6,8 @@
     <color name="colorGrey">#DCDCDC</color>
     <color name="colorWhite">#ffffff</color>
 
+    <color name="colorTextUnchecked">#6b6d73</color>
+    <color name="colorTextChecked">#262933</color>
+    <color name="colorTextHeading">#262933</color>
+
 </resources>

@@ -110,7 +110,38 @@
                             android:singleLine="true" />
                     </android.support.design.widget.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <RadioGroup
+                        android:id="@+id/rgGender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:checkedButton="1"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@drawable/radiobutton_selector"
+                            android:paddingLeft="10dp"
+                            android:paddingStart="10dp"
+                            android:text="@string/male"
+                            android:textColor="@drawable/text_color_selector"
+                            tools:ignore="RtlSymmetry"
+                            android:checked="true"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@drawable/radiobutton_selector"
+                            android:paddingLeft="10dp"
+                            android:paddingStart="10dp"
+                            android:text="@string/female"
+                            android:textColor="@drawable/text_color_selector"
+                            tools:ignore="RtlSymmetry" />
+
+                    </RadioGroup>
+
+                  <!--  <android.support.design.widget.TextInputLayout
                         android:id="@+id/inputLayoutZip"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -124,7 +155,7 @@
                             android:inputType="number"
                             android:maxLength="6"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </android.support.design.widget.TextInputLayout>-->
 
                 </LinearLayout>
             </FrameLayout>

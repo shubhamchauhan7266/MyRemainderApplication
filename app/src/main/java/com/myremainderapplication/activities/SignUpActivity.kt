@@ -57,7 +57,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     private fun uploadNewUserData() {
         val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().reference
         val databaseCurrentMemberIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_ID)
-        val databaseCurrentMemberListIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_ID)
+        val databaseCurrentMemberListIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_LIST_ID)
         val databaseMembersRef = databaseRef.child(AppConstant.MEMBERS)
         val databaseMemberListRef = databaseMembersRef.child(AppConstant.MEMBERS_LIST)
 
@@ -106,9 +106,12 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         uploadTask.addOnFailureListener { exception ->
             // Handle unsuccessful uploads
         }.addOnSuccessListener { taskSnapshot ->
+            //TODO has to be managed in background
             downloadUrl = (taskSnapshot.downloadUrl).toString()
             Picasso.with(this)
                     .load(downloadUrl)
+                    .centerInside()
+                    .resize(100,100)
                     .into(ivProfile)
         }
     }
@@ -139,7 +142,10 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     private fun takePhotoFromCamera() {
         val imagesFolder = File(Environment.getExternalStorageDirectory(), "MyImages")
         imagesFolder.mkdir()
-        photoPath = File(imagesFolder, currentMemberId + ".jpg")
+        if(!currentMemberId.equals(""))
+         photoPath = File(imagesFolder, (currentMemberId.toInt() + 1).toString()+".jpg")
+        else
+            return
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoPath))
         startActivityForResult(intent, AppConstant.REQUEST_TAKE_PHOTO)

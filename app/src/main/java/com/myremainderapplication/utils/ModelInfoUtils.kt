@@ -44,10 +44,9 @@ class ModelInfoUtils {
             val notificationList = ArrayList<MemberNotificationModel>()
             while (index < size) {
                 val hashMap: HashMap<*, *> = notificationDataList[index] as HashMap<*, *>
-                val messageId = hashMap[AppConstant.MESSAGE_ID].toString()
                 val title = hashMap[AppConstant.TITLE].toString()
                 val body=hashMap[AppConstant.BODY].toString()
-                notificationList.add(MemberNotificationModel(messageId,title,body))
+                notificationList.add(MemberNotificationModel(title,body))
                 index++
             }
             return notificationList

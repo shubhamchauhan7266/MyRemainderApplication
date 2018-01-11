@@ -33,6 +33,7 @@ import java.io.File
  */
 class ProfileFragment : Fragment() {
     private var id: String = ""
+    private var memberListId: String = ""
     private var memberFullInfoModel: MemberFullInfoModel? = null
     private var mContext: Context? = null
     private var mStorageRef: StorageReference? = null
@@ -71,6 +72,19 @@ class ProfileFragment : Fragment() {
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 memberFullInfoModel = ModelInfoUtils.Companion.getMemberInfoModel(dataSnapshot, id)
+                val memberList = dataSnapshot!!.child(AppConstant.MEMBERS).child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
+                val memberUserList = ModelInfoUtils.Companion.getMemberListModel(memberList)
+
+                var index=0
+                while (index<memberUserList.size)
+                {
+                    if(id==memberUserList[index].memberId){
+                        memberListId=index.toString()
+                        break
+                    }
+
+                    index++
+                }
                 updateData(view)
             }
 
@@ -146,6 +160,13 @@ class ProfileFragment : Fragment() {
             // Handle unsuccessful uploads
         }.addOnSuccessListener{ taskSnapshot ->
             val downloadUrl = taskSnapshot.downloadUrl
+            val databaseMemberImagePathref=FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(id)
+            val hashMap= HashMap<String,String>()
+            hashMap.put(AppConstant.IMAGE_PATH,downloadUrl.toString())
+            databaseMemberImagePathref.updateChildren(hashMap as Map<String, Any>?)
+
+            val databaseMemberListImagePathref=FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(AppConstant.MEMBERS_LIST).child(memberListId)
+            databaseMemberListImagePathref.updateChildren(hashMap as Map<String, Any>?)
         }
     }
 

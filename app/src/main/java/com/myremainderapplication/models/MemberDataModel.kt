@@ -22,4 +22,4 @@ class MemberFullInfoModel : Serializable {
 
 class MemberShortInfoModel(val memberId: String, val memberName: String, val imagePath:String, val registrationToken:String):Serializable
 
-class MemberNotificationModel(val messageId:String,val title:String,val body:String)
+class MemberNotificationModel(val title:String,val body:String)

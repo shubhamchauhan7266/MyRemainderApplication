@@ -27,10 +27,12 @@ import com.squareup.picasso.Picasso
 class SignUpActivity : AppCompatActivity(), TextWatcher {
 
     private var isChecked: Boolean = false
-    private var currentId: String = ""
+    private var currentMemberId: String = ""
+    private var currentMemberListId: String = ""
+
     private var storageRef: StorageReference? = null
     private lateinit var photoPath: File
-    private lateinit var downloadUrl: String
+    private  var downloadUrl: String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,41 +49,63 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
             }
         }
 
-        ivProfile.setOnClickListener{
+        ivProfile.setOnClickListener {
             selectImageDialog()
         }
     }
 
     private fun uploadNewUserData() {
-        val databaseRef:DatabaseReference = FirebaseDatabase.getInstance().reference
-        val databaseCurrentIdRef=databaseRef.child(AppConstant.CURRENT_ID)
-        val databaseMembersRef=databaseRef.child(AppConstant.MEMBERS)
+        val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().reference
+        val databaseCurrentMemberIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_ID)
+        val databaseCurrentMemberListIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_ID)
+        val databaseMembersRef = databaseRef.child(AppConstant.MEMBERS)
+        val databaseMemberListRef = databaseMembersRef.child(AppConstant.MEMBERS_LIST)
 
-        val newId=(currentId.toInt()+1).toString()
-        databaseCurrentIdRef.setValue(newId)
+        val newMemberId = (currentMemberId.toInt() + 1).toString()
+        val newMemberListId=(currentMemberListId.toInt() + 1).toString()
 
-        val hasMapUser= HashMap<String,String>()
-        hasMapUser.put(AppConstant.MEMBER_ID,newId)
-        hasMapUser.put(AppConstant.MEMBER_NAME,"shubham")
-        hasMapUser.put(AppConstant.PHONE_NUMBER,"8769567487")
-        hasMapUser.put(AppConstant.EMAIL_ID,"rohan@gmail.com")
-        hasMapUser.put(AppConstant.PASSWORD,"12345")
-        hasMapUser.put(AppConstant.GENDER,"Male")
-        hasMapUser.put(AppConstant.IMAGE_PATH,downloadUrl)
-        hasMapUser.put(AppConstant.REGISTRATION_TOKEN, SharedPreferencesUtils.getRegistrationKey(this)!!)
+        val gender: String
+        if (rbMail.isChecked)
+            gender=rbMail.text.toString()
+        else
+            gender=rbFemale.text.toString()
 
-        val hasMapUserNode=HashMap<String,HashMap<String,String>>()
-        hasMapUserNode.put(newId,hasMapUser)
-        databaseMembersRef.updateChildren(hasMapUserNode as Map<String, Any>?)
+        val hasMapMemberUserNode = HashMap<String, String>()
+        hasMapMemberUserNode.put(AppConstant.MEMBER_ID, newMemberId)
+        hasMapMemberUserNode.put(AppConstant.MEMBER_NAME, etName.text.toString())
+        hasMapMemberUserNode.put(AppConstant.PHONE_NUMBER, etMobileNumber.text.toString())
+        hasMapMemberUserNode.put(AppConstant.EMAIL_ID, etEmail.text.toString())
+        hasMapMemberUserNode.put(AppConstant.PASSWORD, etPassword.text.toString())
+        hasMapMemberUserNode.put(AppConstant.GENDER, gender)
+        hasMapMemberUserNode . put (AppConstant.IMAGE_PATH, downloadUrl)
+        hasMapMemberUserNode.put(AppConstant.REGISTRATION_TOKEN, SharedPreferencesUtils.getRegistrationKey(this)!!)
+
+        val hasMapMemberNode = HashMap<String, HashMap<String, String>>()
+        hasMapMemberNode.put(newMemberId, hasMapMemberUserNode)
+
+        val hasMapMemberListUserNode = HashMap<String, String>()
+        hasMapMemberListUserNode.put(AppConstant.MEMBER_ID, newMemberId)
+        hasMapMemberListUserNode.put(AppConstant.MEMBER_NAME, etName.text.toString())
+        hasMapMemberListUserNode . put (AppConstant.IMAGE_PATH, downloadUrl)
+        hasMapMemberListUserNode.put(AppConstant.REGISTRATION_TOKEN, SharedPreferencesUtils.getRegistrationKey(this)!!)
+
+        val hasMapMemberListNode = HashMap<String, HashMap<String, String>>()
+        hasMapMemberListNode.put(newMemberListId, hasMapMemberListUserNode)
+
+        databaseMembersRef.updateChildren(hasMapMemberNode as Map<String, Any>?)
+        databaseMemberListRef.updateChildren(hasMapMemberListNode as Map<String, Any>?)
+        databaseCurrentMemberIdRef.setValue(newMemberId)
+        databaseCurrentMemberListIdRef.setValue(newMemberListId)
+
     }
 
-    private fun uploadProfileImage(file:Uri){
+    private fun uploadProfileImage(file: Uri) {
         val childRef = storageRef!!.child("images/" + file.lastPathSegment)
         val uploadTask = childRef.putFile(file)
 
-        uploadTask.addOnFailureListener{exception->
+        uploadTask.addOnFailureListener { exception ->
             // Handle unsuccessful uploads
-        }.addOnSuccessListener{ taskSnapshot ->
+        }.addOnSuccessListener { taskSnapshot ->
             downloadUrl = (taskSnapshot.downloadUrl).toString()
             Picasso.with(this)
                     .load(downloadUrl)
@@ -89,48 +113,48 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
-    private fun selectImageDialog(){
-        val items= arrayOf("Take Photo", "Choose from Library", "Cancel")
-        val builder= AlertDialog.Builder(this)
+    private fun selectImageDialog() {
+        val items = arrayOf("Take Photo", "Choose from Library", "Cancel")
+        val builder = AlertDialog.Builder(this)
         builder.setTitle("Add Photo!")
-        builder.setItems(items){dialog,item->
-            if(items[item].equals("Take Photo")){
+        builder.setItems(items) { dialog, item ->
+            if (items[item].equals("Take Photo")) {
                 takePhotoFromCamera()
-            }else if(items[item].equals("Choose from Library")){
+            } else if (items[item].equals("Choose from Library")) {
                 selectImageFromAlbum()
-            }else{
+            } else {
                 dialog.dismiss()
             }
         }
         builder.show()
     }
 
-    private fun selectImageFromAlbum(){
-        val intent= Intent()
+    private fun selectImageFromAlbum() {
+        val intent = Intent()
         intent.setAction(Intent.ACTION_GET_CONTENT)
         intent.setType("image/*")
         startActivityForResult(intent, AppConstant.REQUEST_SELECT_IMAGE_FROM_ALBUM)
     }
 
-    private fun takePhotoFromCamera(){
+    private fun takePhotoFromCamera() {
         val imagesFolder = File(Environment.getExternalStorageDirectory(), "MyImages")
         imagesFolder.mkdir()
-        photoPath = File(imagesFolder, currentId + ".jpg")
-        val intent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        photoPath = File(imagesFolder, currentMemberId + ".jpg")
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoPath))
         startActivityForResult(intent, AppConstant.REQUEST_TAKE_PHOTO)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode== Activity.RESULT_OK){
-            var uri: Uri? =null
-            when(requestCode){
-                AppConstant.REQUEST_SELECT_IMAGE_FROM_ALBUM ->{
+        if (resultCode == Activity.RESULT_OK) {
+            var uri: Uri? = null
+            when (requestCode) {
+                AppConstant.REQUEST_SELECT_IMAGE_FROM_ALBUM -> {
                     uri = data!!.data
                 }
-                AppConstant.REQUEST_TAKE_PHOTO ->{
-                    uri= Uri.fromFile(photoPath)
+                AppConstant.REQUEST_TAKE_PHOTO -> {
+                    uri = Uri.fromFile(photoPath)
                 }
             }
             uploadProfileImage(uri!!)
@@ -149,7 +173,8 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         val database = FirebaseDatabase.getInstance().reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                currentId = dataSnapshot?.child(AppConstant.CURRENT_ID)?.value.toString()
+                currentMemberId = dataSnapshot?.child(AppConstant.CURRENT_MEMBER_ID)?.value.toString()
+                currentMemberListId = dataSnapshot?.child(AppConstant.CURRENT_MEMBER_LIST_ID)?.value.toString()
             }
 
             override fun onCancelled(dataSnapshot: DatabaseError?) {
@@ -181,6 +206,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         checkValidatioForEmail()
         checkValidationForPassword()
         checkValidationForConfirmPassword()
+        checkValidationForImage()
         return isChecked
     }
 
@@ -305,5 +331,14 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
             inputLayoutPasswordConfirm.setErrorEnabled(false)
         }
     }
+
+    /*
+    * This method will check validation for Profile Image.
+    */
+    internal fun checkValidationForImage(){
+        if(downloadUrl.equals(""))
+            isChecked=false
+    }
+
 
 }

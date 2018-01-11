@@ -119,6 +119,7 @@
                         android:orientation="vertical">
 
                         <RadioButton
+                            android:id="@+id/rbMail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:button="@drawable/radiobutton_selector"
@@ -130,6 +131,7 @@
                             android:checked="true"/>
 
                         <RadioButton
+                            android:id="@+id/rbFemale"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:button="@drawable/radiobutton_selector"

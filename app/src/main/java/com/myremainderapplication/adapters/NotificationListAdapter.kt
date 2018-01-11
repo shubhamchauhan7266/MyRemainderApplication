@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import com.myremainderapplication.R
 import com.myremainderapplication.fragments.NotificationFragment
 import com.myremainderapplication.models.MemberNotificationModel
-import com.myremainderapplication.models.MemberShortInfoModel
 import kotlinx.android.synthetic.main.notification_item_row.view.*
 
 /**

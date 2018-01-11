@@ -16,6 +16,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        loadHomeFragment()
 
         bottomNavigationView.setOnNavigationItemSelectedListener{item ->
             when(item.itemId){

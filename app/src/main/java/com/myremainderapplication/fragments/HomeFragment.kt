@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
                 if (dataSnapshot?.hasChild(AppConstant.MEMBERS_LIST)!!) {
                     val memberNodeList = dataSnapshot.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
                     memberList = ModelInfoUtils.getMemberListModel(memberNodeList)
-                    memberListAdapter = MemberListAdapter(this@HomeFragment, memberList!!)
+                    memberListAdapter = MemberListAdapter(mContext!!, memberList!!)
 
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                     view.recyclerView.adapter = memberListAdapter

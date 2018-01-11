@@ -101,6 +101,7 @@ class ProfileFragment : Fragment() {
         val url=memberFullInfoModel!!.imagePath
         Picasso.with(mContext)
                 .load(url)
+                .resize(100,100)
                 .into(view.ivProfile)
     }
 

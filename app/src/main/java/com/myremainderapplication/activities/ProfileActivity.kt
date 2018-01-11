@@ -57,6 +57,7 @@ class ProfileActivity : AppCompatActivity() {
         val url=memberFullInfoModel!!.imagePath
         Picasso.with(this)
                 .load(url)
+                .resize(100,100)
                 .into(ivProfile)
     }
 

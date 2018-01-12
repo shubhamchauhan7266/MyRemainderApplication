@@ -72,6 +72,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
         val hasMapMemberUserNode = HashMap<String, String>()
         hasMapMemberUserNode.put(AppConstant.MEMBER_ID, newMemberId)
+        hasMapMemberUserNode.put(AppConstant.CURRENT_FRIEND_LIST_ID,(-1).toString())
         hasMapMemberUserNode.put(AppConstant.MEMBER_NAME, etName.text.toString())
         hasMapMemberUserNode.put(AppConstant.PHONE_NUMBER, etMobileNumber.text.toString())
         hasMapMemberUserNode.put(AppConstant.EMAIL_ID, etEmail.text.toString())

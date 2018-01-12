@@ -15,12 +15,14 @@ import com.myremainderapplication.R
 import com.myremainderapplication.activities.HomeActivity
 import com.myremainderapplication.models.CalenderModel
 import java.util.*
+import android.widget.RemoteViews
 
 
 /**
  * Created by Shubham Chauhan on 21/12/17.
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+    private val SIMPLE_NOTIFICATION_REQUEST = 1410
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         var title: String? = null
         var body: String? = null
@@ -30,6 +32,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val hour: Int
         val minute: Int
 
+        // Check if message contains a Alarm Data payload.
         if (remoteMessage!!.data.size > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
             title = remoteMessage.data!!.get("title")!!
@@ -68,10 +71,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
     }
 
-    fun sendNotification(title: String?, body: String?) {
+    private fun sendNotification(title: String?, body: String?) {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 1410,
+        val pendingIntent = PendingIntent.getActivity(this, SIMPLE_NOTIFICATION_REQUEST,
                 intent, PendingIntent.FLAG_ONE_SHOT)
 
         val notificationBuilder = NotificationCompat.Builder(this)
@@ -83,6 +86,26 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        notificationManager.notify(1410, notificationBuilder.build())
+        notificationManager.notify(SIMPLE_NOTIFICATION_REQUEST, notificationBuilder.build())
+    }
+
+    private fun sendFriendRequestNotification(title: String?, body: String?) {
+
+        val remoteViews = RemoteViews(packageName, R.layout.customnotification)
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(this, SIMPLE_NOTIFICATION_REQUEST,
+                intent, PendingIntent.FLAG_ONE_SHOT)
+
+        val notificationBuilder = NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.profile)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        notificationManager.notify(SIMPLE_NOTIFICATION_REQUEST, notificationBuilder.build())
     }
 }

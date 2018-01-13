@@ -48,6 +48,8 @@
             </intent-filter>
         </service>
 
+        <service android:name=".services.HandleFriendRequestService"/>
+
         <activity android:name=".activities.EventActivity" />
         <activity android:name=".activities.AlarmActivity">
             <intent-filter>

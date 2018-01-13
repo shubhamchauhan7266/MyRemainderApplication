@@ -10,6 +10,7 @@ package com.myremainderapplication.interfaces
 interface AppConstant {
     companion object {
         val SPLASH_TIME_OUT = 3000
+        val SIMPLE_NOTIFICATION_REQUEST = 1410
         val REQUEST_SELECT_IMAGE_FROM_ALBUM = 1
         val REQUEST_TAKE_PHOTO = 2
         val APP_ID = "1:303119189109:android:bf9132e50cbefbce"

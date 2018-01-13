@@ -17,25 +17,28 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:weightSum="2">
         <TextView
             android:id="@+id/tvAccept"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:padding="10dp"
             android:text="ACCEPT"/>
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorGrey"/>
+
         <TextView
-            android:id="@+id/Reject"
+            android:id="@+id/tvReject"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:padding="10dp"
             android:text="REJECT"/>
     </LinearLayout>
 </LinearLayout>

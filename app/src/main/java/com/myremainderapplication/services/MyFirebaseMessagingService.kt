@@ -16,13 +16,13 @@ import com.myremainderapplication.activities.HomeActivity
 import com.myremainderapplication.models.CalenderModel
 import java.util.*
 import android.widget.RemoteViews
+import com.myremainderapplication.interfaces.AppConstant
 
 
 /**
  * Created by Shubham Chauhan on 21/12/17.
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    private val SIMPLE_NOTIFICATION_REQUEST = 1410
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         var title: String? = null
         var body: String? = null
@@ -63,7 +63,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun setEventAlarm(title: String?, body: String?, calenderModel: CalenderModel) {
 
         val intent = Intent("com.myremainderapplication.activities.alarmactivity")
-        val pendingIntent = PendingIntent.getActivity(baseContext, 0, intent, Intent.FLAG_ACTIVITY_NEW_TASK)
+        val pendingIntent = PendingIntent.getActivity(baseContext, 2, intent, Intent.FLAG_ACTIVITY_NEW_TASK)
         val alarmManager: AlarmManager = baseContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val calendar = GregorianCalendar(calenderModel.year, calenderModel.month, calenderModel.day,
                 calenderModel.hour, calenderModel.minute)
@@ -74,7 +74,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(title: String?, body: String?) {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, SIMPLE_NOTIFICATION_REQUEST,
+        val pendingIntent = PendingIntent.getActivity(this, AppConstant.SIMPLE_NOTIFICATION_REQUEST,
                 intent, PendingIntent.FLAG_ONE_SHOT)
 
         val notificationBuilder = NotificationCompat.Builder(this)
@@ -86,26 +86,37 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        notificationManager.notify(SIMPLE_NOTIFICATION_REQUEST, notificationBuilder.build())
+        notificationManager.notify(AppConstant.SIMPLE_NOTIFICATION_REQUEST, notificationBuilder.build())
     }
 
-    private fun sendFriendRequestNotification(title: String?, body: String?) {
+    private fun sendFriendRequestNotification(senderId:String,receiverId:String,message: String?) {
 
-        val remoteViews = RemoteViews(packageName, R.layout.customnotification)
+        val acceptIntent=Intent(this,HandleFriendRequestService::class.java)
+        acceptIntent.action = getString(R.string.accept)
+
+        val rejectIntent=Intent(this,HandleFriendRequestService::class.java)
+        rejectIntent.action = getString(R.string.reject)
+
+        val expendView = RemoteViews(packageName, R.layout.customnotification)
+        expendView.setTextViewText(R.id.tvMessage,message)
+        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this,0,acceptIntent,PendingIntent.FLAG_UPDATE_CURRENT))
+        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this,1,rejectIntent,PendingIntent.FLAG_UPDATE_CURRENT))
+
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, SIMPLE_NOTIFICATION_REQUEST,
+        val pendingIntent = PendingIntent.getActivity(this, AppConstant.SIMPLE_NOTIFICATION_REQUEST,
                 intent, PendingIntent.FLAG_ONE_SHOT)
 
         val notificationBuilder = NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.profile)
-                .setContentTitle(title)
-                .setContentText(body)
+                .setContentTitle("Friend Request")
+                .setContentText(message)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
+                .setCustomBigContentView(expendView)
+                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        notificationManager.notify(SIMPLE_NOTIFICATION_REQUEST, notificationBuilder.build())
+        notificationManager.notify(AppConstant.SIMPLE_NOTIFICATION_REQUEST, notificationBuilder.build())
     }
 }

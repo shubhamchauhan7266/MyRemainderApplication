@@ -93,6 +93,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val acceptIntent=Intent(this,HandleFriendRequestService::class.java)
         acceptIntent.action = getString(R.string.accept)
+        acceptIntent.putExtra(AppConstant.SENDER_ID_KEY,senderId)
+        acceptIntent.putExtra(AppConstant.RECEIVER_ID_KEY,receiverId)
 
         val rejectIntent=Intent(this,HandleFriendRequestService::class.java)
         rejectIntent.action = getString(R.string.reject)

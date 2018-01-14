@@ -8,6 +8,7 @@ import java.io.Serializable
 
 class MemberFullInfoModel : Serializable {
     lateinit var  memberId: String
+    lateinit var currentFriendId:String
     lateinit var  memberName: String
     lateinit var  emailId: String
     lateinit var phoneNumber: String

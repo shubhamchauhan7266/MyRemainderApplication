@@ -13,7 +13,9 @@ class ModelInfoUtils {
             val memberInfoModel= MemberFullInfoModel()
             val data = dataSnapshot?.child(AppConstant.MEMBERS)!!.child(memberId).value as HashMap<*, *>
             memberInfoModel.memberId = data[AppConstant.MEMBER_ID].toString()
+            memberInfoModel.currentFriendId = data[AppConstant.CURRENT_FRIEND_LIST_ID].toString()
             memberInfoModel.memberName  = data[AppConstant.MEMBER_NAME].toString()
+            memberInfoModel.gender = data[AppConstant.GENDER].toString()
             memberInfoModel.phoneNumber = data[AppConstant.PHONE_NUMBER].toString()
             memberInfoModel.emailId = data[AppConstant.EMAIL_ID].toString()
             memberInfoModel.password = data[AppConstant.PASSWORD].toString()

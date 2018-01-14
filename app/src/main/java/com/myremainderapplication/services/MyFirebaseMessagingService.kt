@@ -58,6 +58,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
                     val calenderModel = CalenderModel(year, month, day, hour, minute)
                     setEventAlarm(title, body, calenderModel)
+                    sendNotification(title, body)
                 }
             }
         }
@@ -69,8 +70,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
             Log.d(TAG, "Message Notification Title: " + title)
             Log.d(TAG, "Message Notification Body: " + body)
+            sendNotification(title, body)
         }
-        sendNotification(title, body)
     }
 
     @SuppressLint("WrongConstant")
@@ -107,32 +108,33 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val acceptIntent=Intent(this,HandleFriendRequestService::class.java)
         acceptIntent.action = getString(R.string.accept)
+        acceptIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         acceptIntent.putExtra(AppConstant.SENDER_ID_KEY,senderId)
         acceptIntent.putExtra(AppConstant.RECEIVER_ID_KEY,receiverId)
 
         val rejectIntent=Intent(this,HandleFriendRequestService::class.java)
         rejectIntent.action = getString(R.string.reject)
+        rejectIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         val expendView = RemoteViews(packageName, R.layout.customnotification)
         expendView.setTextViewText(R.id.tvMessage,message)
-        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this,0,acceptIntent,PendingIntent.FLAG_UPDATE_CURRENT))
-        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this,1,rejectIntent,PendingIntent.FLAG_UPDATE_CURRENT))
+        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this,AppConstant.CUSTOM_NOTIFICATION_REQUEST,acceptIntent,PendingIntent.FLAG_UPDATE_CURRENT))
+        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this,AppConstant.CUSTOM_NOTIFICATION_REQUEST,rejectIntent,PendingIntent.FLAG_UPDATE_CURRENT))
 
         val intent = Intent(this, HomeActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, AppConstant.SIMPLE_NOTIFICATION_REQUEST,
-                intent, PendingIntent.FLAG_ONE_SHOT)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val pendingIntent = PendingIntent.getActivity(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notificationBuilder = NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.profile)
-                .setContentTitle("Friend Request")
-                .setContentText(message)
+                .setContentTitle("custom notification")
+                .setContentText("testing message")
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
-                .setCustomBigContentView(expendView)
+                .setCustomContentView(expendView)
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(AppConstant.SIMPLE_NOTIFICATION_REQUEST, notificationBuilder.build())
+        notificationManager.notify(AppConstant.CUSTOM_NOTIFICATION_REQUEST, notificationBuilder.build())
     }
 }

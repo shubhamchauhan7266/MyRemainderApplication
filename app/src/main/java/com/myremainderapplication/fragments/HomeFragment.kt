@@ -103,7 +103,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         jsonObjectData.put(AppConstant.SENDER_ID_KEY, senderId)
         jsonObjectData.put(AppConstant.RECEIVER_ID_KEY, ReceiverId)
         jsonObjectData.put("message", message)
-        jsonObjectRequestParams.put("friendRequestData", jsonObjectData)
+        jsonObjectRequestParams.put("data", jsonObjectData)
         jsonObjectRequestParams.put("to", SharedPreferencesUtils.getRegistrationKey(mContext!!))
 
         return jsonObjectRequestParams

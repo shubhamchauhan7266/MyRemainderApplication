@@ -33,19 +33,33 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val minute: Int
 
         // Check if message contains a Alarm Data payload.
-        if (remoteMessage!!.data.size > 0) {
+        if (remoteMessage!!.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
-            title = remoteMessage.data!!.get("title")!!
-            body = remoteMessage.data!!.get("body")!!
+            var type=0
+            if(remoteMessage.data.containsKey("type")){
+               type= remoteMessage.data["type"]!!.toInt()
+            }
+            when(type){
+                1->{
+                    val senderId = remoteMessage.data!![AppConstant.SENDER_ID_KEY]!!
+                    val receiverId = remoteMessage.data!![AppConstant.RECEIVER_ID_KEY]!!
+                    val message = remoteMessage.data!!["message"]!!
+                    sendFriendRequestNotification(senderId,receiverId,message)
+                }
+                2->{
+                    title = remoteMessage.data!!["title"]!!
+                    body = remoteMessage.data!!["body"]!!
 
-            year = remoteMessage.data!!.get("year")!!.toInt()
-            month = remoteMessage.data!!.get("month")!!.toInt()
-            day = remoteMessage.data!!.get("day")!!.toInt()
-            hour = remoteMessage.data!!.get("hour")!!.toInt()
-            minute = remoteMessage.data!!.get("minute")!!.toInt()
+                    year = remoteMessage.data!!["year"]!!.toInt()
+                    month = remoteMessage.data!!["month"]!!.toInt()
+                    day = remoteMessage.data!!["day"]!!.toInt()
+                    hour = remoteMessage.data!!["hour"]!!.toInt()
+                    minute = remoteMessage.data!!["minute"]!!.toInt()
 
-            val calenderModel = CalenderModel(year, month, day, hour, minute)
-            setEventAlarm(title, body, calenderModel)
+                    val calenderModel = CalenderModel(year, month, day, hour, minute)
+                    setEventAlarm(title, body, calenderModel)
+                }
+            }
         }
 
         // Check if message contains a notification payload.

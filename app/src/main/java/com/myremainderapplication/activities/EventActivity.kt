@@ -91,7 +91,7 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.btSend -> {
                 val calenderModel = CalenderModel(alarmYear,alarmMonth,alarmDay,alarmHour,alarmMinute)
-                if (etTitle.text.toString().trim().length > 0 && etDescription.text.toString().trim().length > 0)
+                if (etTitle.text.toString().trim().isNotEmpty() && etDescription.text.toString().trim().isNotEmpty())
                     sendEventNotification(etTitle.text.toString(), etDescription.text.toString(), calenderModel)
                 else
                     Snackbar.make(rootView, "Please fill all Field", Snackbar.LENGTH_SHORT).show()
@@ -125,6 +125,7 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         val jsonObjectRequestParams = JSONObject()
 
         val jsonObjectData = JSONObject()
+        jsonObjectData.put("type",2)
         jsonObjectData.put("title", title)
         jsonObjectData.put("body", body)
         jsonObjectData.put("year", calenderModel.year)

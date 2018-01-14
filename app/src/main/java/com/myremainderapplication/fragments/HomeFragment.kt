@@ -70,11 +70,11 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
 
     override fun onViewClick(position: Int) {
         val memberShortInfoModel = memberList?.get(position)
-        sendFriendRequest("4041",memberShortInfoModel!!.memberId,"message1")
+        sendFriendRequest("4041",memberShortInfoModel!!.memberId,"message1",memberShortInfoModel.registrationToken)
     }
 
-    private fun sendFriendRequest(senderId: String, ReceiverId: String,message:String) {
-        val request = getJsonBody(senderId, ReceiverId,message)
+    private fun sendFriendRequest(senderId: String, ReceiverId: String,message:String,registrationToken: String) {
+        val request = getJsonBody(senderId, ReceiverId,message,registrationToken)
         val jsonRequest = object : JsonObjectRequest(Request.Method.POST, AppConstant.SEND_NOTIFICATION_URL, request,
                 Response.Listener<JSONObject> { response: JSONObject? ->
                     val success= response!!.getInt("success")
@@ -95,7 +95,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         requestQueue.add(jsonRequest)
     }
 
-    private fun getJsonBody(senderId: String, ReceiverId: String,message:String): JSONObject {
+    private fun getJsonBody(senderId: String, ReceiverId: String,message:String,registrationToken:String): JSONObject {
         val jsonObjectRequestParams = JSONObject()
 
         val jsonObjectData = JSONObject()

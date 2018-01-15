@@ -44,8 +44,8 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
         when (intent?.action) {
             getString(R.string.accept) -> {
                 if (senderId != null && receiverId != null) {
-                    val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(senderId)
-                    val databaseReceiverRef = FirebaseDatabase.getInstance().reference.child(receiverId)
+                    val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(senderId)
+                    val databaseReceiverRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(receiverId)
 
                     if (senderInfo != null && receiverInfo != null) {
                         val newSenderFriendId = (senderInfo?.currentFriendId!!.toInt() + 1).toString()

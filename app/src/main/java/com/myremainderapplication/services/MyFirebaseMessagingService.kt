@@ -24,8 +24,8 @@ import com.myremainderapplication.interfaces.AppConstant
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
-        var title: String? = null
-        var body: String? = null
+        var title: String?
+        var body: String?
         val year: Int
         val month: Int
         val day: Int

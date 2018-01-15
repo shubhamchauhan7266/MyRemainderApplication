@@ -104,35 +104,36 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.notify(AppConstant.SIMPLE_NOTIFICATION_REQUEST, notificationBuilder.build())
     }
 
-    private fun sendFriendRequestNotification(senderId:String,receiverId:String,message: String?) {
+    private fun sendFriendRequestNotification(senderId:String,receiverId:String,message: String) {
 
         val acceptIntent=Intent(this,HandleFriendRequestService::class.java)
         acceptIntent.action = getString(R.string.accept)
-        acceptIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        acceptIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         acceptIntent.putExtra(AppConstant.SENDER_ID_KEY,senderId)
         acceptIntent.putExtra(AppConstant.RECEIVER_ID_KEY,receiverId)
 
         val rejectIntent=Intent(this,HandleFriendRequestService::class.java)
         rejectIntent.action = getString(R.string.reject)
-        rejectIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        rejectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
         val expendView = RemoteViews(packageName, R.layout.customnotification)
         expendView.setTextViewText(R.id.tvMessage,message)
-        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this,AppConstant.CUSTOM_NOTIFICATION_REQUEST,acceptIntent,PendingIntent.FLAG_UPDATE_CURRENT))
-        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this,AppConstant.CUSTOM_NOTIFICATION_REQUEST,rejectIntent,PendingIntent.FLAG_UPDATE_CURRENT))
+        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this,AppConstant.CUSTOM_NOTIFICATION_REQUEST,acceptIntent,PendingIntent.FLAG_ONE_SHOT))
+        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this,AppConstant.CUSTOM_NOTIFICATION_REQUEST,rejectIntent,PendingIntent.FLAG_ONE_SHOT))
 
         val intent = Intent(this, HomeActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                intent, PendingIntent.FLAG_ONE_SHOT)
 
         val notificationBuilder = NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.profile)
                 .setContentTitle("custom notification")
                 .setContentText("testing message")
-                .setAutoCancel(true)
+                .setTicker("custom notification")
                 .setContentIntent(pendingIntent)
-                .setCustomContentView(expendView)
+                .setAutoCancel(true)
+                .setCustomBigContentView(expendView)
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(AppConstant.CUSTOM_NOTIFICATION_REQUEST, notificationBuilder.build())

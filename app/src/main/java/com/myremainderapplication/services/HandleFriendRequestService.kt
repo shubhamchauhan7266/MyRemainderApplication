@@ -7,6 +7,7 @@ import com.myremainderapplication.R
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFullInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
+import android.os.Handler
 
 /**
  * Created by shubham on 13/1/18.
@@ -21,7 +22,8 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
 
     private var receiverId: String? = null
 
-    override fun onStart(intent: Intent?, startId: Int) {
+    override fun onHandleIntent(intent: Intent?) {
+        var updateRequired = true
         if (intent!!.hasExtra(AppConstant.SENDER_ID_KEY) && intent.hasExtra(AppConstant.RECEIVER_ID_KEY)) {
             senderId = intent.getStringExtra(AppConstant.SENDER_ID_KEY)
             receiverId = intent.getStringExtra(AppConstant.RECEIVER_ID_KEY)
@@ -30,6 +32,10 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
                 override fun onDataChange(dataSnapshot: DataSnapshot?) {
                     senderInfo = ModelInfoUtils.getMemberInfoModel(dataSnapshot, senderId!!)
                     receiverInfo = ModelInfoUtils.getMemberInfoModel(dataSnapshot, receiverId!!)
+                    if (updateRequired) {
+                        updateData(intent)
+                        updateRequired = false
+                    }
                 }
 
                 override fun onCancelled(dataSnapshot: DatabaseError?) {
@@ -37,11 +43,10 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
 
             })
         }
-        super.onStart(intent, startId)
     }
 
-    override fun onHandleIntent(intent: Intent?) {
-        when (intent?.action) {
+    private fun updateData(intent: Intent) {
+        when (intent.action) {
             getString(R.string.accept) -> {
                 if (senderId != null && receiverId != null) {
                     val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(senderId)

@@ -7,7 +7,6 @@ import com.myremainderapplication.R
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFullInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
-import android.os.Handler
 
 /**
  * Created by shubham on 13/1/18.

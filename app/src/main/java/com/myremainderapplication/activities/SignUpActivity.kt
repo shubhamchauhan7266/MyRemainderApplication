@@ -32,7 +32,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
     private var storageRef: StorageReference? = null
     private lateinit var photoPath: File
-    private  var downloadUrl: String=""
+    private var downloadUrl: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,23 +62,23 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         val databaseMemberListRef = databaseMembersRef.child(AppConstant.MEMBERS_LIST)
 
         val newMemberId = (currentMemberId.toInt() + 1).toString()
-        val newMemberListId=(currentMemberListId.toInt() + 1).toString()
+        val newMemberListId = (currentMemberListId.toInt() + 1).toString()
 
         val gender: String
         if (rbMail.isChecked)
-            gender=rbMail.text.toString()
+            gender = rbMail.text.toString()
         else
-            gender=rbFemale.text.toString()
+            gender = rbFemale.text.toString()
 
         val hasMapMemberUserNode = HashMap<String, String>()
         hasMapMemberUserNode.put(AppConstant.MEMBER_ID, newMemberId)
-        hasMapMemberUserNode.put(AppConstant.CURRENT_FRIEND_LIST_ID,(-1).toString())
+        hasMapMemberUserNode.put(AppConstant.CURRENT_FRIEND_LIST_ID, (-1).toString())
         hasMapMemberUserNode.put(AppConstant.MEMBER_NAME, etName.text.toString())
         hasMapMemberUserNode.put(AppConstant.PHONE_NUMBER, etMobileNumber.text.toString())
         hasMapMemberUserNode.put(AppConstant.EMAIL_ID, etEmail.text.toString())
         hasMapMemberUserNode.put(AppConstant.PASSWORD, etPassword.text.toString())
         hasMapMemberUserNode.put(AppConstant.GENDER, gender)
-        hasMapMemberUserNode . put (AppConstant.IMAGE_PATH, downloadUrl)
+        hasMapMemberUserNode.put(AppConstant.IMAGE_PATH, downloadUrl)
         hasMapMemberUserNode.put(AppConstant.REGISTRATION_TOKEN, SharedPreferencesUtils.getRegistrationKey(this)!!)
 
         val hasMapMemberNode = HashMap<String, HashMap<String, String>>()
@@ -87,7 +87,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         val hasMapMemberListUserNode = HashMap<String, String>()
         hasMapMemberListUserNode.put(AppConstant.MEMBER_ID, newMemberId)
         hasMapMemberListUserNode.put(AppConstant.MEMBER_NAME, etName.text.toString())
-        hasMapMemberListUserNode . put (AppConstant.IMAGE_PATH, downloadUrl)
+        hasMapMemberListUserNode.put(AppConstant.IMAGE_PATH, downloadUrl)
         hasMapMemberListUserNode.put(AppConstant.REGISTRATION_TOKEN, SharedPreferencesUtils.getRegistrationKey(this)!!)
 
         val hasMapMemberListNode = HashMap<String, HashMap<String, String>>()
@@ -112,19 +112,19 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
             Picasso.with(this)
                     .load(downloadUrl)
                     .centerInside()
-                    .resize(100,100)
+                    .resize(100, 100)
                     .into(ivProfile)
         }
     }
 
     private fun selectImageDialog() {
-        val items = arrayOf("Take Photo", "Choose from Library", "Cancel")
+        val items = arrayOf(getString(R.string.take_photo), getString(R.string.choose_from_library), getString(R.string.cancel))
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Add Photo!")
+        builder.setTitle(getString(R.string.add_photo))
         builder.setItems(items) { dialog, item ->
-            if (items[item].equals("Take Photo")) {
+            if (items[item].equals(getString(R.string.take_photo))) {
                 takePhotoFromCamera()
-            } else if (items[item].equals("Choose from Library")) {
+            } else if (items[item].equals(getString(R.string.choose_from_library))) {
                 selectImageFromAlbum()
             } else {
                 dialog.dismiss()
@@ -141,10 +141,10 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     }
 
     private fun takePhotoFromCamera() {
-        val imagesFolder = File(Environment.getExternalStorageDirectory(), "MyImages")
+        val imagesFolder = File(Environment.getExternalStorageDirectory(), getString(R.string.myimages))
         imagesFolder.mkdir()
-        if(!currentMemberId.equals(""))
-         photoPath = File(imagesFolder, (currentMemberId.toInt() + 1).toString()+".jpg")
+        if (!currentMemberId.equals(""))
+            photoPath = File(imagesFolder, (currentMemberId.toInt() + 1).toString() + ".jpg")
         else
             return
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -271,7 +271,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
      */
     internal fun checkValidationForName() {
         if (etName.getText().toString().trim({ it <= ' ' }).length == 0) {
-            inputLayoutName.setError(AppConstant.NAME_VALIDATION_ERROR)
+            inputLayoutName.error = getString(R.string.please_enter_name)
             inputLayoutName.setErrorEnabled(true)
             isChecked = false
         } else {
@@ -284,11 +284,11 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
      */
     internal fun checkValidationForMobileNumber() {
         if (etMobileNumber.getText().toString().trim({ it <= ' ' }).length == 0) {
-            inputLayoutMobile.setError(AppConstant.MOBILE_NUMBER_VALIDATION_ERROR)
+            inputLayoutMobile.error = getString(R.string.please_enter_mobile_Number)
             inputLayoutMobile.setErrorEnabled(true)
             isChecked = false
         } else if (etMobileNumber.getText().toString().trim({ it <= ' ' }).length < 10) {
-            inputLayoutMobile.setError(AppConstant.NOT_VALID_MOBILE_NUMBER_ERROR)
+            inputLayoutMobile.error = getString(R.string.please_enter_valid_mobile_number)
             inputLayoutMobile.setErrorEnabled(true)
             isChecked = false
         } else {
@@ -301,11 +301,11 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
      */
     internal fun checkValidatioForEmail() {
         if (etEmail.getText().toString().trim({ it <= ' ' }).length == 0) {
-            inputLayoutEmail.setError(AppConstant.EMAIL_ID_VALIDATION_ERROR)
+            inputLayoutEmail.error = getString(R.string.please_enter_email_id)
             inputLayoutEmail.setErrorEnabled(true)
             isChecked = false
         } else if (!etEmail.getText().toString().trim({ it <= ' ' }).matches(AppConstant.EMAIL_PATTERN.toRegex())) {
-            inputLayoutEmail.setError(AppConstant.NOT_VALID_EMAIL_ID_ERROR)
+            inputLayoutEmail.setError(getString(R.string.please_enter_valid_email_id))
             inputLayoutEmail.setErrorEnabled(true)
             isChecked = false
         } else {
@@ -318,7 +318,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     */
     internal fun checkValidationForPassword() {
         if (etPassword.getText().toString().trim({ it <= ' ' }).length == 0) {
-            inputLayoutPassword.setError(AppConstant.NAME_VALIDATION_ERROR)
+            inputLayoutPassword.setError(getString(R.string.please_enter_password))
             inputLayoutPassword.setErrorEnabled(true)
             isChecked = false
         } else {
@@ -331,7 +331,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     */
     internal fun checkValidationForConfirmPassword() {
         if (etPasswordConfirm.getText().toString().trim({ it <= ' ' }).length == 0) {
-            inputLayoutPasswordConfirm.setError(AppConstant.CONFIRM_PASSWORD_VALIDATION_ERROR)
+            inputLayoutPasswordConfirm.error = getString(R.string.please_enter_confirm_password)
             inputLayoutPasswordConfirm.setErrorEnabled(true)
             isChecked = false
         } else {
@@ -342,9 +342,9 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     /*
     * This method will check validation for Profile Image.
     */
-    internal fun checkValidationForImage(){
-        if(downloadUrl.equals(""))
-            isChecked=false
+    internal fun checkValidationForImage() {
+        if (downloadUrl.equals(""))
+            isChecked = false
     }
 
 

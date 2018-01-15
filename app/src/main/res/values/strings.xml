@@ -20,4 +20,17 @@
     <string name="add_friend">+ \n Add Friend</string>
     <string name="accept">accept</string>
     <string name="reject">reject</string>
+
+    <string name="please_enter_name">please enter Name</string>
+    <string name="please_enter_mobile_Number">please enter Mobile Number</string>
+    <string name="please_enter_valid_mobile_number">please enter valid Mobile Number</string>
+    <string name="please_enter_email_id">please enter Email Id</string>
+    <string name="please_enter_valid_email_id">please enter valid Email Id</string>
+    <string name="please_enter_password">please enter Password</string>
+    <string name="please_enter_confirm_password">please enter Confirm Password</string>
+    <string name="add_photo">Add Photo!</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_library">Choose from Library</string>
+    <string name="cancel">Cancel</string>
+    <string name="myimages">MyImages</string>
 </resources>

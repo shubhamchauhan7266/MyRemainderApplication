@@ -23,6 +23,10 @@ import com.myremainderapplication.interfaces.AppConstant
  * Created by Shubham Chauhan on 21/12/17.
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    /*
+     * this is an override method which receive all notification information
+     */
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         var title: String?
         var body: String?
@@ -35,18 +39,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Check if message contains a Alarm Data payload.
         if (remoteMessage!!.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
-            var type=0
-            if(remoteMessage.data.containsKey("type")){
-               type= remoteMessage.data["type"]!!.toInt()
+            var type = 0
+            if (remoteMessage.data.containsKey("type")) {
+                type = remoteMessage.data["type"]!!.toInt()
             }
-            when(type){
-                1->{
+            when (type) {
+                1 -> {
                     val senderId = remoteMessage.data!![AppConstant.SENDER_ID_KEY]!!
                     val receiverId = remoteMessage.data!![AppConstant.RECEIVER_ID_KEY]!!
                     val message = remoteMessage.data!!["message"]!!
-                    sendFriendRequestNotification(senderId,receiverId,message)
+                    sendFriendRequestNotification(senderId, receiverId, message)
                 }
-                2->{
+                2 -> {
                     title = remoteMessage.data!!["title"]!!
                     body = remoteMessage.data!!["body"]!!
 
@@ -74,6 +78,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
+    /*
+     * This method is used to set alarm at particuler time.
+     * when alarm is start then it goes to AlarmActivity
+     */
     @SuppressLint("WrongConstant")
     private fun setEventAlarm(title: String?, body: String?, calenderModel: CalenderModel) {
 
@@ -86,6 +94,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
     }
 
+    /*
+     * This method is used to create a simple alert notification
+     */
     private fun sendNotification(title: String?, body: String?) {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -104,23 +115,25 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.notify(AppConstant.SIMPLE_NOTIFICATION_REQUEST, notificationBuilder.build())
     }
 
-    private fun sendFriendRequestNotification(senderId:String,receiverId:String,message: String) {
+    /*
+     * This method is used to create a notification for friend request
+     */
+    private fun sendFriendRequestNotification(senderId: String, receiverId: String, message: String) {
 
-        val acceptIntent=Intent(this,HandleFriendRequestService::class.java)
+        val acceptIntent = Intent(this, HandleFriendRequestService::class.java)
         acceptIntent.action = getString(R.string.accept)
         acceptIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        acceptIntent.putExtra(AppConstant.SENDER_ID_KEY,senderId)
-        acceptIntent.putExtra(AppConstant.RECEIVER_ID_KEY,receiverId)
+        acceptIntent.putExtra(AppConstant.SENDER_ID_KEY, senderId)
+        acceptIntent.putExtra(AppConstant.RECEIVER_ID_KEY, receiverId)
 
-        val rejectIntent=Intent(this,HandleFriendRequestService::class.java)
+        val rejectIntent = Intent(this, HandleFriendRequestService::class.java)
         rejectIntent.action = getString(R.string.reject)
         rejectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
         val expendView = RemoteViews(packageName, R.layout.customnotification)
-        expendView.setTextViewText(R.id.tvMessage,message)
-        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this,AppConstant.CUSTOM_NOTIFICATION_REQUEST,acceptIntent,PendingIntent.FLAG_ONE_SHOT))
-        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this,AppConstant.CUSTOM_NOTIFICATION_REQUEST,rejectIntent,PendingIntent.FLAG_ONE_SHOT))
-
+        expendView.setTextViewText(R.id.tvMessage, message)
+        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST, acceptIntent, PendingIntent.FLAG_CANCEL_CURRENT))
+        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST, rejectIntent, PendingIntent.FLAG_CANCEL_CURRENT))
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST,

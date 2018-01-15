@@ -27,6 +27,9 @@ class AlarmActivity : AppCompatActivity() {
         playSound(this, getAlarmUri())
     }
 
+    /*
+     * Method is used to play sound when alarm is start
+     */
     private fun playSound(context: AlarmActivity, alarmUri: Uri?) {
         mMediaPlayer = MediaPlayer()
         try {
@@ -43,6 +46,9 @@ class AlarmActivity : AppCompatActivity() {
 
     }
 
+    /*
+     * Method is used to get Uri of either
+     */
     private fun getAlarmUri(): Uri? {
         var alert: Uri? = RingtoneManager
                 .getDefaultUri(RingtoneManager.TYPE_ALARM)

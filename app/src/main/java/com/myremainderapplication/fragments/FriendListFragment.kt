@@ -52,8 +52,14 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
                 if(dataSnapshot?.hasChild(AppConstant.FRIEND_LIST)!!){
                     val memberList = dataSnapshot.child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
                     friendList = ModelInfoUtils.Companion.getFriendList(memberList)
-                    friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
 
+                    for (friendInfo:MemberFriendInfoModel in friendList!!){
+                        if(friendInfo.friendStatus==ModelInfoUtils.FRIEND_REQUEST_SENT){
+                            friendList?.remove(friendInfo)
+                        }
+                    }
+
+                    friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                     view.recyclerView.adapter = friendListAdapter
                 }

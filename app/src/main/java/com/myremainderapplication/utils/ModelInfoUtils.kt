@@ -104,6 +104,19 @@ class ModelInfoUtils {
             hasMapFriendId.put(AppConstant.CURRENT_FRIEND_LIST_ID, friendId)
             databaseReference?.updateChildren(hasMapFriendId as Map<String, Any>?)
         }
+
+        fun updateFriendStatus(databaseReference: DatabaseReference?,receiverId:String,friendList:ArrayList<MemberFriendInfoModel>,friendStatus:Int){
+            val hasMapFriendUserNode = HashMap<String, Any>()
+            hasMapFriendUserNode.put(AppConstant.FRIEND_STATUS,friendStatus)
+            var index = -1
+            for (friendInfo:MemberFriendInfoModel in friendList){
+                if (friendInfo.memberId==receiverId){
+                    index = friendList.indexOf(friendInfo)
+                    break
+                }
+            }
+            databaseReference?.child(AppConstant.FRIEND_LIST)?.child(index.toString())?.updateChildren(hasMapFriendUserNode as Map<String, Any>?)
+        }
     }
 
 }

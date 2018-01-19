@@ -38,7 +38,6 @@ interface AppConstant {
         val CURRENT_MEMBER_ID = "currentMemberId"
         val CURRENT_MEMBER_LIST_ID = "currentMemberListId"
         val CURRENT_FRIEND_LIST_ID = "currentFriendId"
-        val FRIEND_REQUEST_ID = "friendRequestId"
         val PASSWORD = "password"
         val REGISTRATION_TOKEN = "registrationToken"
         val IMAGE_PATH = "imagePath"
@@ -46,6 +45,7 @@ interface AppConstant {
         val BODY = "body"
         val SENDER_ID_KEY = "senderId"
         val RECEIVER_ID_KEY = "receiverId"
+        val FRIEND_STATUS = "friendStatus"
 
         // Url and Patterns
         val EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"

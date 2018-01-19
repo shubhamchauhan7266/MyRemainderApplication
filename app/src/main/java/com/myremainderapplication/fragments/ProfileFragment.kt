@@ -73,7 +73,7 @@ class ProfileFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 memberFullInfoModel = ModelInfoUtils.Companion.getMemberInfoModel(dataSnapshot, id)
                 val memberList = dataSnapshot!!.child(AppConstant.MEMBERS).child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
-                val memberUserList = ModelInfoUtils.Companion.getMemberListModel(memberList)
+                val memberUserList = ModelInfoUtils.Companion.getMemberList(memberList)
 
                 var index=0
                 while (index<memberUserList.size)

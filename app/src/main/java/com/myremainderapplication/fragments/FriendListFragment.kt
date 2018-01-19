@@ -18,6 +18,7 @@ import com.myremainderapplication.R
 import com.myremainderapplication.activities.ProfileActivity
 import com.myremainderapplication.adapters.FriendListAdapter
 import com.myremainderapplication.interfaces.AppConstant
+import com.myremainderapplication.models.MemberFriendInfoModel
 import com.myremainderapplication.models.MemberShortInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
 import kotlinx.android.synthetic.main.fragment_friend_list.view.*
@@ -26,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_friend_list.view.*
  * A simple [Fragment] subclass.
  */
 class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallBack {
-    private var friendList: ArrayList<MemberShortInfoModel>? = null
+    private var friendList: ArrayList<MemberFriendInfoModel>? = null
     private lateinit var friendListAdapter: FriendListAdapter
     private var mContext: Context? = null
 
@@ -50,7 +51,7 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 if(dataSnapshot?.hasChild(AppConstant.FRIEND_LIST)!!){
                     val memberList = dataSnapshot.child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
-                    friendList = ModelInfoUtils.Companion.getMemberListModel(memberList)
+                    friendList = ModelInfoUtils.Companion.getFriendList(memberList)
                     friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
 
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)

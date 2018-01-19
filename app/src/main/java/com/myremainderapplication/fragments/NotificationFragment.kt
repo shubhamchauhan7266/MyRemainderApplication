@@ -51,7 +51,7 @@ class NotificationFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 if(dataSnapshot?.hasChild(AppConstant.NOTIFICATION_LIST)!!){
                     val memberNotificationList = dataSnapshot.child(AppConstant.NOTIFICATION_LIST)?.value as ArrayList<*>
-                    notificationList = ModelInfoUtils.Companion.getMemberNotificationModel(memberNotificationList)
+                    notificationList = ModelInfoUtils.Companion.getNotificationList(memberNotificationList)
                     notificationListAdapter = NotificationListAdapter(this@NotificationFragment, notificationList!!)
 
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)

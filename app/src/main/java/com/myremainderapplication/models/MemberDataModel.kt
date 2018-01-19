@@ -16,11 +16,11 @@ class MemberFullInfoModel : Serializable {
     lateinit var imagePath: String
     lateinit var registrationToken:String
     lateinit var password: String
-    lateinit var friendList: ArrayList<MemberShortInfoModel>
-    lateinit var notificationList:ArrayList<MemberNotificationModel>
 }
 
 
 class MemberShortInfoModel(val memberId: String, val memberName: String, val imagePath:String, val registrationToken:String):Serializable
 
-class MemberNotificationModel(val title:String,val body:String)
+class MemberFriendInfoModel(val friendStatus:Int ,val memberId: String, val memberName: String, val imagePath:String, val registrationToken:String):Serializable
+
+class MemberNotificationModel(val title:String,val body:String):Serializable

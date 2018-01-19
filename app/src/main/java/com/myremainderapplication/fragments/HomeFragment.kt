@@ -49,17 +49,15 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
     }
 
     private fun setMemberListData(view: View) {
-        val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS)
+        val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(AppConstant.MEMBERS_LIST)
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                if (dataSnapshot?.hasChild(AppConstant.MEMBERS_LIST)!!) {
-                    val memberNodeList = dataSnapshot.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
-                    memberList = ModelInfoUtils.getMemberListModel(memberNodeList)
+                    val memberNodeList = dataSnapshot?.value as ArrayList<*>
+                    memberList = ModelInfoUtils.getMemberList(memberNodeList)
                     memberListAdapter = MemberListAdapter(mContext!!, memberList!!, this@HomeFragment)
 
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                     view.recyclerView.adapter = memberListAdapter
-                }
             }
 
             override fun onCancelled(dataSnapshot: DatabaseError?) {

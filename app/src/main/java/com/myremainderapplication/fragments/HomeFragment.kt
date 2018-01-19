@@ -34,6 +34,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
     private lateinit var memberListAdapter: MemberListAdapter
     private lateinit var requestQueue: RequestQueue
     private var mContext: Context? = null
+    private lateinit var currentFriendId: String
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -57,13 +58,14 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 val memberNodeList = dataSnapshot?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
                 memberList = ModelInfoUtils.getMemberList(memberNodeList)
+                currentFriendId = dataSnapshot.child("4041").child(AppConstant.CURRENT_FRIEND_LIST_ID).value as String
 
                 if (dataSnapshot.child("4041").hasChild(AppConstant.FRIEND_LIST)) {
                     val friendDataList = dataSnapshot.child("4041").child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
                     friendList = ModelInfoUtils.getFriendList(friendDataList)
                 }
-                memberListAdapter = MemberListAdapter(mContext!!, memberList!!, friendList!!, this@HomeFragment)
 
+                memberListAdapter = MemberListAdapter(mContext!!, memberList!!, friendList!!, this@HomeFragment)
                 view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                 view.recyclerView.adapter = memberListAdapter
             }
@@ -76,14 +78,17 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
 
     override fun onViewClick(position: Int) {
         val memberShortInfoModel = memberList?.get(position)
-        sendFriendRequest("4041", memberShortInfoModel!!.memberId, "message1", memberShortInfoModel.registrationToken)
+        sendFriendRequest("4041", memberShortInfoModel!!.memberId, "message1", memberShortInfoModel.registrationToken, position)
     }
 
-    private fun sendFriendRequest(senderId: String, ReceiverId: String, message: String, registrationToken: String) {
+    private fun sendFriendRequest(senderId: String, ReceiverId: String, message: String, registrationToken: String, position: Int) {
         val request = getJsonBody(senderId, ReceiverId, message, registrationToken)
         val jsonRequest = object : JsonObjectRequest(Request.Method.POST, AppConstant.SEND_NOTIFICATION_URL, request,
                 Response.Listener<JSONObject> { response: JSONObject? ->
                     val success = response!!.getInt("success")
+                    if (success != 0) {
+                        updateSenderFriendList(position)
+                    }
                 },
                 Response.ErrorListener { error: VolleyError? ->
 
@@ -113,5 +118,12 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         jsonObjectRequestParams.put("to", SharedPreferencesUtils.getRegistrationKey(mContext!!))
 
         return jsonObjectRequestParams
+    }
+
+    private fun updateSenderFriendList(position: Int) {
+        val receiverInfo = memberList?.get(position)
+        val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child("4041")
+        val newSenderFriendId = (currentFriendId.toInt() + 1).toString()
+        ModelInfoUtils.updateFriendList(databaseSenderRef, newSenderFriendId, receiverInfo!!, ModelInfoUtils.FRIEND_REQUEST_SENT)
     }
 }

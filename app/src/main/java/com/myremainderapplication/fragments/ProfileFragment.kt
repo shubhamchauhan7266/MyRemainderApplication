@@ -71,7 +71,7 @@ class ProfileFragment : Fragment() {
         val database = FirebaseDatabase.getInstance().reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                memberFullInfoModel = ModelInfoUtils.Companion.getMemberInfoModel(dataSnapshot, id)
+                memberFullInfoModel = ModelInfoUtils.Companion.getMemberFullInfoModel(dataSnapshot, id)
                 val memberList = dataSnapshot!!.child(AppConstant.MEMBERS).child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
                 val memberUserList = ModelInfoUtils.Companion.getMemberList(memberList)
 

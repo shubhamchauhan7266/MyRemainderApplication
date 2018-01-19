@@ -1,6 +1,7 @@
 package com.myremainderapplication.utils
 
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseReference
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFriendInfoModel
 import com.myremainderapplication.models.MemberShortInfoModel
@@ -13,7 +14,7 @@ class ModelInfoUtils {
         val FRIEND_REQUEST_SENT = 0
         val FRIEND = 1
 
-        fun getMemberInfoModel(dataSnapshot: DataSnapshot?, memberId: String): MemberFullInfoModel {
+        fun getMemberFullInfoModel(dataSnapshot: DataSnapshot?, memberId: String): MemberFullInfoModel {
             val memberInfoModel = MemberFullInfoModel()
             val data = dataSnapshot?.child(AppConstant.MEMBERS)!!.child(memberId).value as HashMap<*, *>
             memberInfoModel.memberId = data[AppConstant.MEMBER_ID].toString()
@@ -26,6 +27,14 @@ class ModelInfoUtils {
             memberInfoModel.registrationToken = data[AppConstant.REGISTRATION_TOKEN].toString()
             memberInfoModel.imagePath = data[AppConstant.IMAGE_PATH].toString()
             return memberInfoModel
+        }
+
+        fun getMemberShortInfoModel(dataSnapshot: DataSnapshot?, memberId: String): MemberShortInfoModel {
+            val data = dataSnapshot?.child(AppConstant.MEMBERS)!!.child(memberId).value as HashMap<*, *>
+            val memberName = data[AppConstant.MEMBER_NAME].toString()
+            val imagePath = data[AppConstant.IMAGE_PATH].toString()
+            val registrationToken = data[AppConstant.REGISTRATION_TOKEN].toString()
+            return MemberShortInfoModel(memberId,memberName,imagePath,registrationToken)
         }
 
         fun getMemberList(memberDataList: ArrayList<*>): ArrayList<MemberShortInfoModel> {
@@ -73,6 +82,27 @@ class ModelInfoUtils {
                 index++
             }
             return notificationList
+        }
+
+        /*
+     * This method is used to add member data in FriendList
+     * this method update firebase database
+     */
+        fun updateFriendList(databaseReference: DatabaseReference?, friendId: String, friendInfo: MemberShortInfoModel,friendStatus:Int) {
+            val hasMapFriendUserNode = HashMap<String, Any>()
+            hasMapFriendUserNode.put(AppConstant.FRIEND_STATUS,friendStatus)
+            hasMapFriendUserNode.put(AppConstant.MEMBER_ID, friendInfo.memberId)
+            hasMapFriendUserNode.put(AppConstant.MEMBER_NAME, friendInfo.memberName)
+            hasMapFriendUserNode.put(AppConstant.IMAGE_PATH, friendInfo.imagePath)
+            hasMapFriendUserNode.put(AppConstant.REGISTRATION_TOKEN, friendInfo.registrationToken)
+
+            val hasMapFriendListNode = HashMap<String, HashMap<String, Any>>()
+            hasMapFriendListNode.put(friendId, hasMapFriendUserNode)
+            databaseReference?.child(AppConstant.FRIEND_LIST)?.updateChildren(hasMapFriendListNode as Map<String, Any>?)
+
+            val hasMapFriendId = HashMap<String, String>()
+            hasMapFriendId.put(AppConstant.CURRENT_FRIEND_LIST_ID, friendId)
+            databaseReference?.updateChildren(hasMapFriendId as Map<String, Any>?)
         }
     }
 

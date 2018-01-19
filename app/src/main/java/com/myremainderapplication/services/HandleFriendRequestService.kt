@@ -8,6 +8,7 @@ import com.google.firebase.database.*
 import com.myremainderapplication.R
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFullInfoModel
+import com.myremainderapplication.models.MemberShortInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
 
 /**
@@ -15,7 +16,7 @@ import com.myremainderapplication.utils.ModelInfoUtils
  */
 class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
 
-    private var senderInfo: MemberFullInfoModel? = null
+    private var senderInfo: MemberShortInfoModel? = null
 
     private var receiverInfo: MemberFullInfoModel? = null
 
@@ -30,7 +31,7 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
     override fun onHandleIntent(intent: Intent?) {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(AppConstant.CUSTOM_NOTIFICATION_REQUEST)
-        sendBroadcast( Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
+        sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 
         var updateRequired = true
         if (intent!!.hasExtra(AppConstant.SENDER_ID_KEY) && intent.hasExtra(AppConstant.RECEIVER_ID_KEY)) {
@@ -39,8 +40,8 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
             val database = FirebaseDatabase.getInstance().reference
             database.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                    senderInfo = ModelInfoUtils.getMemberInfoModel(dataSnapshot, senderId!!)
-                    receiverInfo = ModelInfoUtils.getMemberInfoModel(dataSnapshot, receiverId!!)
+                    senderInfo = ModelInfoUtils.getMemberShortInfoModel(dataSnapshot, senderId!!)
+                    receiverInfo = ModelInfoUtils.getMemberFullInfoModel(dataSnapshot, receiverId!!)
                     if (updateRequired) {
                         updateData(intent)
                         updateRequired = false
@@ -62,16 +63,12 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
     private fun updateData(intent: Intent) {
         when (intent.action) {
             getString(R.string.accept) -> {
-                if (senderId != null && receiverId != null) {
-                    val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(senderId)
+                if (receiverId != null) {
                     val databaseReceiverRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(receiverId)
 
                     if (senderInfo != null && receiverInfo != null) {
-                        val newSenderFriendId = (senderInfo?.currentFriendId!!.toInt() + 1).toString()
                         val newReceiverFriendId = (receiverInfo?.currentFriendId!!.toInt() + 1).toString()
-
-                        updateFriendList(databaseSenderRef, newSenderFriendId, receiverInfo!!)
-                        updateFriendList(databaseReceiverRef, newReceiverFriendId, senderInfo!!)
+                        ModelInfoUtils.updateFriendList(databaseReceiverRef, newReceiverFriendId, senderInfo!!, ModelInfoUtils.FRIEND)
                     }
                 }
             }
@@ -81,23 +78,4 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
         }
     }
 
-    /*
-     * This method is used to add member data in FriendList
-     * this method update firebase database
-     */
-    private fun updateFriendList(databaseReference: DatabaseReference?, friendId: String, friendInfo: MemberFullInfoModel) {
-        val hasMapFriendUserNode = HashMap<String, String>()
-        hasMapFriendUserNode.put(AppConstant.MEMBER_ID, friendInfo.memberId)
-        hasMapFriendUserNode.put(AppConstant.MEMBER_NAME, friendInfo.memberName)
-        hasMapFriendUserNode.put(AppConstant.IMAGE_PATH, friendInfo.imagePath)
-        hasMapFriendUserNode.put(AppConstant.REGISTRATION_TOKEN, friendInfo.registrationToken)
-
-        val hasMapFriendListNode = HashMap<String, HashMap<String, String>>()
-        hasMapFriendListNode.put(friendId, hasMapFriendUserNode)
-        databaseReference?.child(AppConstant.FRIEND_LIST)?.updateChildren(hasMapFriendListNode as Map<String, Any>?)
-
-        val hasMapFriendId = HashMap<String, String>()
-        hasMapFriendId.put(AppConstant.CURRENT_FRIEND_LIST_ID, friendId)
-        databaseReference?.updateChildren(hasMapFriendId as Map<String, Any>?)
-    }
 }

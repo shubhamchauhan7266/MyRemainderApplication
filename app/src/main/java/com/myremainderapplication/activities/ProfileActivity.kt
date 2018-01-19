@@ -13,7 +13,6 @@ import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFullInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
 import kotlinx.android.synthetic.main.activity_profile.*
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 
@@ -40,7 +39,7 @@ class ProfileActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().reference
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                memberFullInfoModel = ModelInfoUtils.Companion.getMemberInfoModel(dataSnapshot, id)
+                memberFullInfoModel = ModelInfoUtils.Companion.getMemberFullInfoModel(dataSnapshot, id)
                 updateData()
             }
 

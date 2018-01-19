@@ -33,4 +33,6 @@
     <string name="choose_from_library">Choose from Library</string>
     <string name="cancel">Cancel</string>
     <string name="myimages">MyImages</string>
+    <string name="friend_request_sent">Friend Request Sent</string>
+    <string name="friend">Friend</string>
 </resources>

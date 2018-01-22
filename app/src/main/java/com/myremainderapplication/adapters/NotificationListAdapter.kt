@@ -10,7 +10,10 @@ import com.myremainderapplication.models.MemberNotificationModel
 import kotlinx.android.synthetic.main.notification_item_row.view.*
 
 /**
- * Created by user on 8/1/18.
+ * <h1><font color="orange">NotificationListAdapter</font></h1>
+ * It is a Adapter class which is used for NotificationFragment
+ *
+ * @author Shubham Chauhan
  */
 class NotificationListAdapter(val context: NotificationFragment, private var notificationList: ArrayList<MemberNotificationModel>) : RecyclerView.Adapter<NotificationListAdapter.ViewHolder>() {
 

@@ -25,7 +25,10 @@ import org.json.JSONObject
 
 
 /**
- * A simple [Fragment] subclass.
+ * <h1><font color="orange">HomeFragment</font></h1>
+ * It is a Fregment which is used to display a list of Members
+ *
+ * @author Shubham Chauhan
  */
 class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
 

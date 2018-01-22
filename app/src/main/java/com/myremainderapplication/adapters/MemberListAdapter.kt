@@ -13,7 +13,10 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.member_item_row.view.*
 
 /**
- * Created by user on 11/1/18.
+ * <h1><font color="orange">MemberListAdapter</font></h1>
+ * It is a Adapter class which is used for HomeFragment
+ *
+ * @author Shubham Chauhan
  */
 class MemberListAdapter(val context: Context, private var memberList: ArrayList<MemberShortInfoModel>, private var friendList: ArrayList<MemberFriendInfoModel>,val iMemberListAdapterCallBack: IMemberListAdapterCallBack) : RecyclerView.Adapter<MemberListAdapter.ViewHolder>() {
 

@@ -24,6 +24,12 @@ import com.google.firebase.database.DatabaseReference
 import com.myremainderapplication.utils.SharedPreferencesUtils
 import com.squareup.picasso.Picasso
 
+/**
+ * <h1><font color="orange">SignUpActivity</font></h1>
+ * This Activity class is used for Signup
+ *
+ * @author Shubham Chauhan
+ */
 class SignUpActivity : AppCompatActivity(), TextWatcher {
 
     private var isChecked: Boolean = false

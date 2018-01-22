@@ -20,7 +20,11 @@ import com.myremainderapplication.interfaces.AppConstant
 
 
 /**
- * Created by Shubham Chauhan on 21/12/17.
+ * <h1><font color="orange">MyFirebaseMessagingService</font></h1>
+ * this is a Service class which extends FirebaseMessagingService
+ * this service class is used to receive all type of notification from firebase
+ *
+ * @author Shubham Chauhan
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 

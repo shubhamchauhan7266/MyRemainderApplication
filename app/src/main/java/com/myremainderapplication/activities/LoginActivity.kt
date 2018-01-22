@@ -10,6 +10,12 @@ import kotlinx.android.synthetic.main.activity_login.*
 import com.google.firebase.auth.FirebaseAuth
 import android.widget.Toast
 
+/**
+ * <h1><font color="orange">LoginActivity</font></h1>
+ * This Activity class is used for Login
+ *
+ * @author Shubham Chauhan
+ */
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private val TAG = LoginActivity::class.java.simpleName
     private var auth: FirebaseAuth? = null

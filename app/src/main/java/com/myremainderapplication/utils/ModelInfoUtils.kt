@@ -8,6 +8,13 @@ import com.myremainderapplication.models.MemberShortInfoModel
 import com.myremainderapplication.models.MemberFullInfoModel
 import com.myremainderapplication.models.MemberNotificationModel
 
+/**
+ * <h1><font color="orange">ModelInfoUtils</font></h1>
+ * this is a Utils class which contain sets of methods
+ * these methods perform operation on firebase data
+ *
+ * @author Shubham Chauhan
+ */
 class ModelInfoUtils {
 
     companion object {

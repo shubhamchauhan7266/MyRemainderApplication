@@ -11,7 +11,10 @@ import com.myremainderapplication.models.MemberShortInfoModel
 import kotlinx.android.synthetic.main.friend_item_row.view.*
 
 /**
- * Created by user on 8/12/17.
+ * <h1><font color="orange">FriendListAdapter</font></h1>
+ * It is a Adapter class which is used for FriendListFragment
+ *
+ * @author Shubham Chauhan
  */
 class FriendListAdapter(val iFriendListAdapterCallBack: FriendListFragment, private var friendList:ArrayList<MemberFriendInfoModel>) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
 

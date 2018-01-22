@@ -9,7 +9,13 @@ import com.myremainderapplication.fragments.ProfileFragment
 import com.myremainderapplication.fragments.HomeFragment
 import com.myremainderapplication.fragments.NotificationFragment
 
-
+/**
+ * <h1><font color="orange">HomeActivity</font></h1>
+ * This Activity class is used for contain fragments ehich are FriendListFragment,HomeFragment,
+ * NotificationFragment,ProfileFragment
+ *
+ * @author Shubham Chauhan
+ */
 class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

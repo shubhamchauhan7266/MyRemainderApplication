@@ -16,7 +16,12 @@ import kotlinx.android.synthetic.main.activity_profile.*
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 
-
+/**
+ * <h1><font color="orange">ProfileActivity</font></h1>
+ * This Activity class is used for display a Profile of Friend
+ *
+ * @author Shubham Chauhan
+ */
 class ProfileActivity : AppCompatActivity() {
     private var id: String = ""
     private var memberFullInfoModel: MemberFullInfoModel? = null

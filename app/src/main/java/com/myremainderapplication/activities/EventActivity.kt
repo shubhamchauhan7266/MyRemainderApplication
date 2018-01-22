@@ -22,7 +22,12 @@ import kotlinx.android.synthetic.main.activity_event.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import java.util.*
 
-
+/**
+ * <h1><font color="orange">EventActivity</font></h1>
+ * This Activity class is used for create a Event and send all information in Notification
+ *
+ * @author Shubham Chauhan
+ */
 class EventActivity : AppCompatActivity(), View.OnClickListener {
 
 

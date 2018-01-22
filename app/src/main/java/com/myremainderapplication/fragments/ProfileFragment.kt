@@ -29,7 +29,10 @@ import java.io.File
 
 
 /**
- * A simple [Fragment] subclass.
+ * <h1><font color="orange">ProfileFragment</font></h1>
+ * It is a Fregment which is used to display a profile information of Member
+ *
+ * @author Shubham Chauhan
  */
 class ProfileFragment : Fragment() {
     private var id: String = ""

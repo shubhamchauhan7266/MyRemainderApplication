@@ -24,7 +24,10 @@ import com.myremainderapplication.utils.ModelInfoUtils
 import kotlinx.android.synthetic.main.fragment_friend_list.view.*
 
 /**
- * A simple [Fragment] subclass.
+ * <h1><font color="orange">FriendListFragment</font></h1>
+ * It is a Fregment which is used to display a list of Friends
+ *
+ * @author Shubham Chauhan
  */
 class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallBack {
     private var friendList: ArrayList<MemberFriendInfoModel>? = null

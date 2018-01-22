@@ -6,7 +6,6 @@ package com.myremainderapplication.interfaces
  *
  * @author Shubham Chauhan
  */
-
 interface AppConstant {
     companion object {
 

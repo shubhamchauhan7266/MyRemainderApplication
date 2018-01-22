@@ -13,7 +13,10 @@ import com.myremainderapplication.models.MemberShortInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
 
 /**
- * Created by shubham on 13/1/18.
+ * <h1><font color="orange">HandleFriendRequestService</font></h1>
+ * this is a Intent Service class for update(add or remove friend) firebase data in background
+ *
+ * @author Shubham Chauhan
  */
 class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
 

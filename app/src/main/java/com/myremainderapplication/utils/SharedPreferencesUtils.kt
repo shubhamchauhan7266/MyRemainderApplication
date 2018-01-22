@@ -4,7 +4,12 @@ import android.content.Context
 import android.util.Log
 
 /**
- * Created by user on 10/1/18.
+ * <h1><font color="orange">SharedPreferencesUtils</font></h1>
+ * this is a Utils class which contain sets of methods
+ * these methods perform operation to save and retrieve data
+ * Data is stored in fileSystem
+ *
+ * @author Shubham Chauhan
  */
 class SharedPreferencesUtils {
     companion object {

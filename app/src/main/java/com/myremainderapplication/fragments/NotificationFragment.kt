@@ -21,12 +21,10 @@ import com.myremainderapplication.utils.ModelInfoUtils
 import kotlinx.android.synthetic.main.fragment_notifaction.view.*
 
 /**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [NotificationFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [NotificationFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * <h1><font color="orange">NotificationFragment</font></h1>
+ * It is a Fregment which is used to display a list of Notification
+ *
+ * @author Shubham Chauhan
  */
 class NotificationFragment : Fragment() {
     private var mContext: Context? = null

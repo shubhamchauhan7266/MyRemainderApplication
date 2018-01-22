@@ -11,7 +11,12 @@ import android.media.RingtoneManager
 import android.media.AudioManager
 import java.io.IOException
 
-
+/**
+ * <h1><font color="orange">AlarmActivity</font></h1>
+ * This Activity class is used for show a alert message and play a sound
+ *
+ * @author Shubham Chauhan
+ */
 class AlarmActivity : AppCompatActivity() {
     private var mMediaPlayer: MediaPlayer? = null
 
@@ -27,8 +32,10 @@ class AlarmActivity : AppCompatActivity() {
         playSound(this, getAlarmUri())
     }
 
-    /*
+    /**
      * Method is used to play sound when alarm is start
+     * @param context
+     * @param alarmUri
      */
     private fun playSound(context: AlarmActivity, alarmUri: Uri?) {
         mMediaPlayer = MediaPlayer()
@@ -46,8 +53,9 @@ class AlarmActivity : AppCompatActivity() {
 
     }
 
-    /*
+    /**
      * Method is used to get Uri of either
+     * @return Uri of default Alarm ringtone
      */
     private fun getAlarmUri(): Uri? {
         var alert: Uri? = RingtoneManager

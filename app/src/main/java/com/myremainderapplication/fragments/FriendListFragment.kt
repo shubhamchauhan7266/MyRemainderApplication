@@ -51,11 +51,12 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 if(dataSnapshot?.hasChild(AppConstant.FRIEND_LIST)!!){
                     val memberList = dataSnapshot.child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
-                    friendList = ModelInfoUtils.Companion.getFriendList(memberList)
+                    val tempFriendList = ModelInfoUtils.Companion.getFriendList(memberList)
+                    friendList= ArrayList()
 
-                    for (friendInfo:MemberFriendInfoModel in friendList!!){
-                        if(friendInfo.friendStatus==ModelInfoUtils.FRIEND_REQUEST_SENT){
-                            friendList?.remove(friendInfo)
+                    for (friendInfo:MemberFriendInfoModel in tempFriendList){
+                        if(friendInfo.friendStatus==ModelInfoUtils.FRIEND){
+                            friendList!!.add(friendInfo)
                         }
                     }
 

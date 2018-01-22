@@ -124,6 +124,6 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         val receiverInfo = memberList?.get(position)
         val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child("4041")
         val newSenderFriendId = (currentFriendId.toInt() + 1).toString()
-        ModelInfoUtils.updateFriendList(databaseSenderRef, newSenderFriendId, receiverInfo!!, ModelInfoUtils.FRIEND_REQUEST_SENT)
+        ModelInfoUtils.addFriend(databaseSenderRef, newSenderFriendId, receiverInfo!!, ModelInfoUtils.FRIEND_REQUEST_SENT)
     }
 }

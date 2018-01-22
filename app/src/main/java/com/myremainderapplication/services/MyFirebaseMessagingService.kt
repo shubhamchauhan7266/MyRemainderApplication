@@ -128,16 +128,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val rejectIntent = Intent(this, HandleFriendRequestService::class.java)
         rejectIntent.action = getString(R.string.reject)
+        rejectIntent.putExtra(AppConstant.SENDER_ID_KEY, senderId)
+        rejectIntent.putExtra(AppConstant.RECEIVER_ID_KEY, receiverId)
         rejectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
         val expendView = RemoteViews(packageName, R.layout.customnotification)
         expendView.setTextViewText(R.id.tvMessage, message)
-        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST, acceptIntent, PendingIntent.FLAG_CANCEL_CURRENT))
-        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST, rejectIntent, PendingIntent.FLAG_CANCEL_CURRENT))
+        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST, rejectIntent, PendingIntent.FLAG_UPDATE_CURRENT))
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST,
-                intent, PendingIntent.FLAG_ONE_SHOT)
+                intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notificationBuilder = NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.profile)

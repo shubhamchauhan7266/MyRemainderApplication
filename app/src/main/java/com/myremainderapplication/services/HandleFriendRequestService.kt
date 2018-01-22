@@ -63,27 +63,29 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
 
     /*
      * This method is used to update data based on action of user.
-     * if user click on Accept button then it goes to accept section and call updateFriendList to add user in friendList
+     * if user click on Accept button then it goes to accept section and call addFriend to add user in friendList
      * if user click on Reject button then it goes to reject section
      */
     private fun updateData(intent: Intent) {
         when (intent.action) {
             getString(R.string.accept) -> {
-                if (senderId!=null&&receiverId != null) {
+                if (senderId != null && receiverId != null) {
                     val databaseReceiverRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(receiverId)
                     val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(senderId)
 
                     if (senderInfo != null && receiverInfo != null) {
                         val newReceiverFriendId = (receiverInfo?.currentFriendId!!.toInt() + 1).toString()
-                        ModelInfoUtils.updateFriendList(databaseReceiverRef, newReceiverFriendId, senderInfo!!, ModelInfoUtils.FRIEND)
-                        ModelInfoUtils.updateFriendStatus(databaseSenderRef, receiverId!!,senderFriendList,ModelInfoUtils.FRIEND)
+                        ModelInfoUtils.addFriend(databaseReceiverRef, newReceiverFriendId, senderInfo!!, ModelInfoUtils.FRIEND)
+                        ModelInfoUtils.updateFriendStatus(databaseSenderRef, receiverId!!, senderFriendList, ModelInfoUtils.FRIEND)
                     }
                 }
             }
             getString(R.string.reject) -> {
-
+                if (senderId != null && receiverId != null) {
+                    val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(senderId)
+                    ModelInfoUtils.removeFriend(databaseSenderRef, receiverId!!, senderFriendList)
+                }
             }
         }
     }
-
 }

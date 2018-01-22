@@ -34,7 +34,7 @@ class ModelInfoUtils {
             val memberName = data[AppConstant.MEMBER_NAME].toString()
             val imagePath = data[AppConstant.IMAGE_PATH].toString()
             val registrationToken = data[AppConstant.REGISTRATION_TOKEN].toString()
-            return MemberShortInfoModel(memberId,memberName,imagePath,registrationToken)
+            return MemberShortInfoModel(memberId, memberName, imagePath, registrationToken)
         }
 
         fun getMemberList(memberDataList: ArrayList<*>): ArrayList<MemberShortInfoModel> {
@@ -59,7 +59,7 @@ class ModelInfoUtils {
             val friendList = ArrayList<MemberFriendInfoModel>()
             while (index < size) {
                 val hashMap: HashMap<*, *> = friendDataList[index] as HashMap<*, *>
-                val friendStatus:Long = hashMap[AppConstant.FRIEND_STATUS] as Long
+                val friendStatus: Long = hashMap[AppConstant.FRIEND_STATUS] as Long
                 val friendId = hashMap[AppConstant.MEMBER_ID].toString()
                 val friendName = hashMap[AppConstant.MEMBER_NAME].toString()
                 val imagePath = hashMap[AppConstant.IMAGE_PATH].toString()
@@ -84,13 +84,13 @@ class ModelInfoUtils {
             return notificationList
         }
 
-        /*
-     * This method is used to add member data in FriendList
-     * this method update firebase database
-     */
-        fun updateFriendList(databaseReference: DatabaseReference?, friendId: String, friendInfo: MemberShortInfoModel,friendStatus:Int) {
+        /**
+          * This method is used to add friend data in FriendList
+          * this method update firebase database
+          */
+        fun addFriend(databaseReference: DatabaseReference?, friendId: String, friendInfo: MemberShortInfoModel, friendStatus: Int) {
             val hasMapFriendUserNode = HashMap<String, Any>()
-            hasMapFriendUserNode.put(AppConstant.FRIEND_STATUS,friendStatus)
+            hasMapFriendUserNode.put(AppConstant.FRIEND_STATUS, friendStatus)
             hasMapFriendUserNode.put(AppConstant.MEMBER_ID, friendInfo.memberId)
             hasMapFriendUserNode.put(AppConstant.MEMBER_NAME, friendInfo.memberName)
             hasMapFriendUserNode.put(AppConstant.IMAGE_PATH, friendInfo.imagePath)
@@ -105,12 +105,31 @@ class ModelInfoUtils {
             databaseReference?.updateChildren(hasMapFriendId as Map<String, Any>?)
         }
 
-        fun updateFriendStatus(databaseReference: DatabaseReference?,receiverId:String,friendList:ArrayList<MemberFriendInfoModel>,friendStatus:Int){
-            val hasMapFriendUserNode = HashMap<String, Any>()
-            hasMapFriendUserNode.put(AppConstant.FRIEND_STATUS,friendStatus)
+        /**
+         * This method is used to remove friend data from FriendList
+         * this method update firebase database
+         */
+        fun removeFriend(databaseReference: DatabaseReference?, receiverId: String, friendList: ArrayList<MemberFriendInfoModel>) {
             var index = -1
-            for (friendInfo:MemberFriendInfoModel in friendList){
-                if (friendInfo.memberId==receiverId){
+            for (friendInfo: MemberFriendInfoModel in friendList) {
+                if (friendInfo.memberId == receiverId) {
+                    index = friendList.indexOf(friendInfo)
+                    break
+                }
+            }
+            val friendListId = (friendList.size-2).toString()
+            databaseReference?.child(AppConstant.FRIEND_LIST)?.child(index.toString())?.setValue(null)
+            val hasMapFriendId = HashMap<String, String>()
+            hasMapFriendId.put(AppConstant.CURRENT_FRIEND_LIST_ID, friendListId)
+            databaseReference?.updateChildren(hasMapFriendId as Map<String, Any>?)
+        }
+
+        fun updateFriendStatus(databaseReference: DatabaseReference?, receiverId: String, friendList: ArrayList<MemberFriendInfoModel>, friendStatus: Int) {
+            val hasMapFriendUserNode = HashMap<String, Any>()
+            hasMapFriendUserNode.put(AppConstant.FRIEND_STATUS, friendStatus)
+            var index = -1
+            for (friendInfo: MemberFriendInfoModel in friendList) {
+                if (friendInfo.memberId == receiverId) {
                     index = friendList.indexOf(friendInfo)
                     break
                 }

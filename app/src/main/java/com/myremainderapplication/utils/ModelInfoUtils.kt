@@ -1,7 +1,6 @@
 package com.myremainderapplication.utils
 
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFriendInfoModel
@@ -15,6 +14,12 @@ class ModelInfoUtils {
         val FRIEND_REQUEST_SENT = 0
         val FRIEND = 1
 
+        /**
+         * This method is used to get a full information of member
+         * @param dataSnapshot
+         * @param memberId
+         * @return a oobject of MemberFullInfoModel
+         */
         fun getMemberFullInfoModel(dataSnapshot: DataSnapshot?, memberId: String): MemberFullInfoModel {
             val memberInfoModel = MemberFullInfoModel()
             val data = dataSnapshot?.child(AppConstant.MEMBERS)!!.child(memberId).value as HashMap<*, *>
@@ -30,6 +35,12 @@ class ModelInfoUtils {
             return memberInfoModel
         }
 
+        /**
+         * This method is used to get a short information of member
+         * @param dataSnapshot
+         * @param memberId
+         * @return a oobject of MemberShortInfoModel
+         */
         fun getMemberShortInfoModel(dataSnapshot: DataSnapshot?, memberId: String): MemberShortInfoModel {
             val data = dataSnapshot?.child(AppConstant.MEMBERS)!!.child(memberId).value as HashMap<*, *>
             val memberName = data[AppConstant.MEMBER_NAME].toString()
@@ -38,6 +49,11 @@ class ModelInfoUtils {
             return MemberShortInfoModel(memberId, memberName, imagePath, registrationToken)
         }
 
+        /**
+         * This method is used to get all members in a list
+         * @param memberDataList
+         * @return arraylist of MemberShortInfoModel
+         */
         fun getMemberList(memberDataList: ArrayList<*>): ArrayList<MemberShortInfoModel> {
             val size = memberDataList.size
             var index = 0
@@ -54,6 +70,11 @@ class ModelInfoUtils {
             return memberList
         }
 
+        /**
+         * This method is used to get all friends in a list
+         * @param friendDataList
+         * @return arraylist of MemberFriendInfoModel
+         */
         fun getFriendList(friendDataList: ArrayList<*>): ArrayList<MemberFriendInfoModel> {
             val size = friendDataList.size
             var index = 0
@@ -71,6 +92,11 @@ class ModelInfoUtils {
             return friendList
         }
 
+        /**
+         * This method is used to get all notification in a list
+         * @param notificationDataList
+         * @return arraylist of MemberNotificationModel
+         */
         fun getNotificationList(notificationDataList: ArrayList<*>): ArrayList<MemberNotificationModel> {
             val size = notificationDataList.size
             var index = 0
@@ -86,9 +112,12 @@ class ModelInfoUtils {
         }
 
         /**
-          * This method is used to add friend data in FriendList
-          * this method update firebase database
-          */
+         * This method is used to add friend data in FriendList
+         * @param  databaseReference  - refrence to a friendList of Member
+         * @param friendId - new FriendList id at which friend will add
+         * @param friendInfo - information of friend
+         * @param friendStatus - friend status like FRIEND , FRIEND_REQUEST_SENT
+         */
         fun addFriend(databaseReference: DatabaseReference?, friendId: String, friendInfo: MemberShortInfoModel, friendStatus: Int) {
             val hasMapFriendUserNode = HashMap<String, Any>()
             hasMapFriendUserNode.put(AppConstant.FRIEND_STATUS, friendStatus)
@@ -108,29 +137,39 @@ class ModelInfoUtils {
 
         /**
          * This method is used to remove friend data from FriendList
-         * this method update firebase database
+         * @param databaseReference - refrence to a friendList of Member
+         * @param friendId - friendId
+         * @param friendList - arraylist of all friends
          */
-        fun removeFriend(databaseReference: DatabaseReference?, receiverId: String, friendList: ArrayList<MemberFriendInfoModel>) {
+        fun removeFriend(databaseReference: DatabaseReference?, friendId: String, friendList: ArrayList<MemberFriendInfoModel>) {
             var index = -1
             for (friendInfo: MemberFriendInfoModel in friendList) {
-                if (friendInfo.memberId == receiverId) {
+                if (friendInfo.memberId == friendId) {
                     index = friendList.indexOf(friendInfo)
                     break
                 }
             }
-            val friendListId = (friendList.size-2).toString()
+            val friendListId = (friendList.size - 2).toString()
             databaseReference?.child(AppConstant.FRIEND_LIST)?.child(index.toString())?.removeValue()
+
             val hasMapFriendId = HashMap<String, String>()
             hasMapFriendId.put(AppConstant.CURRENT_FRIEND_LIST_ID, friendListId)
             databaseReference?.updateChildren(hasMapFriendId as Map<String, Any>?)
         }
 
-        fun updateFriendStatus(databaseReference: DatabaseReference?, receiverId: String, friendList: ArrayList<MemberFriendInfoModel>, friendStatus: Int) {
+        /**
+         * This method is used to update friend status
+         * @param databaseReference - refrence to a friendList of Member
+         * @param friendId - friendId
+         * @param friendList - arraylist of all friends
+         * @param friendStatus
+         */
+        fun updateFriendStatus(databaseReference: DatabaseReference?, friendId: String, friendList: ArrayList<MemberFriendInfoModel>, friendStatus: Int) {
             val hasMapFriendUserNode = HashMap<String, Any>()
             hasMapFriendUserNode.put(AppConstant.FRIEND_STATUS, friendStatus)
             var index = -1
             for (friendInfo: MemberFriendInfoModel in friendList) {
-                if (friendInfo.memberId == receiverId) {
+                if (friendInfo.memberId == friendId) {
                     index = friendList.indexOf(friendInfo)
                     break
                 }

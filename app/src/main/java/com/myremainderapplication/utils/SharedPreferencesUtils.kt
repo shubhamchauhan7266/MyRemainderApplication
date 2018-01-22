@@ -12,7 +12,11 @@ class SharedPreferencesUtils {
         private val REMINDER_SHARED_PREF = "REMINDER_SHARED_PREF"
         private val TAG = SharedPreferencesUtils::class.java.getSimpleName()
 
-
+        /**
+         * This method is used to get a registration key from fileSystem
+         * @param context
+         * @return  a registration key
+         */
         fun getRegistrationKey(context: Context): String? {
             Log.v(TAG, "getRegistrationKey")
             try {
@@ -24,6 +28,11 @@ class SharedPreferencesUtils {
             }
         }
 
+        /**
+         * This method is used to store a registration key in filesystem which create every time when app is install
+         * @param context
+         * @param registrationKey
+         */
         fun setRegistrationKey(context: Context, registrationKey: String?) {
             Log.v(TAG, "getRegistrationKey")
             try {

@@ -24,8 +24,9 @@ import com.myremainderapplication.interfaces.AppConstant
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    /*
+    /**
      * this is an override method which receive all notification information
+     * @param remoteMessage
      */
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         var title: String?
@@ -61,7 +62,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     minute = remoteMessage.data!!["minute"]!!.toInt()
 
                     val calenderModel = CalenderModel(year, month, day, hour, minute)
-                    setEventAlarm(title, body, calenderModel)
+                    setEventAlarm(calenderModel)
                     sendNotification(title, body)
                 }
             }
@@ -78,12 +79,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    /*
+    /**
      * This method is used to set alarm at particuler time.
      * when alarm is start then it goes to AlarmActivity
+     * @param calenderModel
      */
     @SuppressLint("WrongConstant")
-    private fun setEventAlarm(title: String?, body: String?, calenderModel: CalenderModel) {
+    private fun setEventAlarm(calenderModel: CalenderModel) {
 
         val intent = Intent("com.myremainderapplication.activities.alarmactivity")
         val pendingIntent = PendingIntent.getActivity(baseContext, 2, intent, Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -94,8 +96,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent)
     }
 
-    /*
+    /**
      * This method is used to create a simple alert notification
+     * @param title
+     * @param body
      */
     private fun sendNotification(title: String?, body: String?) {
         val intent = Intent(this, HomeActivity::class.java)
@@ -115,8 +119,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.notify(AppConstant.SIMPLE_NOTIFICATION_REQUEST, notificationBuilder.build())
     }
 
-    /*
+    /**
      * This method is used to create a notification for friend request
+     * @param senderId
+     * @param receiverId
+     * @param message
      */
     private fun sendFriendRequestNotification(senderId: String, receiverId: String, message: String) {
 

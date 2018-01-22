@@ -27,10 +27,11 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
 
     private lateinit var senderFriendList: ArrayList<MemberFriendInfoModel>
 
-    /*
-         * this is an override method which handle all action done by user in notification and
-         * also extract the sender and receiver information from the database
-         */
+    /**
+     * this is an override method which handle all action done by user in notification and
+     * also extract the sender and receiver information from the database
+     * @param intent
+     */
     override fun onHandleIntent(intent: Intent?) {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(AppConstant.CUSTOM_NOTIFICATION_REQUEST)
@@ -61,10 +62,11 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
         }
     }
 
-    /*
+    /**
      * This method is used to update data based on action of user.
      * if user click on Accept button then it goes to accept section and call addFriend to add user in friendList
      * if user click on Reject button then it goes to reject section
+     * @param intent
      */
     private fun updateData(intent: Intent) {
         when (intent.action) {

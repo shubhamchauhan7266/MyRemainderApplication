@@ -20,7 +20,7 @@ class VolleySingletonClass(context: Context) {
      * @return RequestQueue(Volley) instance
      */
     companion object {
-        private var requestQueue: RequestQueue? =null
+        private var requestQueue: RequestQueue? = null
 
         fun getInstance(context: Context): RequestQueue? {
 

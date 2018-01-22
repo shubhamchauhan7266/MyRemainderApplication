@@ -1,6 +1,7 @@
 package com.myremainderapplication.utils
 
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFriendInfoModel
@@ -118,7 +119,7 @@ class ModelInfoUtils {
                 }
             }
             val friendListId = (friendList.size-2).toString()
-            databaseReference?.child(AppConstant.FRIEND_LIST)?.child(index.toString())?.setValue(null)
+            databaseReference?.child(AppConstant.FRIEND_LIST)?.child(index.toString())?.removeValue()
             val hasMapFriendId = HashMap<String, String>()
             hasMapFriendId.put(AppConstant.CURRENT_FRIEND_LIST_ID, friendListId)
             databaseReference?.updateChildren(hasMapFriendId as Map<String, Any>?)

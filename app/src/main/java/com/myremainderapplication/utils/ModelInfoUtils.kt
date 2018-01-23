@@ -111,10 +111,12 @@ class ModelInfoUtils {
             val notificationList = ArrayList<MemberNotificationModel>()
             while (index < size) {
                 val hashMap: HashMap<*, *> = notificationDataList[index] as HashMap<*, *>
+                val type = hashMap[AppConstant.NOTIFICATION_TYPE]  as Long
                 val title = hashMap[AppConstant.TITLE].toString()
                 val body = hashMap[AppConstant.BODY].toString()
-                val type = hashMap[AppConstant.MESSAGE_TYPE]  as Long
-                notificationList.add(MemberNotificationModel(type.toInt(),title, body))
+                val senderId = hashMap[AppConstant.SENDER_ID_KEY].toString()
+                val receiverId = hashMap[AppConstant.RECEIVER_ID_KEY].toString()
+                notificationList.add(MemberNotificationModel(type.toInt(),title, body,senderId,receiverId))
                 index++
             }
             return notificationList
@@ -184,6 +186,51 @@ class ModelInfoUtils {
                 }
             }
             databaseReference?.child(AppConstant.FRIEND_LIST)?.child(index.toString())?.updateChildren(hasMapFriendUserNode as Map<String, Any>?)
+        }
+
+        /**
+         * This method is used to add notification data in FriendList
+         * @param  databaseReference  - refrence to a friendList of Member
+         * @param notificationId - new Notification id at which notification will add
+         * @param notificationInfo - information of notification
+         */
+        fun addNotification(databaseReference: DatabaseReference?, notificationId: String, notificationInfo: MemberNotificationModel) {
+            val hasMapNotificationNode = HashMap<String, Any>()
+            hasMapNotificationNode.put(AppConstant.NOTIFICATION_TYPE, notificationInfo.type)
+            hasMapNotificationNode.put(AppConstant.TITLE, notificationInfo.title)
+            hasMapNotificationNode.put(AppConstant.BODY, notificationInfo.body)
+            hasMapNotificationNode.put(AppConstant.SENDER_ID_KEY, notificationInfo.senderId)
+            hasMapNotificationNode.put(AppConstant.RECEIVER_ID_KEY, notificationInfo.receiverId)
+
+            val hasMapNotificationListNode = HashMap<String, HashMap<String, Any>>()
+            hasMapNotificationListNode.put(notificationId, hasMapNotificationNode)
+            databaseReference?.child(AppConstant.NOTIFICATION_LIST)?.updateChildren(hasMapNotificationListNode as Map<String, Any>?)
+
+            val hasMapNotificationId = HashMap<String, String>()
+            hasMapNotificationId.put(AppConstant.CURRENT_NOTIFICATION_ID, notificationId)
+            databaseReference?.updateChildren(hasMapNotificationId as Map<String, Any>?)
+        }
+
+        /**
+         * This method is used to update notification type
+         * @param databaseReference - refrence to a friendList of Member
+         * @param receiverId - receiverId
+         * @param notificationList - arraylist of all notification
+         * @param notificationType
+         * @param message
+         */
+        fun updateNotificationType(databaseReference: DatabaseReference?, senderId: String, notificationList: ArrayList<MemberNotificationModel>, notificationType: Int,message:String) {
+            val hasMapNotificationNode = HashMap<String, Any>()
+            hasMapNotificationNode.put(AppConstant.NOTIFICATION_TYPE, notificationType)
+            hasMapNotificationNode.put(AppConstant.BODY,message)
+            var index = -1
+            for (notificationInfo: MemberNotificationModel in notificationList) {
+                if (notificationInfo.senderId == senderId) {
+                    index = notificationList.indexOf(notificationInfo)
+                    break
+                }
+            }
+            databaseReference?.child(AppConstant.NOTIFICATION_LIST)?.child(index.toString())?.updateChildren(hasMapNotificationNode as Map<String, Any>?)
         }
     }
 

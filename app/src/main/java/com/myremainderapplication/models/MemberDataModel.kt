@@ -25,4 +25,4 @@ class MemberShortInfoModel(val memberId: String, val memberName: String, val ima
 
 class MemberFriendInfoModel(val friendStatus: Int, val memberId: String, val memberName: String, val imagePath: String, val registrationToken: String) : Serializable
 
-class MemberNotificationModel(val type:Int,val title: String, val body: String) : Serializable
+class MemberNotificationModel(val type:Int,val title: String, val body: String,val senderId:String,val receiverId:String) : Serializable

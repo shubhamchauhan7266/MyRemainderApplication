@@ -9,6 +9,7 @@ import com.myremainderapplication.R
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFriendInfoModel
 import com.myremainderapplication.models.MemberFullInfoModel
+import com.myremainderapplication.models.MemberNotificationModel
 import com.myremainderapplication.models.MemberShortInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
 
@@ -29,6 +30,7 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
     private var receiverId: String? = null
 
     private lateinit var senderFriendList: ArrayList<MemberFriendInfoModel>
+    private lateinit var receiverNotificationList: ArrayList<MemberNotificationModel>
 
     /**
      * this is an override method which handle all action done by user in notification and
@@ -48,7 +50,10 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
             database.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot?) {
                     val memberList = dataSnapshot?.child(AppConstant.MEMBERS)?.child(senderId)?.child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
+                    val notificationList = dataSnapshot.child(AppConstant.MEMBERS)?.child(receiverId)?.child(AppConstant.NOTIFICATION_LIST)?.value as ArrayList<*>
+
                     senderFriendList = ModelInfoUtils.getFriendList(memberList)
+                    receiverNotificationList = ModelInfoUtils.getNotificationList(notificationList)
 
                     senderInfo = ModelInfoUtils.getMemberShortInfoModel(dataSnapshot, senderId!!)
                     receiverInfo = ModelInfoUtils.getMemberFullInfoModel(dataSnapshot, receiverId!!)
@@ -82,13 +87,17 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
                         val newReceiverFriendId = (receiverInfo?.currentFriendId!!.toInt() + 1).toString()
                         ModelInfoUtils.addFriend(databaseReceiverRef, newReceiverFriendId, senderInfo!!, ModelInfoUtils.FRIEND)
                         ModelInfoUtils.updateFriendStatus(databaseSenderRef, receiverId!!, senderFriendList, ModelInfoUtils.FRIEND)
+                        ModelInfoUtils.updateNotificationType(databaseReceiverRef, senderId!!, receiverNotificationList, AppConstant.SIMPE_ALERT_TYPE, "Friend Request Accept")
                     }
                 }
             }
             getString(R.string.reject) -> {
                 if (senderId != null && receiverId != null) {
                     val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(senderId)
+                    val databaseReceiverRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(receiverId)
+
                     ModelInfoUtils.removeFriend(databaseSenderRef, receiverId!!, senderFriendList)
+                    ModelInfoUtils.updateNotificationType(databaseReceiverRef, senderId!!, receiverNotificationList, AppConstant.SIMPE_ALERT_TYPE, "Friend Request Reject")
                 }
             }
         }

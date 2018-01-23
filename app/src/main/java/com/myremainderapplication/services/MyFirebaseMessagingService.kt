@@ -16,7 +16,13 @@ import com.myremainderapplication.activities.HomeActivity
 import com.myremainderapplication.models.CalenderModel
 import java.util.*
 import android.widget.RemoteViews
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.myremainderapplication.interfaces.AppConstant
+import com.myremainderapplication.models.MemberNotificationModel
+import com.myremainderapplication.utils.ModelInfoUtils
 
 
 /**
@@ -27,7 +33,6 @@ import com.myremainderapplication.interfaces.AppConstant
  * @author Shubham Chauhan
  */
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-
     /**
      * this is an override method which receive all notification information
      * @param remoteMessage
@@ -45,14 +50,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage!!.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
             var type = 0
-            if (remoteMessage.data.containsKey(AppConstant.MESSAGE_TYPE)) {
-                type = remoteMessage.data[AppConstant.MESSAGE_TYPE]!!.toInt()
+            if (remoteMessage.data.containsKey(AppConstant.NOTIFICATION_TYPE)) {
+                type = remoteMessage.data[AppConstant.NOTIFICATION_TYPE]!!.toInt()
             }
             when (type) {
                 AppConstant.FRIEND_REQUEST_TYPE -> {
                     val senderId = remoteMessage.data!![AppConstant.SENDER_ID_KEY]!!
                     val receiverId = remoteMessage.data!![AppConstant.RECEIVER_ID_KEY]!!
                     val message = remoteMessage.data!!["message"]!!
+                    saveNotificationToDatabase(AppConstant.FRIEND_REQUEST_TYPE,"Friend Request",message,senderId,receiverId)
                     sendFriendRequestNotification(senderId, receiverId, message)
                 }
                 AppConstant.EVENT_ALERT_TYPE -> {
@@ -163,5 +169,27 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(AppConstant.CUSTOM_NOTIFICATION_REQUEST, notificationBuilder.build())
+    }
+
+    private fun saveNotificationToDatabase(type:Int, title:String, body:String, senderId: String, receiverId: String) {
+        var currentNotificationId: String?=null
+        var isUpdateRequired = false
+
+        val databaseReceiverRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(receiverId)
+        databaseReceiverRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                currentNotificationId = dataSnapshot?.child(AppConstant.CURRENT_NOTIFICATION_ID)?.value as String
+
+                if(!isUpdateRequired){
+                    isUpdateRequired = true
+                    val newNotificationId = (currentNotificationId!!.toInt()+1).toString()
+                    val notificationInfo = MemberNotificationModel(type,title,body,senderId,receiverId)
+                    ModelInfoUtils.addNotification(databaseReceiverRef,newNotificationId,notificationInfo)
+                }
+            }
+
+            override fun onCancelled(dataSnapshot: DatabaseError?) {
+            }
+        })
     }
 }

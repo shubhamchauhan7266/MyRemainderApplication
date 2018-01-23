@@ -130,7 +130,7 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         val jsonObjectRequestParams = JSONObject()
 
         val jsonObjectData = JSONObject()
-        jsonObjectData.put("type",2)
+        jsonObjectData.put("type",AppConstant.EVENT_ALERT_TYPE)
         jsonObjectData.put("title", title)
         jsonObjectData.put("body", body)
         jsonObjectData.put("year", calenderModel.year)

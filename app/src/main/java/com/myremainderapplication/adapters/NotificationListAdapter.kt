@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.myremainderapplication.R
 import com.myremainderapplication.fragments.NotificationFragment
+import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberNotificationModel
 import kotlinx.android.synthetic.main.notification_item_row.view.*
 
@@ -15,23 +16,56 @@ import kotlinx.android.synthetic.main.notification_item_row.view.*
  *
  * @author Shubham Chauhan
  */
-class NotificationListAdapter(val context: NotificationFragment, private var notificationList: ArrayList<MemberNotificationModel>) : RecyclerView.Adapter<NotificationListAdapter.ViewHolder>() {
+class NotificationListAdapter(val context: NotificationFragment, private var notificationList: ArrayList<MemberNotificationModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent!!.context).inflate(R.layout.notification_item_row, parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType==AppConstant.FRIEND_REQUEST_TYPE){
+            val view = LayoutInflater.from(parent!!.context).inflate(R.layout.notification_item_row, parent, false)
+            return ViewHolderFriendRequest(view)
+        }else if (viewType==AppConstant.EVENT_ALERT_TYPE){
+            val view = LayoutInflater.from(parent!!.context).inflate(R.layout.notification_item_row, parent, false)
+            return ViewHolderEventAlert(view)
+        }else{
+            val view = LayoutInflater.from(parent!!.context).inflate(R.layout.notification_item_row, parent, false)
+            return ViewHolderEventAlert(view)
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int)=holder!!.bind(notificationList[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+        if(holder is ViewHolderEventAlert ){
+            val viewHolderEventAler:ViewHolderEventAlert = holder
+            viewHolderEventAler.bindEventData(notificationList[position])
+        }else if(holder is ViewHolderFriendRequest){
+            val viewHolderFriendRequest:ViewHolderFriendRequest = holder
+            viewHolderFriendRequest.bindFriendRequestData(notificationList[position])
+        }
+    }
 
     override fun getItemCount(): Int {
         return notificationList.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(memberNotificationModel: MemberNotificationModel) {
+    override fun getItemViewType(position: Int): Int {
+        if(notificationList[position].type==AppConstant.FRIEND_REQUEST_TYPE){
+            return AppConstant.FRIEND_REQUEST_TYPE
+        }else if (notificationList[position].type==AppConstant.EVENT_ALERT_TYPE){
+            return AppConstant.EVENT_ALERT_TYPE
+        }else{
+            return AppConstant.SIMPE_ALERT_TYPE
+        }
+    }
+
+    class ViewHolderEventAlert(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bindEventData(memberNotificationModel: MemberNotificationModel) {
             itemView.tvTitle.text=memberNotificationModel.title
             itemView.tvDescription.text=memberNotificationModel.body
+        }
+
+    }
+
+    class ViewHolderFriendRequest(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+        fun bindFriendRequestData(memberNotificationModel: MemberNotificationModel) {
+
         }
 
     }

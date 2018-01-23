@@ -45,19 +45,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage!!.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
             var type = 0
-            if (remoteMessage.data.containsKey("type")) {
-                type = remoteMessage.data["type"]!!.toInt()
+            if (remoteMessage.data.containsKey(AppConstant.MESSAGE_TYPE)) {
+                type = remoteMessage.data[AppConstant.MESSAGE_TYPE]!!.toInt()
             }
             when (type) {
-                1 -> {
+                AppConstant.FRIEND_REQUEST_TYPE -> {
                     val senderId = remoteMessage.data!![AppConstant.SENDER_ID_KEY]!!
                     val receiverId = remoteMessage.data!![AppConstant.RECEIVER_ID_KEY]!!
                     val message = remoteMessage.data!!["message"]!!
                     sendFriendRequestNotification(senderId, receiverId, message)
                 }
-                2 -> {
-                    title = remoteMessage.data!!["title"]!!
-                    body = remoteMessage.data!!["body"]!!
+                AppConstant.EVENT_ALERT_TYPE -> {
+                    title = remoteMessage.data!![AppConstant.TITLE]!!
+                    body = remoteMessage.data!![AppConstant.BODY]!!
 
                     year = remoteMessage.data!!["year"]!!.toInt()
                     month = remoteMessage.data!!["month"]!!.toInt()

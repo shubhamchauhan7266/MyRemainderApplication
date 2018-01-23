@@ -13,6 +13,9 @@ interface AppConstant {
         val SPLASH_TIME_OUT = 3000
         val SIMPLE_NOTIFICATION_REQUEST = 10
         val CUSTOM_NOTIFICATION_REQUEST = 11
+        val FRIEND_REQUEST_TYPE = 1
+        val EVENT_ALERT_TYPE = 2
+        val SIMPE_ALERT_TYPE = 0
         val REQUEST_SELECT_IMAGE_FROM_ALBUM = 1
         val REQUEST_TAKE_PHOTO = 2
 
@@ -42,6 +45,7 @@ interface AppConstant {
         val IMAGE_PATH = "imagePath"
         val TITLE = "title"
         val BODY = "body"
+        val MESSAGE_TYPE = "type"
         val SENDER_ID_KEY = "senderId"
         val RECEIVER_ID_KEY = "receiverId"
         val FRIEND_STATUS = "friendStatus"

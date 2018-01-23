@@ -113,7 +113,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         val jsonObjectRequestParams = JSONObject()
 
         val jsonObjectData = JSONObject()
-        jsonObjectData.put("type", 1)
+        jsonObjectData.put("type", AppConstant.FRIEND_REQUEST_TYPE)
         jsonObjectData.put(AppConstant.SENDER_ID_KEY, senderId)
         jsonObjectData.put(AppConstant.RECEIVER_ID_KEY, ReceiverId)
         jsonObjectData.put("message", message)

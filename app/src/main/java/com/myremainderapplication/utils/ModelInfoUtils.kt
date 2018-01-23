@@ -102,6 +102,7 @@ class ModelInfoUtils {
         /**
          * This method is used to get all notification in a list
          * @param notificationDataList
+         * @param type
          * @return arraylist of MemberNotificationModel
          */
         fun getNotificationList(notificationDataList: ArrayList<*>): ArrayList<MemberNotificationModel> {
@@ -112,7 +113,8 @@ class ModelInfoUtils {
                 val hashMap: HashMap<*, *> = notificationDataList[index] as HashMap<*, *>
                 val title = hashMap[AppConstant.TITLE].toString()
                 val body = hashMap[AppConstant.BODY].toString()
-                notificationList.add(MemberNotificationModel(title, body))
+                val type = hashMap[AppConstant.MESSAGE_TYPE]  as Long
+                notificationList.add(MemberNotificationModel(type.toInt(),title, body))
                 index++
             }
             return notificationList

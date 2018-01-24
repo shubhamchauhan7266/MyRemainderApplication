@@ -24,25 +24,30 @@ class HomeActivity : AppCompatActivity() {
 
         loadHomeFragment()
 
-        bottomNavigationView.setOnNavigationItemSelectedListener{item ->
-            when(item.itemId){
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+
                 R.id.action_home -> {
                     loadHomeFragment()
                     return@setOnNavigationItemSelectedListener true
                 }
+
                 R.id.action_profile -> {
                     loadProfileFragment()
                     return@setOnNavigationItemSelectedListener true
                 }
+
                 R.id.action_notification -> {
                     loadNotifactionFragment()
                     return@setOnNavigationItemSelectedListener true
                 }
-                R.id.action_friends->{
+
+                R.id.action_friends -> {
                     loadFriendListFragment()
                     return@setOnNavigationItemSelectedListener true
                 }
-                else->{
+
+                else -> {
                     return@setOnNavigationItemSelectedListener false
                 }
             }

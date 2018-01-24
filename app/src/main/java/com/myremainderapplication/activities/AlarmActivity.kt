@@ -42,6 +42,7 @@ class AlarmActivity : AppCompatActivity() {
         try {
             mMediaPlayer!!.setDataSource(context, alarmUri)
             val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
             if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
                 mMediaPlayer!!.setAudioStreamType(AudioManager.STREAM_ALARM)
                 mMediaPlayer!!.prepare()

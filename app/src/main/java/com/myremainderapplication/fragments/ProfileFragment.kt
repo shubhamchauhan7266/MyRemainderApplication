@@ -58,7 +58,7 @@ class ProfileFragment : Fragment() {
         id = "4041"
         mStorageRef = FirebaseStorage.getInstance().reference
         setDatabaseData(view)
-        view.ivProfile.setOnClickListener{
+        view.ivProfile.setOnClickListener {
             selectImageDialog()
         }
 
@@ -71,21 +71,20 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setDatabaseData(view: View) {
-        val database = FirebaseDatabase.getInstance().reference
+        val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS)
         database.addValueEventListener(object : ValueEventListener {
+
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 memberFullInfoModel = ModelInfoUtils.Companion.getMemberFullInfoModel(dataSnapshot, id)
-                val memberList = dataSnapshot!!.child(AppConstant.MEMBERS).child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
+                val memberList = dataSnapshot?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
                 val memberUserList = ModelInfoUtils.Companion.getMemberList(memberList)
 
-                var index=0
-                while (index<memberUserList.size)
-                {
-                    if(id==memberUserList[index].memberId){
-                        memberListId=index.toString()
+                var index = 0
+                while (index < memberUserList.size) {
+                    if (id == memberUserList[index].memberId) {
+                        memberListId = index.toString()
                         break
                     }
-
                     index++
                 }
                 updateData(view)
@@ -101,75 +100,80 @@ class ProfileFragment : Fragment() {
         view.tvName.text = memberFullInfoModel!!.memberName
         view.tvEmail.text = memberFullInfoModel!!.emailId
         view.tvMobileNumber.text = memberFullInfoModel!!.phoneNumber
-        val url=memberFullInfoModel!!.imagePath
+        val url = memberFullInfoModel!!.imagePath
+
         Picasso.with(mContext)
                 .load(url)
-                .resize(100,100)
+                .resize(100, 100)
                 .into(view.ivProfile)
     }
 
-    private fun selectImageDialog(){
-        val items= arrayOf("Take Photo", "Choose from Library", "Cancel")
-        val builder= AlertDialog.Builder(mContext)
+    private fun selectImageDialog() {
+        val items = arrayOf("Take Photo", "Choose from Library", "Cancel")
+        val builder = AlertDialog.Builder(mContext)
         builder.setTitle("Add Photo!")
-        builder.setItems(items){dialog,item->
-            if(items[item].equals("Take Photo")){
+
+        builder.setItems(items) { dialog, item ->
+            if (items[item].equals("Take Photo")) {
                 takePhotoFromCamera()
-            }else if(items[item].equals("Choose from Library")){
+            } else if (items[item].equals("Choose from Library")) {
                 selectImageFromAlbum()
-            }else{
+            } else {
                 dialog.dismiss()
             }
         }
         builder.show()
     }
 
-    private fun selectImageFromAlbum(){
-        val intent= Intent()
+    private fun selectImageFromAlbum() {
+        val intent = Intent()
         intent.setAction(Intent.ACTION_GET_CONTENT)
         intent.setType("image/*")
         startActivityForResult(intent, AppConstant.REQUEST_SELECT_IMAGE_FROM_ALBUM)
     }
 
-    private fun takePhotoFromCamera(){
+    private fun takePhotoFromCamera() {
         val imagesFolder = File(Environment.getExternalStorageDirectory(), "MyImages")
         imagesFolder.mkdir()
         photoPath = File(imagesFolder, memberFullInfoModel!!.memberId + ".jpg")
-        val intent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoPath))
         startActivityForResult(intent, AppConstant.REQUEST_TAKE_PHOTO)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode== Activity.RESULT_OK){
-            var uri: Uri? =null
-            when(requestCode){
-                AppConstant.REQUEST_SELECT_IMAGE_FROM_ALBUM ->{
+
+        if (resultCode == Activity.RESULT_OK) {
+            var uri: Uri? = null
+            when (requestCode) {
+                AppConstant.REQUEST_SELECT_IMAGE_FROM_ALBUM -> {
                     uri = data!!.data
                 }
-                AppConstant.REQUEST_TAKE_PHOTO ->{
-                    uri= Uri.fromFile(photoPath)
+                AppConstant.REQUEST_TAKE_PHOTO -> {
+                    uri = Uri.fromFile(photoPath)
                 }
             }
             uploadProfileImage(uri!!)
         }
     }
 
-    private fun uploadProfileImage(file:Uri){
+    private fun uploadProfileImage(file: Uri) {
         val childRef = mStorageRef!!.child("images/" + file.lastPathSegment)
         val uploadTask = childRef.putFile(file)
 
-        uploadTask.addOnFailureListener{exception->
+        uploadTask.addOnFailureListener { exception ->
             // Handle unsuccessful uploads
-        }.addOnSuccessListener{ taskSnapshot ->
+        }.addOnSuccessListener { taskSnapshot ->
             val downloadUrl = taskSnapshot.downloadUrl
-            val databaseMemberImagePathref=FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(id)
-            val hashMap= HashMap<String,String>()
-            hashMap.put(AppConstant.IMAGE_PATH,downloadUrl.toString())
+            val databaseMemberImagePathref = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(id)
+
+            val hashMap = HashMap<String, String>()
+            hashMap.put(AppConstant.IMAGE_PATH, downloadUrl.toString())
             databaseMemberImagePathref.updateChildren(hashMap as Map<String, Any>?)
 
-            val databaseMemberListImagePathref=FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(AppConstant.MEMBERS_LIST).child(memberListId)
+            val databaseMemberListImagePathref = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).
+                    child(AppConstant.MEMBERS_LIST).child(memberListId)
             databaseMemberListImagePathref.updateChildren(hashMap as Map<String, Any>?)
         }
     }

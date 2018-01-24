@@ -29,12 +29,13 @@ import kotlinx.android.synthetic.main.fragment_notifaction.view.*
 class NotificationFragment : Fragment() {
     private var mContext: Context? = null
     private var notificationList: ArrayList<MemberNotificationModel>? = null
-    private lateinit var notificationListAdapter:NotificationListAdapter
+    private lateinit var notificationListAdapter: NotificationListAdapter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         mContext = context
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -46,8 +47,9 @@ class NotificationFragment : Fragment() {
     private fun setNotificationListData(view: View) {
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child("4041")
         database.addValueEventListener(object : ValueEventListener {
+
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                if(dataSnapshot?.hasChild(AppConstant.NOTIFICATION_LIST)!!){
+                if (dataSnapshot?.hasChild(AppConstant.NOTIFICATION_LIST)!!) {
                     val memberNotificationList = dataSnapshot.child(AppConstant.NOTIFICATION_LIST)?.value as ArrayList<*>
                     notificationList = ModelInfoUtils.Companion.getNotificationList(memberNotificationList)
                     notificationListAdapter = NotificationListAdapter(this@NotificationFragment, notificationList!!)
@@ -56,8 +58,10 @@ class NotificationFragment : Fragment() {
                     view.recyclerView.adapter = notificationListAdapter
                 }
             }
+
             override fun onCancelled(dataSnapshot: DatabaseError?) {
             }
 
-        })    }
+        })
+    }
 }

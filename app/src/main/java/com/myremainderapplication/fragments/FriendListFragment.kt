@@ -51,6 +51,7 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
     private fun setFriendListData(view: View) {
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child("4041")
         database.addValueEventListener(object : ValueEventListener {
+
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 if(dataSnapshot?.hasChild(AppConstant.FRIEND_LIST)!!){
                     val memberList = dataSnapshot.child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
@@ -68,6 +69,7 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
                     view.recyclerView.adapter = friendListAdapter
                 }
             }
+
             override fun onCancelled(dataSnapshot: DatabaseError?) {
             }
 

@@ -30,27 +30,16 @@ import java.util.*
  */
 class EventActivity : AppCompatActivity(), View.OnClickListener {
 
-
     private lateinit var requestQueue: RequestQueue
-
     private var year: Int = 0
-
     private var month: Int = 0
-
     private var day: Int = 0
-
     private var hour: Int = 0
-
     private var minute: Int = 0
-
     private var alarmYear: Int = 0
-
     private var alarmMonth: Int = 0
-
     private var alarmDay: Int = 0
-
     private var alarmHour: Int = 0
-
     private var alarmMinute: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,8 +53,6 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         hour = calender.get(Calendar.HOUR_OF_DAY)
         minute = calender.get(Calendar.MINUTE)
 
-
-
         requestQueue = VolleySingletonClass.getInstance(this)!!
 
         btSend.setOnClickListener(this)
@@ -75,27 +62,30 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when (view!!.id) {
+
             R.id.btDate -> {
                 val datePickerDialog = DatePickerDialog(this@EventActivity, DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     // Display Selected date in textbox
                     btDate.text = (dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year)
-                    alarmYear=year
-                    alarmMonth=monthOfYear
-                    alarmDay=dayOfMonth
+                    alarmYear = year
+                    alarmMonth = monthOfYear
+                    alarmDay = dayOfMonth
                 }, year, month, day)
                 datePickerDialog.show()
             }
+
             R.id.btTime -> {
                 val timePickerDialog = TimePickerDialog(this@EventActivity, TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                     btTime.text = (hourOfDay.toString() + ":" + minute)
-                    alarmHour=hourOfDay
-                    alarmMinute=minute
+                    alarmHour = hourOfDay
+                    alarmMinute = minute
 
-                }, hour, minute,true)
+                }, hour, minute, true)
                 timePickerDialog.show()
             }
+
             R.id.btSend -> {
-                val calenderModel = CalenderModel(alarmYear,alarmMonth,alarmDay,alarmHour,alarmMinute)
+                val calenderModel = CalenderModel(alarmYear, alarmMonth, alarmDay, alarmHour, alarmMinute)
                 if (etTitle.text.toString().trim().isNotEmpty() && etDescription.text.toString().trim().isNotEmpty())
                     sendEventNotification(etTitle.text.toString(), etDescription.text.toString(), calenderModel)
                 else
@@ -106,9 +96,10 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun sendEventNotification(title: String, body: String, calenderModel: CalenderModel) {
         val request = getJsonBody(title, body, calenderModel)
+
         val jsonRequest = object : JsonObjectRequest(Request.Method.POST, AppConstant.SEND_NOTIFICATION_URL, request,
                 Response.Listener<JSONObject> { response: JSONObject? ->
-                    val success= response!!.getInt("success")
+                    val success = response!!.getInt("success")
                 },
                 Response.ErrorListener { error: VolleyError? ->
 
@@ -130,7 +121,7 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         val jsonObjectRequestParams = JSONObject()
 
         val jsonObjectData = JSONObject()
-        jsonObjectData.put("type",AppConstant.EVENT_ALERT_TYPE)
+        jsonObjectData.put("type", AppConstant.EVENT_ALERT_TYPE)
         jsonObjectData.put("title", title)
         jsonObjectData.put("body", body)
         jsonObjectData.put("year", calenderModel.year)

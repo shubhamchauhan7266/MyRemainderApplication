@@ -41,7 +41,8 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setDatabaseData() {
-        val database = FirebaseDatabase.getInstance().reference
+        val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS)
+
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 memberFullInfoModel = ModelInfoUtils.Companion.getMemberFullInfoModel(dataSnapshot, id)
@@ -59,6 +60,7 @@ class ProfileActivity : AppCompatActivity() {
         tvEmail.text = memberFullInfoModel!!.emailId
         tvMobileNumber.text = memberFullInfoModel!!.phoneNumber
         val url=memberFullInfoModel!!.imagePath
+
         Picasso.with(this)
                 .load(url)
                 .resize(100,100)

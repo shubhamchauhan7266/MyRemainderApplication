@@ -53,14 +53,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             if (remoteMessage.data.containsKey(AppConstant.NOTIFICATION_TYPE)) {
                 type = remoteMessage.data[AppConstant.NOTIFICATION_TYPE]!!.toInt()
             }
+
             when (type) {
+
                 AppConstant.FRIEND_REQUEST_TYPE -> {
                     val senderId = remoteMessage.data!![AppConstant.SENDER_ID_KEY]!!
                     val receiverId = remoteMessage.data!![AppConstant.RECEIVER_ID_KEY]!!
                     val message = remoteMessage.data!!["message"]!!
-                    saveNotificationToDatabase(AppConstant.FRIEND_REQUEST_TYPE,"Friend Request",message,senderId,receiverId)
+                    saveNotificationToDatabase(AppConstant.FRIEND_REQUEST_TYPE, "Friend Request", message, senderId, receiverId)
                     sendFriendRequestNotification(senderId, receiverId, message)
                 }
+
                 AppConstant.EVENT_ALERT_TYPE -> {
                     title = remoteMessage.data!![AppConstant.TITLE]!!
                     body = remoteMessage.data!![AppConstant.BODY]!!
@@ -153,6 +156,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         expendView.setTextViewText(R.id.tvMessage, message)
         expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT))
         expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST, rejectIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST,
@@ -167,24 +171,25 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setAutoCancel(true)
                 .setCustomBigContentView(expendView)
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(AppConstant.CUSTOM_NOTIFICATION_REQUEST, notificationBuilder.build())
     }
 
-    private fun saveNotificationToDatabase(type:Int, title:String, body:String, senderId: String, receiverId: String) {
-        var currentNotificationId: String?=null
+    private fun saveNotificationToDatabase(type: Int, title: String, body: String, senderId: String, receiverId: String) {
+        var currentNotificationId: String?
         var isUpdateRequired = false
-
         val databaseReceiverRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(receiverId)
+
         databaseReceiverRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 currentNotificationId = dataSnapshot?.child(AppConstant.CURRENT_NOTIFICATION_ID)?.value as String
 
-                if(!isUpdateRequired){
+                if (!isUpdateRequired) {
                     isUpdateRequired = true
-                    val newNotificationId = (currentNotificationId!!.toInt()+1).toString()
-                    val notificationInfo = MemberNotificationModel(type,title,body,senderId,receiverId)
-                    ModelInfoUtils.addNotification(databaseReceiverRef,newNotificationId,notificationInfo)
+                    val newNotificationId = (currentNotificationId!!.toInt() + 1).toString()
+                    val notificationInfo = MemberNotificationModel(type, title, body, senderId, receiverId)
+                    ModelInfoUtils.addNotification(databaseReceiverRef, newNotificationId, notificationInfo)
                 }
             }
 

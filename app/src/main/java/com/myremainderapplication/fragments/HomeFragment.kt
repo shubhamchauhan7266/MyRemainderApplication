@@ -58,6 +58,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
     private fun setMemberListData(view: View) {
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS)
         database.addValueEventListener(object : ValueEventListener {
+
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 val memberNodeList = dataSnapshot?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
                 memberList = ModelInfoUtils.getMemberList(memberNodeList)
@@ -81,11 +82,13 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
 
     override fun onViewClick(position: Int) {
         val memberShortInfoModel = memberList?.get(position)
-        sendFriendRequest("4041", memberShortInfoModel!!.memberId, "message1", memberShortInfoModel.registrationToken, position)
+        sendFriendRequest("4041", memberShortInfoModel!!.memberId, "message1",
+                memberShortInfoModel.registrationToken, position)
     }
 
     private fun sendFriendRequest(senderId: String, ReceiverId: String, message: String, registrationToken: String, position: Int) {
         val request = getJsonBody(senderId, ReceiverId, message, registrationToken)
+
         val jsonRequest = object : JsonObjectRequest(Request.Method.POST, AppConstant.SEND_NOTIFICATION_URL, request,
                 Response.Listener<JSONObject> { response: JSONObject? ->
                     val success = response!!.getInt("success")
@@ -117,6 +120,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         jsonObjectData.put(AppConstant.SENDER_ID_KEY, senderId)
         jsonObjectData.put(AppConstant.RECEIVER_ID_KEY, ReceiverId)
         jsonObjectData.put("message", message)
+
         jsonObjectRequestParams.put("data", jsonObjectData)
         jsonObjectRequestParams.put("to", SharedPreferencesUtils.getRegistrationKey(mContext!!))
 

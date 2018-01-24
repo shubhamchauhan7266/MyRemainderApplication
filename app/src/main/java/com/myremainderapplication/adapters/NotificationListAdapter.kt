@@ -69,6 +69,7 @@ class NotificationListAdapter(val context: NotificationFragment, private var not
     class ViewHolderFriendRequest(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         fun bindFriendRequestData(context: NotificationFragment, memberNotificationModel: MemberNotificationModel) {
             itemView.tvMessage.text = memberNotificationModel.body
+
             itemView.tvAccept.setOnClickListener {
                 val acceptIntent = Intent(context.activity, HandleFriendRequestService::class.java)
                 acceptIntent.action = context.getString(R.string.accept)
@@ -77,6 +78,7 @@ class NotificationListAdapter(val context: NotificationFragment, private var not
                 acceptIntent.putExtra(AppConstant.RECEIVER_ID_KEY, memberNotificationModel.receiverId)
                 context.activity?.startService(acceptIntent)
             }
+
             itemView.tvReject.setOnClickListener {
                 val rejectIntent = Intent(context.activity, HandleFriendRequestService::class.java)
                 rejectIntent.action = context.getString(R.string.reject)

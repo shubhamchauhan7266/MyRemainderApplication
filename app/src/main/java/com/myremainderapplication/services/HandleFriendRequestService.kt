@@ -22,13 +22,9 @@ import com.myremainderapplication.utils.ModelInfoUtils
 class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
 
     private var senderInfo: MemberShortInfoModel? = null
-
     private var receiverInfo: MemberFullInfoModel? = null
-
     private var senderId: String? = null
-
     private var receiverId: String? = null
-
     private lateinit var senderFriendList: ArrayList<MemberFriendInfoModel>
     private lateinit var receiverNotificationList: ArrayList<MemberNotificationModel>
 
@@ -42,18 +38,27 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
         notificationManager.cancel(AppConstant.CUSTOM_NOTIFICATION_REQUEST)
         sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 
+        senderFriendList = ArrayList()
+        receiverNotificationList = ArrayList()
+
         var updateRequired = true
         if (intent!!.hasExtra(AppConstant.SENDER_ID_KEY) && intent.hasExtra(AppConstant.RECEIVER_ID_KEY)) {
             senderId = intent.getStringExtra(AppConstant.SENDER_ID_KEY)
             receiverId = intent.getStringExtra(AppConstant.RECEIVER_ID_KEY)
-            val database = FirebaseDatabase.getInstance().reference
-            database.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                    val memberList = dataSnapshot?.child(AppConstant.MEMBERS)?.child(senderId)?.child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
-                    val notificationList = dataSnapshot.child(AppConstant.MEMBERS)?.child(receiverId)?.child(AppConstant.NOTIFICATION_LIST)?.value as ArrayList<*>
 
-                    senderFriendList = ModelInfoUtils.getFriendList(memberList)
-                    receiverNotificationList = ModelInfoUtils.getNotificationList(notificationList)
+            val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS)
+            database.addValueEventListener(object : ValueEventListener {
+
+                override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                    if (dataSnapshot?.child(senderId)?.hasChild(AppConstant.FRIEND_LIST)!!) {
+                        val memberList = dataSnapshot.child(senderId)?.child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
+                        senderFriendList = ModelInfoUtils.getFriendList(memberList)
+                    }
+
+                    if (dataSnapshot.child(receiverId)?.hasChild(AppConstant.NOTIFICATION_LIST)!!) {
+                        val notificationList = dataSnapshot.child(receiverId)?.child(AppConstant.NOTIFICATION_LIST)?.value as ArrayList<*>
+                        receiverNotificationList = ModelInfoUtils.getNotificationList(notificationList)
+                    }
 
                     senderInfo = ModelInfoUtils.getMemberShortInfoModel(dataSnapshot, senderId!!)
                     receiverInfo = ModelInfoUtils.getMemberFullInfoModel(dataSnapshot, receiverId!!)
@@ -78,6 +83,7 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
      */
     private fun updateData(intent: Intent) {
         when (intent.action) {
+
             getString(R.string.accept) -> {
                 if (senderId != null && receiverId != null) {
                     val databaseReceiverRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(receiverId)
@@ -91,6 +97,7 @@ class HandleFriendRequestService : IntentService("HandleFriendRequestService") {
                     }
                 }
             }
+
             getString(R.string.reject) -> {
                 if (senderId != null && receiverId != null) {
                     val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(senderId)

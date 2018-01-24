@@ -127,6 +127,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         val items = arrayOf(getString(R.string.take_photo), getString(R.string.choose_from_library), getString(R.string.cancel))
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.add_photo))
+
         builder.setItems(items) { dialog, item ->
             if (items[item].equals(getString(R.string.take_photo))) {
                 takePhotoFromCamera()
@@ -149,10 +150,12 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     private fun takePhotoFromCamera() {
         val imagesFolder = File(Environment.getExternalStorageDirectory(), getString(R.string.myimages))
         imagesFolder.mkdir()
+
         if (!currentMemberId.equals(""))
             photoPath = File(imagesFolder, (currentMemberId.toInt() + 1).toString() + ".jpg")
         else
             return
+
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoPath))
         startActivityForResult(intent, AppConstant.REQUEST_TAKE_PHOTO)
@@ -160,6 +163,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (resultCode == Activity.RESULT_OK) {
             var uri: Uri? = null
             when (requestCode) {
@@ -184,6 +188,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
     private fun setDatabaseData() {
         val database = FirebaseDatabase.getInstance().reference
+
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 currentMemberId = dataSnapshot?.child(AppConstant.CURRENT_MEMBER_ID)?.value.toString()

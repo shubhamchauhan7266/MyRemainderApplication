@@ -1,7 +1,9 @@
 package com.myremainderapplication.utils
 
+import android.content.Context
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFriendInfoModel
 import com.myremainderapplication.models.MemberShortInfoModel
@@ -249,6 +251,17 @@ class ModelInfoUtils {
             if (index != -1)
                 databaseReference?.child(AppConstant.NOTIFICATION_LIST)?.child(index.toString())?.
                         updateChildren(hasMapNotificationNode as Map<String, Any>?)
+        }
+
+        fun updateRegistrationToken(context: Context, memberId: String, memberListId: String) {
+            val databaseMemberRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(memberId)
+            val databaseMemberListRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(AppConstant.MEMBERS_LIST)
+
+            val hashMap = HashMap<String, String>()
+            hashMap.put(AppConstant.REGISTRATION_TOKEN, SharedPreferencesUtils.getRegistrationKey(context).toString())
+
+            databaseMemberRef.updateChildren(hashMap as Map<String, Any>?)
+            databaseMemberListRef.child(memberListId).updateChildren(hashMap as Map<String, Any>?)
         }
     }
 

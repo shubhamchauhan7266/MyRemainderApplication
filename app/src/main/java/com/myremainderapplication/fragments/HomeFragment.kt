@@ -58,6 +58,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
     }
 
     private fun setMemberListData(view: View) {
+        var isUpdateRequired = false
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS)
         database.addValueEventListener(object : ValueEventListener {
 
@@ -65,15 +66,20 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
                 val memberNodeList = dataSnapshot?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
                 val tempMemberList = ModelInfoUtils.getMemberList(memberNodeList)
                 currentFriendId = dataSnapshot.child(memberId).child(AppConstant.CURRENT_FRIEND_LIST_ID).value as String
-                memberList= ArrayList()
+                memberList = ArrayList()
+
+                if (!isUpdateRequired) {
+                    isUpdateRequired = true
+                    updateNewRegistrationToken(dataSnapshot)
+                }
 
                 if (dataSnapshot.child(memberId).hasChild(AppConstant.FRIEND_LIST)) {
                     val friendDataList = dataSnapshot.child(memberId).child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
                     friendList = ModelInfoUtils.getFriendList(friendDataList)
                 }
 
-                for (memberInfo:MemberShortInfoModel in tempMemberList){
-                    if(memberInfo.memberId!=memberId){
+                for (memberInfo: MemberShortInfoModel in tempMemberList) {
+                    if (memberInfo.memberId != memberId) {
                         memberList!!.add(memberInfo)
                     }
                 }
@@ -88,6 +94,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
 
         })
     }
+
 
     override fun onViewClick(position: Int) {
         val memberShortInfoModel = memberList?.get(position)
@@ -141,5 +148,19 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(memberId)
         val newSenderFriendId = (currentFriendId.toInt() + 1).toString()
         ModelInfoUtils.addFriend(databaseSenderRef, newSenderFriendId, receiverInfo!!, ModelInfoUtils.FRIEND_REQUEST_SENT)
+    }
+
+    private fun updateNewRegistrationToken(dataSnapshot: DataSnapshot) {
+        val memberList = dataSnapshot.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
+        val memberUserList = ModelInfoUtils.Companion.getMemberList(memberList)
+
+        var index = 0
+        while (index < memberUserList.size) {
+            if (memberId == memberUserList[index].memberId) {
+                ModelInfoUtils.updateRegistrationToken(mContext!!, memberId, index.toString())
+                break
+            }
+            index++
+        }
     }
 }

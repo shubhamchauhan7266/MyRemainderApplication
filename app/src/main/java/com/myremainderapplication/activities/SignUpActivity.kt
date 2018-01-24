@@ -107,7 +107,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     }
 
     private fun uploadProfileImage(file: Uri) {
-        val childRef = storageRef!!.child("images/" + file.lastPathSegment)
+        val childRef = storageRef!!.child("images/" + (currentMemberId.toInt() + 1).toString())
         val uploadTask = childRef.putFile(file)
 
         uploadTask.addOnFailureListener { exception ->

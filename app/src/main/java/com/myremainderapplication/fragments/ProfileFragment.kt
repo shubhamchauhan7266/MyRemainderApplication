@@ -80,7 +80,7 @@ class ProfileFragment : Fragment() {
                 val memberList = dataSnapshot?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
                 val memberUserList = ModelInfoUtils.Companion.getMemberList(memberList)
 
-                var index = -1
+                var index = 0
                 while (index < memberUserList.size) {
                     if (memberId == memberUserList[index].memberId) {
                         memberListId = index.toString()
@@ -88,7 +88,6 @@ class ProfileFragment : Fragment() {
                     }
                     index++
                 }
-                if (index != -1)
                     updateData(view)
             }
 

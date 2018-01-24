@@ -131,7 +131,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         jsonObjectData.put("message", message)
 
         jsonObjectRequestParams.put("data", jsonObjectData)
-        jsonObjectRequestParams.put("to", SharedPreferencesUtils.getRegistrationKey(mContext!!))
+        jsonObjectRequestParams.put("to", registrationToken)
 
         return jsonObjectRequestParams
     }

@@ -42,6 +42,8 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
     private var alarmHour: Int = 0
     private var alarmMinute: Int = 0
 
+    private lateinit var registrationToken: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
@@ -53,6 +55,7 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         hour = calender.get(Calendar.HOUR_OF_DAY)
         minute = calender.get(Calendar.MINUTE)
 
+        registrationToken = intent.getStringExtra(AppConstant.REGISTRATION_TOKEN)
         requestQueue = VolleySingletonClass.getInstance(this)!!
 
         btSend.setOnClickListener(this)
@@ -131,7 +134,7 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         jsonObjectData.put("minute", calenderModel.minute)
 
         jsonObjectRequestParams.put("data", jsonObjectData)
-        jsonObjectRequestParams.put("to", SharedPreferencesUtils.getRegistrationKey(this))
+        jsonObjectRequestParams.put("to", registrationToken)
 
         return jsonObjectRequestParams
     }

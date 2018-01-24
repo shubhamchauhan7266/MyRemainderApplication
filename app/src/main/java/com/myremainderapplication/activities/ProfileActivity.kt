@@ -34,8 +34,10 @@ class ProfileActivity : AppCompatActivity() {
         id = intent.getStringExtra(AppConstant.MEMBER_ID)
         setDatabaseData()
 
+        etCreateEvent.isClickable=false
         etCreateEvent.setOnClickListener{
             val intent=Intent(this@ProfileActivity,EventActivity::class.java)
+            intent.putExtra(AppConstant.REGISTRATION_TOKEN,memberFullInfoModel?.registrationToken)
             startActivity(intent)
         }
     }
@@ -56,6 +58,8 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun updateData() {
+        etCreateEvent.isClickable=true
+
         tvName.text = memberFullInfoModel!!.memberName
         tvEmail.text = memberFullInfoModel!!.emailId
         tvMobileNumber.text = memberFullInfoModel!!.phoneNumber

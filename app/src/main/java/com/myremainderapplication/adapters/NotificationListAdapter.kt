@@ -76,16 +76,14 @@ class NotificationListAdapter(val context: NotificationFragment, private var not
                 acceptIntent.putExtra(AppConstant.SENDER_ID_KEY, memberNotificationModel.senderId)
                 acceptIntent.putExtra(AppConstant.RECEIVER_ID_KEY, memberNotificationModel.receiverId)
                 context.activity?.startService(acceptIntent)
-
+            }
+            itemView.tvReject.setOnClickListener {
                 val rejectIntent = Intent(context.activity, HandleFriendRequestService::class.java)
                 rejectIntent.action = context.getString(R.string.reject)
                 rejectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 rejectIntent.putExtra(AppConstant.SENDER_ID_KEY, memberNotificationModel.senderId)
                 rejectIntent.putExtra(AppConstant.RECEIVER_ID_KEY, memberNotificationModel.receiverId)
                 context.activity?.startService(rejectIntent)
-            }
-            itemView.tvReject.setOnClickListener {
-
             }
         }
 

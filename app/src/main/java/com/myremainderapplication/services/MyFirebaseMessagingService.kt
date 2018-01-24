@@ -101,7 +101,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun setEventAlarm(calenderModel: CalenderModel) {
 
         val intent = Intent("com.myremainderapplication.activities.alarmactivity")
-        val pendingIntent = PendingIntent.getActivity(baseContext, 2, intent, Intent.FLAG_ACTIVITY_NEW_TASK)
+        val pendingIntent = PendingIntent.getActivity(baseContext, 2, intent,PendingIntent.FLAG_UPDATE_CURRENT)
         val alarmManager: AlarmManager = baseContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val calendar = GregorianCalendar(calenderModel.year, calenderModel.month, calenderModel.day,
                 calenderModel.hour, calenderModel.minute)
@@ -118,7 +118,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, AppConstant.SIMPLE_NOTIFICATION_REQUEST,
-                intent, PendingIntent.FLAG_ONE_SHOT)
+                intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notificationBuilder = NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.profile)

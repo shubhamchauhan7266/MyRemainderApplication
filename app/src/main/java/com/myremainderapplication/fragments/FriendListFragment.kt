@@ -21,6 +21,7 @@ import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFriendInfoModel
 import com.myremainderapplication.models.MemberShortInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
+import com.myremainderapplication.utils.SharedPreferencesUtils
 import kotlinx.android.synthetic.main.fragment_friend_list.view.*
 
 /**
@@ -49,7 +50,8 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
 
 
     private fun setFriendListData(view: View) {
-        val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child("4041")
+        val memberId = SharedPreferencesUtils.getMemberId(mContext!!).toString()
+        val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(memberId)
         database.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot?) {

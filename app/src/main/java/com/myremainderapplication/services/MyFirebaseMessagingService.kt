@@ -154,8 +154,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val expendView = RemoteViews(packageName, R.layout.customnotification)
         expendView.setTextViewText(R.id.tvMessage, message)
-        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST, rejectIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+        expendView.setOnClickPendingIntent(R.id.tvAccept, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST,
+                acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+        expendView.setOnClickPendingIntent(R.id.tvReject, PendingIntent.getService(this, AppConstant.CUSTOM_NOTIFICATION_REQUEST,
+                rejectIntent, PendingIntent.FLAG_UPDATE_CURRENT))
 
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

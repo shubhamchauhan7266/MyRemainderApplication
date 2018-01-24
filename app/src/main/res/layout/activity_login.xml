@@ -14,7 +14,7 @@
         android:layout_above="@+id/inputLayoutPassword">
 
         <EditText
-            android:id="@+id/etMamberId"
+            android:id="@+id/etMemberId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/mamber_id"

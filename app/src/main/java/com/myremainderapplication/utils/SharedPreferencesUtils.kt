@@ -15,6 +15,7 @@ class SharedPreferencesUtils {
     companion object {
         private val REGISTRATION_KEY = "REGISTRATION_KEY"
         private val REMINDER_SHARED_PREF = "REMINDER_SHARED_PREF"
+        private val MEMBER_ID = "MEMBER_ID"
         private val TAG = SharedPreferencesUtils::class.java.getSimpleName()
 
         /**
@@ -39,11 +40,44 @@ class SharedPreferencesUtils {
          * @param registrationKey
          */
         fun setRegistrationKey(context: Context, registrationKey: String?) {
-            Log.v(TAG, "getRegistrationKey")
+            Log.v(TAG, "setRegistrationKey")
             try {
                 val sharedPref = context.getSharedPreferences(REMINDER_SHARED_PREF, Context.MODE_PRIVATE)
                 val editor = sharedPref.edit()
                 editor.putString(REGISTRATION_KEY, registrationKey)
+                editor.apply()
+            } catch (e: NullPointerException) {
+                Log.e(TAG, "error")
+            }
+        }
+
+        /**
+         * This method is used to get a memberId from fileSystem
+         * @param context
+         * @return  a memberId
+         */
+        fun getMemberId(context: Context): String? {
+            Log.v(TAG, "getMemberId")
+            try {
+                val sharedPref = context.getSharedPreferences(REMINDER_SHARED_PREF, Context.MODE_PRIVATE)
+                return sharedPref.getString(MEMBER_ID, null)
+            } catch (e: NullPointerException) {
+                Log.e(TAG, "error")
+                return null
+            }
+        }
+
+        /**
+         * This method is used to store a memberId in filesystem
+         * @param context
+         * @param memberId
+         */
+        fun setMemberId(context: Context, memberId: String?) {
+            Log.v(TAG, "setMemberId")
+            try {
+                val sharedPref = context.getSharedPreferences(REMINDER_SHARED_PREF, Context.MODE_PRIVATE)
+                val editor = sharedPref.edit()
+                editor.putString(MEMBER_ID, memberId)
                 editor.apply()
             } catch (e: NullPointerException) {
                 Log.e(TAG, "error")

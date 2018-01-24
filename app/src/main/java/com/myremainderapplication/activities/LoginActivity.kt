@@ -9,6 +9,12 @@ import com.myremainderapplication.R
 import kotlinx.android.synthetic.main.activity_login.*
 import com.google.firebase.auth.FirebaseAuth
 import android.widget.Toast
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.myremainderapplication.interfaces.AppConstant
+import com.myremainderapplication.utils.SharedPreferencesUtils
 
 /**
  * <h1><font color="orange">LoginActivity</font></h1>
@@ -95,9 +101,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 }
     }
 
-   /* private fun updateUI(user: FirebaseUser?) {
-        user!!.getIdToken(true)
-    }*/
+    /* private fun updateUI(user: FirebaseUser?) {
+         user!!.getIdToken(true)
+     }*/
 
     public override fun onStart() {
         super.onStart()
@@ -113,12 +119,40 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
             }
             R.id.btLogin -> {
-                val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                startActivity(intent)
+                if (etMemberId.text.toString().trim().isNotEmpty() && etPassword.text.toString().trim().isNotEmpty()) {
+                    checkForValidAuthentication()
+                } else {
+                    Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                }
             }
             else -> {
                 Log.d(TAG, "Wrong case selection")
             }
         }
+    }
+
+    private fun checkForValidAuthentication() {
+        val databaseRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(etMemberId.text.toString())
+        databaseRef.addValueEventListener(object : ValueEventListener {
+
+            override fun onDataChange(dataSnapshot: DataSnapshot?) {
+                if (dataSnapshot != null && dataSnapshot.exists()) {
+                    val password = dataSnapshot.child(AppConstant.PASSWORD).value
+                    if (etPassword.text.toString().trim().equals(password)) {
+                        SharedPreferencesUtils.setMemberId(this@LoginActivity,etMemberId.text.toString().trim())
+                        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(this@LoginActivity, "Invalid Password", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this@LoginActivity, "Invalid MemberId", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
 }

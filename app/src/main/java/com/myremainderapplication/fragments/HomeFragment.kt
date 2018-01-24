@@ -38,6 +38,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
     private lateinit var requestQueue: RequestQueue
     private var mContext: Context? = null
     private lateinit var currentFriendId: String
+    private lateinit var memberId: String
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -47,6 +48,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+        memberId = SharedPreferencesUtils.getMemberId(mContext!!).toString()
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         requestQueue = VolleySingletonClass.getInstance(mContext!!)!!
         friendList = ArrayList()
@@ -61,12 +63,19 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
 
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 val memberNodeList = dataSnapshot?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
-                memberList = ModelInfoUtils.getMemberList(memberNodeList)
-                currentFriendId = dataSnapshot.child("4041").child(AppConstant.CURRENT_FRIEND_LIST_ID).value as String
+                val tempMemberList = ModelInfoUtils.getMemberList(memberNodeList)
+                currentFriendId = dataSnapshot.child(memberId).child(AppConstant.CURRENT_FRIEND_LIST_ID).value as String
+                memberList= ArrayList()
 
-                if (dataSnapshot.child("4041").hasChild(AppConstant.FRIEND_LIST)) {
-                    val friendDataList = dataSnapshot.child("4041").child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
+                if (dataSnapshot.child(memberId).hasChild(AppConstant.FRIEND_LIST)) {
+                    val friendDataList = dataSnapshot.child(memberId).child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
                     friendList = ModelInfoUtils.getFriendList(friendDataList)
+                }
+
+                for (memberInfo:MemberShortInfoModel in tempMemberList){
+                    if(memberInfo.memberId!=memberId){
+                        memberList!!.add(memberInfo)
+                    }
                 }
 
                 memberListAdapter = MemberListAdapter(mContext!!, memberList!!, friendList!!, this@HomeFragment)
@@ -82,7 +91,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
 
     override fun onViewClick(position: Int) {
         val memberShortInfoModel = memberList?.get(position)
-        sendFriendRequest("4041", memberShortInfoModel!!.memberId, "message1",
+        sendFriendRequest(memberId, memberShortInfoModel!!.memberId, "message1",
                 memberShortInfoModel.registrationToken, position)
     }
 
@@ -129,7 +138,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
 
     private fun updateSenderFriendList(position: Int) {
         val receiverInfo = memberList?.get(position)
-        val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child("4041")
+        val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(memberId)
         val newSenderFriendId = (currentFriendId.toInt() + 1).toString()
         ModelInfoUtils.addFriend(databaseSenderRef, newSenderFriendId, receiverInfo!!, ModelInfoUtils.FRIEND_REQUEST_SENT)
     }

@@ -281,7 +281,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
      * This method will check validation for Name.
      */
     internal fun checkValidationForName() {
-        if (etName.getText().toString().trim({ it <= ' ' }).length == 0) {
+        if (etName.getText().toString().trim({ it <= ' ' }).isEmpty()) {
             inputLayoutName.error = getString(R.string.please_enter_name)
             inputLayoutName.setErrorEnabled(true)
             isChecked = false
@@ -294,7 +294,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
      * This method will check validation for Mobile Number.
      */
     internal fun checkValidationForMobileNumber() {
-        if (etMobileNumber.getText().toString().trim({ it <= ' ' }).length == 0) {
+        if (etMobileNumber.getText().toString().trim({ it <= ' ' }).isEmpty()) {
             inputLayoutMobile.error = getString(R.string.please_enter_mobile_Number)
             inputLayoutMobile.setErrorEnabled(true)
             isChecked = false
@@ -311,7 +311,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
      * This method will check validation for Email Id.
      */
     internal fun checkValidatioForEmail() {
-        if (etEmail.getText().toString().trim({ it <= ' ' }).length == 0) {
+        if (etEmail.getText().toString().trim({ it <= ' ' }).isEmpty()) {
             inputLayoutEmail.error = getString(R.string.please_enter_email_id)
             inputLayoutEmail.setErrorEnabled(true)
             isChecked = false
@@ -328,7 +328,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     * This method will check validation for Password.
     */
     internal fun checkValidationForPassword() {
-        if (etPassword.getText().toString().trim({ it <= ' ' }).length == 0) {
+        if (etPassword.getText().toString().trim({ it <= ' ' }).isEmpty()) {
             inputLayoutPassword.setError(getString(R.string.please_enter_password))
             inputLayoutPassword.setErrorEnabled(true)
             isChecked = false
@@ -341,7 +341,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
     * This method will check validation for Confirm Password.
     */
     internal fun checkValidationForConfirmPassword() {
-        if (etPasswordConfirm.getText().toString().trim({ it <= ' ' }).length == 0) {
+        if (etPasswordConfirm.getText().toString().trim({ it <= ' ' }).isEmpty()) {
             inputLayoutPasswordConfirm.error = getString(R.string.please_enter_confirm_password)
             inputLayoutPasswordConfirm.setErrorEnabled(true)
             isChecked = false

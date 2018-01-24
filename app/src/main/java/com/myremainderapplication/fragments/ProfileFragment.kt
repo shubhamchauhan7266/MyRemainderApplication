@@ -25,6 +25,7 @@ import com.myremainderapplication.utils.ModelInfoUtils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import com.myremainderapplication.interfaces.AppConstant
+import com.myremainderapplication.utils.SharedPreferencesUtils
 import java.io.File
 
 
@@ -35,7 +36,7 @@ import java.io.File
  * @author Shubham Chauhan
  */
 class ProfileFragment : Fragment() {
-    private var id: String = ""
+    private var memberId: String = ""
     private var memberListId: String = ""
     private var memberFullInfoModel: MemberFullInfoModel? = null
     private var mContext: Context? = null
@@ -55,7 +56,7 @@ class ProfileFragment : Fragment() {
             return
         }*/
 
-        id = "4041"
+        memberId = SharedPreferencesUtils.getMemberId(mContext!!).toString()
         mStorageRef = FirebaseStorage.getInstance().reference
         setDatabaseData(view)
         view.ivProfile.setOnClickListener {
@@ -75,13 +76,13 @@ class ProfileFragment : Fragment() {
         database.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                memberFullInfoModel = ModelInfoUtils.Companion.getMemberFullInfoModel(dataSnapshot, id)
+                memberFullInfoModel = ModelInfoUtils.Companion.getMemberFullInfoModel(dataSnapshot, memberId)
                 val memberList = dataSnapshot?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
                 val memberUserList = ModelInfoUtils.Companion.getMemberList(memberList)
 
                 var index = 0
                 while (index < memberUserList.size) {
-                    if (id == memberUserList[index].memberId) {
+                    if (memberId == memberUserList[index].memberId) {
                         memberListId = index.toString()
                         break
                     }
@@ -166,7 +167,7 @@ class ProfileFragment : Fragment() {
             // Handle unsuccessful uploads
         }.addOnSuccessListener { taskSnapshot ->
             val downloadUrl = taskSnapshot.downloadUrl
-            val databaseMemberImagePathref = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(id)
+            val databaseMemberImagePathref = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(memberId)
 
             val hashMap = HashMap<String, String>()
             hashMap.put(AppConstant.IMAGE_PATH, downloadUrl.toString())

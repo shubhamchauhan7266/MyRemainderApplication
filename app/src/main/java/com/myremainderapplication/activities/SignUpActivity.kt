@@ -44,7 +44,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        storageRef = FirebaseStorage.getInstance().getReference()
+        storageRef = FirebaseStorage.getInstance().reference
         setTextChangeListener()
         setDatabaseData()
 
@@ -60,6 +60,9 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
+    /**
+     * Method is used to add new member data in database
+     */
     private fun uploadNewUserData() {
         val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().reference
         val databaseCurrentMemberIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_ID)
@@ -70,11 +73,10 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         val newMemberId = (currentMemberId.toInt() + 1).toString()
         val newMemberListId = (currentMemberListId.toInt() + 1).toString()
 
-        val gender: String
-        if (rbMail.isChecked)
-            gender = rbMail.text.toString()
-        else
-            gender = rbFemale.text.toString()
+        val gender: String = when {
+            rbMail.isChecked -> rbMail.text.toString()
+            else -> rbFemale.text.toString()
+        }
 
         val hasMapMemberUserNode = HashMap<String, String>()
         hasMapMemberUserNode.put(AppConstant.MEMBER_ID, newMemberId)
@@ -104,14 +106,17 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         databaseMemberListRef.updateChildren(hasMapMemberListNode as Map<String, Any>?)
         databaseCurrentMemberIdRef.setValue(newMemberId)
         databaseCurrentMemberListIdRef.setValue(newMemberListId)
-
     }
 
+    /**
+     * Method is used to upload profile image in storage and get URL
+     * @param file
+     */
     private fun uploadProfileImage(file: Uri) {
         val childRef = storageRef!!.child("images/" + (currentMemberId.toInt() + 1).toString())
         val uploadTask = childRef.putFile(file)
 
-        uploadTask.addOnFailureListener { exception ->
+        uploadTask.addOnFailureListener {
             // Handle unsuccessful uploads
         }.addOnSuccessListener { taskSnapshot ->
             //TODO has to be managed in background
@@ -124,35 +129,42 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
+    /**
+     * Method is used to show an Alert Dialog for select Profile image
+     */
     private fun selectImageDialog() {
         val items = arrayOf(getString(R.string.take_photo), getString(R.string.choose_from_library), getString(R.string.cancel))
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.add_photo))
 
         builder.setItems(items) { dialog, item ->
-            if (items[item].equals(getString(R.string.take_photo))) {
-                takePhotoFromCamera()
-            } else if (items[item].equals(getString(R.string.choose_from_library))) {
-                selectImageFromAlbum()
-            } else {
-                dialog.dismiss()
+            when {
+                items[item] == getString(R.string.take_photo) -> takePhotoFromCamera()
+                items[item] == getString(R.string.choose_from_library) -> selectImageFromAlbum()
+                else -> dialog.dismiss()
             }
         }
         builder.show()
     }
 
+    /**
+     * Method is used to select image from Album or Gallery
+     */
     private fun selectImageFromAlbum() {
         val intent = Intent()
-        intent.setAction(Intent.ACTION_GET_CONTENT)
-        intent.setType("image/*")
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.type = "image/*"
         startActivityForResult(intent, AppConstant.REQUEST_SELECT_IMAGE_FROM_ALBUM)
     }
 
+    /**
+     * Method is used to take photo from Camera
+     */
     private fun takePhotoFromCamera() {
         val imagesFolder = File(Environment.getExternalStorageDirectory(), getString(R.string.myimages))
         imagesFolder.mkdir()
 
-        if (!currentMemberId.equals(""))
+        if (currentMemberId != "")
             photoPath = File(imagesFolder, (currentMemberId.toInt() + 1).toString() + ".jpg")
         else
             return
@@ -179,6 +191,9 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
+    /**
+     * Method is used to take photo from Camera
+     */
     private fun setTextChangeListener() {
         etName.addTextChangedListener(this)
         etMobileNumber.addTextChangedListener(this)
@@ -187,6 +202,9 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         etPasswordConfirm.addTextChangedListener(this)
     }
 
+    /**
+     * Method is used to get data(currentMemberId,currentMemberListId) from database
+     */
     private fun setDatabaseData() {
         val database = FirebaseDatabase.getInstance().reference
 
@@ -213,7 +231,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         checkValidationOnTextChanged()
     }
 
-    /*
+    /**
      * Method is called when we click on the submit button
      * it validate all required fields.
      * return true if all required field are valid otherwise return false.
@@ -229,7 +247,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         return isChecked
     }
 
-    /*
+    /**
      * This method will check validation before text changed.
      * if user missed above field and type on next field then it will show error on above field.
      */
@@ -252,7 +270,7 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
     }
 
-    /*
+    /**
      * This method will check validation on text changed.
      */
     private fun checkValidationOnTextChanged() {
@@ -278,85 +296,98 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
     }
 
-    /*
+    /**
      * This method will check validation for Name.
      */
-    internal fun checkValidationForName() {
-        if (etName.getText().toString().trim({ it <= ' ' }).isEmpty()) {
-            inputLayoutName.error = getString(R.string.please_enter_name)
-            inputLayoutName.setErrorEnabled(true)
-            isChecked = false
-        } else {
-            inputLayoutName.setErrorEnabled(false)
+    private fun checkValidationForName() {
+        when {
+            etName.text.toString().trim({ it <= ' ' }).isEmpty() -> {
+                inputLayoutName.error = getString(R.string.please_enter_name)
+                inputLayoutName.isErrorEnabled = true
+                isChecked = false
+            }
+            else -> inputLayoutName.isErrorEnabled = false
         }
     }
 
-    /*
+    /**
      * This method will check validation for Mobile Number.
      */
-    internal fun checkValidationForMobileNumber() {
-        if (etMobileNumber.getText().toString().trim({ it <= ' ' }).isEmpty()) {
-            inputLayoutMobile.error = getString(R.string.please_enter_mobile_Number)
-            inputLayoutMobile.setErrorEnabled(true)
-            isChecked = false
-        } else if (etMobileNumber.getText().toString().trim({ it <= ' ' }).length < 10) {
-            inputLayoutMobile.error = getString(R.string.please_enter_valid_mobile_number)
-            inputLayoutMobile.setErrorEnabled(true)
-            isChecked = false
-        } else {
-            inputLayoutMobile.setErrorEnabled(false)
+    private fun checkValidationForMobileNumber() {
+        when {
+            etMobileNumber.text.toString().trim({ it <= ' ' }).isEmpty() -> {
+                inputLayoutMobile.error = getString(R.string.please_enter_mobile_Number)
+                inputLayoutMobile.isErrorEnabled = true
+                isChecked = false
+            }
+            etMobileNumber.text.toString().trim({ it <= ' ' }).length < 10 -> {
+                inputLayoutMobile.error = getString(R.string.please_enter_valid_mobile_number)
+                inputLayoutMobile.isErrorEnabled = true
+                isChecked = false
+            }
+            else -> inputLayoutMobile.isErrorEnabled = false
         }
     }
 
-    /*
+    /**
      * This method will check validation for Email Id.
      */
-    internal fun checkValidatioForEmail() {
-        if (etEmail.getText().toString().trim({ it <= ' ' }).isEmpty()) {
-            inputLayoutEmail.error = getString(R.string.please_enter_email_id)
-            inputLayoutEmail.setErrorEnabled(true)
-            isChecked = false
-        } else if (!etEmail.getText().toString().trim({ it <= ' ' }).matches(AppConstant.EMAIL_PATTERN.toRegex())) {
-            inputLayoutEmail.setError(getString(R.string.please_enter_valid_email_id))
-            inputLayoutEmail.setErrorEnabled(true)
-            isChecked = false
-        } else {
-            inputLayoutEmail.setErrorEnabled(false)
+    private fun checkValidatioForEmail() {
+        when {
+            etEmail.text.toString().trim({ it <= ' ' }).isEmpty() -> {
+                inputLayoutEmail.error = getString(R.string.please_enter_email_id)
+                inputLayoutEmail.isErrorEnabled = true
+                isChecked = false
+            }
+            !etEmail.text.toString().trim({ it <= ' ' }).matches(AppConstant.EMAIL_PATTERN.toRegex()) -> {
+                inputLayoutEmail.error = getString(R.string.please_enter_valid_email_id)
+                inputLayoutEmail.isErrorEnabled = true
+                isChecked = false
+            }
+            else -> inputLayoutEmail.isErrorEnabled = false
         }
     }
 
-    /*
-    * This method will check validation for Password.
-    */
-    internal fun checkValidationForPassword() {
-        if (etPassword.getText().toString().trim({ it <= ' ' }).isEmpty()) {
-            inputLayoutPassword.setError(getString(R.string.please_enter_password))
-            inputLayoutPassword.setErrorEnabled(true)
-            isChecked = false
-        } else {
-            inputLayoutPassword.setErrorEnabled(false)
+    /**
+     * This method will check validation for Password.
+     */
+    private fun checkValidationForPassword() {
+        when {
+            etPassword.text.toString().trim({ it <= ' ' }).isEmpty() -> {
+                inputLayoutPassword.error = getString(R.string.please_enter_password)
+                inputLayoutPassword.isErrorEnabled = true
+                isChecked = false
+            }
+            else -> inputLayoutPassword.isErrorEnabled = false
         }
     }
 
-    /*
-    * This method will check validation for Confirm Password.
-    */
-    internal fun checkValidationForConfirmPassword() {
-        if (etPasswordConfirm.getText().toString().trim({ it <= ' ' }).isEmpty()) {
-            inputLayoutPasswordConfirm.error = getString(R.string.please_enter_confirm_password)
-            inputLayoutPasswordConfirm.setErrorEnabled(true)
-            isChecked = false
-        } else {
-            inputLayoutPasswordConfirm.setErrorEnabled(false)
+    /**
+     * This method will check validation for Confirm Password.
+     */
+    private fun checkValidationForConfirmPassword() {
+        when {
+            etPasswordConfirm.text.toString().trim({ it <= ' ' }).isEmpty() -> {
+                inputLayoutPasswordConfirm.error = getString(R.string.please_enter_confirm_password)
+                inputLayoutPasswordConfirm.isErrorEnabled = true
+                isChecked = false
+            }
+            etPassword.text.toString().trim() != etPasswordConfirm.text.toString().trim() -> {
+                inputLayoutPasswordConfirm.error = getString(R.string.please_enter_valid_confirm_password)
+                inputLayoutPasswordConfirm.isErrorEnabled = true
+                isChecked = false
+            }
+            else -> inputLayoutPasswordConfirm.isErrorEnabled = false
         }
     }
 
-    /*
-    * This method will check validation for Profile Image.
-    */
-    internal fun checkValidationForImage() {
-        if (downloadUrl.equals(""))
-            isChecked = false
+    /**
+     * This method will check validation for Profile Image.
+     */
+    private fun checkValidationForImage() {
+        when (downloadUrl) {
+            "" -> isChecked = false
+        }
     }
 
 

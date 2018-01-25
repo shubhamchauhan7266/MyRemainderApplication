@@ -97,6 +97,12 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * Method is used to send Event Notification which contain data for set alarm
+     * @param title
+     * @param body
+     * @param calenderModel
+     */
     private fun sendEventNotification(title: String, body: String, calenderModel: CalenderModel) {
         val request = getJsonBody(title, body, calenderModel)
 
@@ -120,6 +126,13 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         requestQueue.add(jsonRequest)
     }
 
+    /**
+     * Method is used to get payload for Notification API
+     * @param title
+     * @param body
+     * @param calenderModel
+     * @return JSONObject
+     */
     private fun getJsonBody(title: String, body: String, calenderModel: CalenderModel): JSONObject {
         val jsonObjectRequestParams = JSONObject()
 

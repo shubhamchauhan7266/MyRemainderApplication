@@ -38,11 +38,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         userDetails()*/
 
-
         btSignUp.setOnClickListener(this)
         btLogin.setOnClickListener(this)
     }
 
+/*
     private fun userDetails() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
@@ -76,8 +76,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                                 Toast.LENGTH_SHORT).show()
 //                        updateUI(null)
                     }
-
-                    // ...
                 }
     }
 
@@ -100,6 +98,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     // ...
                 }
     }
+*/
 
     /* private fun updateUI(user: FirebaseUser?) {
          user!!.getIdToken(true)
@@ -114,24 +113,32 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when (view?.id) {
+
             R.id.btSignUp -> {
                 val intent = Intent(this@LoginActivity, SignUpActivity::class.java)
                 startActivity(intent)
             }
+
             R.id.btLogin -> {
                 flProgressBar.visibility = View.VISIBLE
+
                 if (etMemberId.text.toString().trim().isNotEmpty() && etPassword.text.toString().trim().isNotEmpty()) {
                     checkForValidAuthentication()
                 } else {
                     Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
                 }
             }
+
             else -> {
                 Log.d(TAG, "Wrong case selection")
             }
         }
     }
 
+    /**
+     * Method is used to check Authentication is valid or not
+     * if Authentication is valid then it will start HomeActivity
+     */
     private fun checkForValidAuthentication() {
         var isUpdateRequired = false
         val databaseRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(etMemberId.text.toString())
@@ -139,9 +146,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 if (!isUpdateRequired) {
-                    isUpdateRequired = true
                     if (dataSnapshot != null && dataSnapshot.exists()) {
                         val password = dataSnapshot.child(AppConstant.PASSWORD).value
+
                         if (etPassword.text.toString().trim().equals(password)) {
                             SharedPreferencesUtils.setMemberId(this@LoginActivity, etMemberId.text.toString().trim())
                             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
@@ -149,9 +156,12 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         } else {
                             Toast.makeText(this@LoginActivity, "Invalid Password", Toast.LENGTH_SHORT).show()
                         }
+
                     } else {
                         Toast.makeText(this@LoginActivity, "Invalid MemberId", Toast.LENGTH_SHORT).show()
                     }
+
+                    isUpdateRequired = true
                     flProgressBar.visibility = View.GONE
                 }
             }

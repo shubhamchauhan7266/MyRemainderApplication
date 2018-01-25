@@ -27,7 +27,7 @@ class MemberListAdapter(val context: Context, private var memberList: ArrayList<
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) = holder!!.bind(context, memberList[position],
-            position,friendList, iMemberListAdapterCallBack)
+            position, friendList, iMemberListAdapterCallBack)
 
 
     override fun getItemCount(): Int {
@@ -35,15 +35,15 @@ class MemberListAdapter(val context: Context, private var memberList: ArrayList<
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(context: Context, memberShortInfoModel: MemberShortInfoModel, position: Int,friendList:ArrayList<MemberFriendInfoModel>,
+        fun bind(context: Context, memberShortInfoModel: MemberShortInfoModel, position: Int, friendList: ArrayList<MemberFriendInfoModel>,
                  iMemberListAdapterCallBack: IMemberListAdapterCallBack) {
-            val status = getStatusOfFriend(memberShortInfoModel,friendList)
+            val status = getStatusOfFriend(memberShortInfoModel, friendList)
 
-            if (status==ModelInfoUtils.FRIEND_REQUEST_SENT){
+            if (status == ModelInfoUtils.FRIEND_REQUEST_SENT) {
                 itemView.btAddFriend.text = context.getString(R.string.friend_request_sent)
-            }else if(status==ModelInfoUtils.FRIEND){
+            } else if (status == ModelInfoUtils.FRIEND) {
                 itemView.btAddFriend.text = context.getString(R.string.friend)
-            }else{
+            } else {
                 itemView.btAddFriend.setOnClickListener {
                     itemView.btAddFriend.text = context.getString(R.string.add_friend)
                     iMemberListAdapterCallBack.onViewClick(position)
@@ -57,10 +57,13 @@ class MemberListAdapter(val context: Context, private var memberList: ArrayList<
                     .into(itemView.ivProfile)
         }
 
+        /**
+         * Method is used to get status of friend
+         */
         private fun getStatusOfFriend(memberShortInfoModel: MemberShortInfoModel,
                                       friendList: ArrayList<MemberFriendInfoModel>): Int {
-            for (memberFriendInfoModel:MemberFriendInfoModel in friendList){
-                if(memberShortInfoModel.memberId==memberFriendInfoModel.memberId){
+            for (memberFriendInfoModel: MemberFriendInfoModel in friendList) {
+                if (memberShortInfoModel.memberId == memberFriendInfoModel.memberId) {
                     return memberFriendInfoModel.friendStatus
                 }
             }

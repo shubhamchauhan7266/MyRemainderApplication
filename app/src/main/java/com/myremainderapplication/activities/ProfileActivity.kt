@@ -25,7 +25,6 @@ import com.squareup.picasso.Picasso
 class ProfileActivity : AppCompatActivity() {
     private var id: String = ""
     private var memberFullInfoModel: MemberFullInfoModel? = null
-    private var storageRef: StorageReference? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +33,17 @@ class ProfileActivity : AppCompatActivity() {
         id = intent.getStringExtra(AppConstant.MEMBER_ID)
         setDatabaseData()
 
-        etCreateEvent.isClickable=false
-        etCreateEvent.setOnClickListener{
-            val intent=Intent(this@ProfileActivity,EventActivity::class.java)
-            intent.putExtra(AppConstant.REGISTRATION_TOKEN,memberFullInfoModel?.registrationToken)
+        etCreateEvent.isClickable = false
+        etCreateEvent.setOnClickListener {
+            val intent = Intent(this@ProfileActivity, EventActivity::class.java)
+            intent.putExtra(AppConstant.REGISTRATION_TOKEN, memberFullInfoModel?.registrationToken)
             startActivity(intent)
         }
     }
 
+    /**
+     * Method is used to get member data from database and then call updateData() method for update UI
+     */
     private fun setDatabaseData() {
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS)
 
@@ -57,17 +59,20 @@ class ProfileActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * Method is used to update UI
+     */
     private fun updateData() {
-        etCreateEvent.isClickable=true
+        etCreateEvent.isClickable = true
 
         tvName.text = memberFullInfoModel!!.memberName
         tvEmail.text = memberFullInfoModel!!.emailId
         tvMobileNumber.text = memberFullInfoModel!!.phoneNumber
-        val url=memberFullInfoModel!!.imagePath
+        val url = memberFullInfoModel!!.imagePath
 
         Picasso.with(this)
                 .load(url)
-                .resize(100,100)
+                .resize(100, 100)
                 .into(ivProfile)
     }
 

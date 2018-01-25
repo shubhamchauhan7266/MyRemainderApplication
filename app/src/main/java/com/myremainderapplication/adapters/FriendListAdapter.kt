@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import com.myremainderapplication.R
 import com.myremainderapplication.fragments.FriendListFragment
 import com.myremainderapplication.models.MemberFriendInfoModel
-import com.myremainderapplication.models.MemberShortInfoModel
 import kotlinx.android.synthetic.main.friend_item_row.view.*
 
 /**

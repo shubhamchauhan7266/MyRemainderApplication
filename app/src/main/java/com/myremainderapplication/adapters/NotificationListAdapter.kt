@@ -58,6 +58,9 @@ class NotificationListAdapter(val context: NotificationFragment, private var not
         }
     }
 
+    /**
+     * Create View holder for Event Alert
+     */
     class ViewHolderEventAlert(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindEventData(memberNotificationModel: MemberNotificationModel) {
             itemView.tvTitle.text = memberNotificationModel.title
@@ -66,6 +69,9 @@ class NotificationListAdapter(val context: NotificationFragment, private var not
 
     }
 
+    /**
+     * Create View holder for Friend Request
+     */
     class ViewHolderFriendRequest(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         fun bindFriendRequestData(context: NotificationFragment, memberNotificationModel: MemberNotificationModel) {
             itemView.tvMessage.text = memberNotificationModel.body

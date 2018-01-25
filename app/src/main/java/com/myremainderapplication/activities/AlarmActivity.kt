@@ -24,7 +24,7 @@ class AlarmActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alarm)
 
-        btStopAlarm.setOnClickListener{
+        btStopAlarm.setOnClickListener {
             mMediaPlayer!!.stop()
             finish()
         }

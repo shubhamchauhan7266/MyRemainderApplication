@@ -78,6 +78,9 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Method is used to load FriendListFragment
+     */
     private fun loadFriendListFragment() {
         val fragment = FriendListFragment()
         val ft = supportFragmentManager.beginTransaction()
@@ -85,6 +88,9 @@ class HomeActivity : AppCompatActivity() {
         ft.commit()
     }
 
+    /**
+     * Method is used to load HomeFragment
+     */
     private fun loadHomeFragment() {
         val fragment = HomeFragment()
         val ft = supportFragmentManager.beginTransaction()
@@ -92,6 +98,9 @@ class HomeActivity : AppCompatActivity() {
         ft.commit()
     }
 
+    /**
+     * Method is used to load ProfileFragment
+     */
     private fun loadProfileFragment() {
         val fragment = ProfileFragment()
         val ft = supportFragmentManager.beginTransaction()
@@ -99,6 +108,9 @@ class HomeActivity : AppCompatActivity() {
         ft.commit()
     }
 
+    /**
+     * Method is used to load NotifactionFragment
+     */
     private fun loadNotifactionFragment() {
         val fragment = NotificationFragment()
         val ft = supportFragmentManager.beginTransaction()
@@ -106,6 +118,10 @@ class HomeActivity : AppCompatActivity() {
         ft.commit()
     }
 
+    /**
+     * Method is used to update Registration/Refresh token which is changed when app data is cleared
+     * @param dataSnapshot
+     */
     private fun updateNewRegistrationToken(dataSnapshot: DataSnapshot) {
         val memberId = SharedPreferencesUtils.getMemberId(this).toString()
 

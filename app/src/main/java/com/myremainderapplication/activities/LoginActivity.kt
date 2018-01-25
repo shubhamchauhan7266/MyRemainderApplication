@@ -119,6 +119,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
             }
             R.id.btLogin -> {
+                flProgressBar.visibility = View.VISIBLE
+                btLogin.isEnabled = false
                 if (etMemberId.text.toString().trim().isNotEmpty() && etPassword.text.toString().trim().isNotEmpty()) {
                     checkForValidAuthentication()
                 } else {
@@ -139,7 +141,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 if (dataSnapshot != null && dataSnapshot.exists()) {
                     val password = dataSnapshot.child(AppConstant.PASSWORD).value
                     if (etPassword.text.toString().trim().equals(password)) {
-                        SharedPreferencesUtils.setMemberId(this@LoginActivity,etMemberId.text.toString().trim())
+                        SharedPreferencesUtils.setMemberId(this@LoginActivity, etMemberId.text.toString().trim())
                         val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                         startActivity(intent)
                     } else {
@@ -148,6 +150,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 } else {
                     Toast.makeText(this@LoginActivity, "Invalid MemberId", Toast.LENGTH_SHORT).show()
                 }
+                flProgressBar.visibility = View.GONE
+                btLogin.isEnabled = true
             }
 
             override fun onCancelled(databaseError: DatabaseError?) {

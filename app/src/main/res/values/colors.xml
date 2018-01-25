@@ -10,4 +10,9 @@
     <color name="colorTextChecked">#262933</color>
     <color name="colorTextHeading">#262933</color>
 
+    <color name="transparentBackgroundBlack">#0D000000</color>
+    <color name="transparentBlack">#8C000000</color>
+
+
+
 </resources>

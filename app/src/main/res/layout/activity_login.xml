@@ -1,102 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="30dp"
     tools:context="com.myremainderapplication.activities.LoginActivity">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputLayoutMemberId"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/inputLayoutPassword">
+        android:layout_height="match_parent"
+        android:layout_margin="30dp">
 
-        <EditText
-            android:id="@+id/etMemberId"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutMemberId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/mamber_id"
-            android:inputType="text" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_above="@+id/inputLayoutPassword">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputLayoutPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:passwordToggleEnabled="true"
-        android:layout_marginTop="20dp"
-        android:layout_above="@+id/tvForgetPassword">
+            <EditText
+                android:id="@+id/etMemberId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/mamber_id"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/etPassword"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:inputType="textPassword"/>
-    </android.support.design.widget.TextInputLayout>
+            android:layout_above="@+id/tvForgetPassword"
+            android:layout_marginTop="20dp"
+            app:passwordToggleEnabled="true">
 
-    <TextView
-        android:id="@+id/tvForgetPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_above="@+id/frameLayout"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:text="@string/forget_password" />
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvForgetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/frameLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:text="@string/forget_password" />
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/btSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/sign_up"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/login"
+                android:textAllCaps="false" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvOr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/frameLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="@string/or"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btGoogle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvOr"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp" />
+
+        <Button
+            android:id="@+id/btFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btGoogle"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp" />
+
+    </RelativeLayout>
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/flProgressBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_centerInParent="true">
-        <Button
-            android:id="@+id/btSignUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:layout_gravity="start"
-            android:text="@string/sign_up"/>
+        android:layout_height="match_parent"
+        android:background="@color/transparentBlack"
+        android:visibility="gone">
 
-        <Button
-            android:id="@+id/btLogin"
-            android:layout_width="wrap_content"
+        <ProgressBar
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:textAllCaps="false"
-            android:text="@string/login"/>
+            android:layout_gravity="center" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/tvOr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/or"
-        android:textSize="20sp"
-        android:layout_below="@+id/frameLayout"
-        android:layout_centerHorizontal="true"/>
-
-    <Button
-        android:id="@+id/btGoogle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvOr"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"/>
-
-    <Button
-        android:id="@+id/btFacebook"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btGoogle"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"/>
-
-
-</RelativeLayout>
+</FrameLayout>

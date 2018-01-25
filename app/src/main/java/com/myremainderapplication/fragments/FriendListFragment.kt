@@ -19,7 +19,6 @@ import com.myremainderapplication.activities.ProfileActivity
 import com.myremainderapplication.adapters.FriendListAdapter
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFriendInfoModel
-import com.myremainderapplication.models.MemberShortInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
 import com.myremainderapplication.utils.SharedPreferencesUtils
 import kotlinx.android.synthetic.main.fragment_friend_list.view.*
@@ -48,7 +47,10 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
         return view
     }
 
-
+    /**
+     * Method is used to get friendList from database and then set in adapter for display
+     * @param view
+     */
     private fun setFriendListData(view: View) {
         val memberId = SharedPreferencesUtils.getMemberId(mContext!!).toString()
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(memberId)
@@ -60,11 +62,9 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
                     val tempFriendList = ModelInfoUtils.Companion.getFriendList(memberList)
                     friendList= ArrayList()
 
-                    for (friendInfo:MemberFriendInfoModel in tempFriendList){
-                        if(friendInfo.friendStatus==ModelInfoUtils.FRIEND){
-                            friendList!!.add(friendInfo)
-                        }
-                    }
+                    tempFriendList
+                            .filter { it.friendStatus==ModelInfoUtils.FRIEND }
+                            .forEach { friendList!!.add(it) }
 
                     friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)

@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        auth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance()
 
         /*createAcount("","")
 
@@ -107,8 +107,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth!!.getCurrentUser()
-//        updateUI(currentUser)
+        /*val currentUser = auth!!.getCurrentUser()
+        updateUI(currentUser)*/
     }
 
     override fun onClick(view: View?) {
@@ -149,7 +149,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     if (dataSnapshot != null && dataSnapshot.exists()) {
                         val password = dataSnapshot.child(AppConstant.PASSWORD).value
 
-                        if (etPassword.text.toString().trim().equals(password)) {
+                        if (etPassword.text.toString().trim() == password) {
                             SharedPreferencesUtils.setMemberId(this@LoginActivity, etMemberId.text.toString().trim())
                             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                             startActivity(intent)

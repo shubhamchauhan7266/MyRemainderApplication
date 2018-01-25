@@ -115,12 +115,10 @@ class ProfileFragment : Fragment() {
         builder.setTitle("Add Photo!")
 
         builder.setItems(items) { dialog, item ->
-            if (items[item].equals("Take Photo")) {
-                takePhotoFromCamera()
-            } else if (items[item].equals("Choose from Library")) {
-                selectImageFromAlbum()
-            } else {
-                dialog.dismiss()
+            when {
+                items[item] == "Take Photo" -> takePhotoFromCamera()
+                items[item] == "Choose from Library" -> selectImageFromAlbum()
+                else -> dialog.dismiss()
             }
         }
         builder.show()
@@ -128,8 +126,8 @@ class ProfileFragment : Fragment() {
 
     private fun selectImageFromAlbum() {
         val intent = Intent()
-        intent.setAction(Intent.ACTION_GET_CONTENT)
-        intent.setType("image/*")
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.type = "image/*"
         startActivityForResult(intent, AppConstant.REQUEST_SELECT_IMAGE_FROM_ALBUM)
     }
 
@@ -163,7 +161,7 @@ class ProfileFragment : Fragment() {
         val childRef = mStorageRef!!.child("images/" + file.lastPathSegment)
         val uploadTask = childRef.putFile(file)
 
-        uploadTask.addOnFailureListener { exception ->
+        uploadTask.addOnFailureListener { //exception ->
             // Handle unsuccessful uploads
         }.addOnSuccessListener { taskSnapshot ->
             val downloadUrl = taskSnapshot.downloadUrl

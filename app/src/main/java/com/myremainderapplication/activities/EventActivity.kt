@@ -9,7 +9,6 @@ import android.view.View
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.myremainderapplication.R
 import com.myremainderapplication.interfaces.AppConstant
@@ -17,9 +16,7 @@ import com.myremainderapplication.utils.VolleySingletonClass
 import org.json.JSONObject
 import com.android.volley.AuthFailureError
 import com.myremainderapplication.models.CalenderModel
-import com.myremainderapplication.utils.SharedPreferencesUtils
 import kotlinx.android.synthetic.main.activity_event.*
-import kotlinx.android.synthetic.main.activity_sign_up.*
 import java.util.*
 
 /**
@@ -107,10 +104,12 @@ class EventActivity : AppCompatActivity(), View.OnClickListener {
         val request = getJsonBody(title, body, calenderModel)
 
         val jsonRequest = object : JsonObjectRequest(Request.Method.POST, AppConstant.SEND_NOTIFICATION_URL, request,
-                Response.Listener<JSONObject> { response: JSONObject? ->
-                    val success = response!!.getInt("success")
+                Response.Listener<JSONObject> {
+                    //response: JSONObject? ->
+//                    val success = response!!.getInt("success")
                 },
-                Response.ErrorListener { error: VolleyError? ->
+                Response.ErrorListener {
+                    //error: VolleyError? ->
 
                 }
         ) {

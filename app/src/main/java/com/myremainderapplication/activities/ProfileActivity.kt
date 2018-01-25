@@ -13,7 +13,6 @@ import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFullInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
 import kotlinx.android.synthetic.main.activity_profile.*
-import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 
 /**

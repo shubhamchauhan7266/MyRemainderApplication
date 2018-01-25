@@ -72,11 +72,9 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
                     friendList = ModelInfoUtils.getFriendList(friendDataList)
                 }
 
-                for (memberInfo: MemberShortInfoModel in tempMemberList) {
-                    if (memberInfo.memberId != memberId) {
-                        memberList!!.add(memberInfo)
-                    }
-                }
+                tempMemberList
+                        .filter { it.memberId != memberId }
+                        .forEach { memberList!!.add(it) }
 
                 memberListAdapter = MemberListAdapter(mContext!!, memberList!!, friendList!!, this@HomeFragment)
                 view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
@@ -106,7 +104,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
                         updateSenderFriendList(position)
                     }
                 },
-                Response.ErrorListener { error: VolleyError? ->
+                Response.ErrorListener { //error: VolleyError? ->
 
                 }
         ) {

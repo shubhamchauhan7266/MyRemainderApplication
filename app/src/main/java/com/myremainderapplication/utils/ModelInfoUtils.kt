@@ -242,7 +242,7 @@ class ModelInfoUtils {
             hasMapNotificationNode.put(AppConstant.BODY, message)
             var index = -1
             for (notificationInfo: MemberNotificationModel in notificationList) {
-                if (notificationInfo.senderId == senderId) {
+                if (notificationInfo.senderId == senderId && notificationInfo.type==AppConstant.FRIEND_REQUEST_TYPE) {
                     index = notificationList.indexOf(notificationInfo)
                     break
                 }

@@ -134,24 +134,28 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun checkForValidAuthentication() {
+        var isUpdateRequired = false
         val databaseRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(etMemberId.text.toString())
         databaseRef.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
-                if (dataSnapshot != null && dataSnapshot.exists()) {
-                    val password = dataSnapshot.child(AppConstant.PASSWORD).value
-                    if (etPassword.text.toString().trim().equals(password)) {
-                        SharedPreferencesUtils.setMemberId(this@LoginActivity, etMemberId.text.toString().trim())
-                        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                        startActivity(intent)
+                if (!isUpdateRequired) {
+                    isUpdateRequired = true
+                    if (dataSnapshot != null && dataSnapshot.exists()) {
+                        val password = dataSnapshot.child(AppConstant.PASSWORD).value
+                        if (etPassword.text.toString().trim().equals(password)) {
+                            SharedPreferencesUtils.setMemberId(this@LoginActivity, etMemberId.text.toString().trim())
+                            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(this@LoginActivity, "Invalid Password", Toast.LENGTH_SHORT).show()
+                        }
                     } else {
-                        Toast.makeText(this@LoginActivity, "Invalid Password", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LoginActivity, "Invalid MemberId", Toast.LENGTH_SHORT).show()
                     }
-                } else {
-                    Toast.makeText(this@LoginActivity, "Invalid MemberId", Toast.LENGTH_SHORT).show()
+                    flProgressBar.visibility = View.GONE
+                    btLogin.isEnabled = true
                 }
-                flProgressBar.visibility = View.GONE
-                btLogin.isEnabled = true
             }
 
             override fun onCancelled(databaseError: DatabaseError?) {

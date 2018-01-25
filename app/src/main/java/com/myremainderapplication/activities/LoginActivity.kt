@@ -120,7 +120,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.btLogin -> {
                 flProgressBar.visibility = View.VISIBLE
-                btLogin.isEnabled = false
                 if (etMemberId.text.toString().trim().isNotEmpty() && etPassword.text.toString().trim().isNotEmpty()) {
                     checkForValidAuthentication()
                 } else {
@@ -154,7 +153,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         Toast.makeText(this@LoginActivity, "Invalid MemberId", Toast.LENGTH_SHORT).show()
                     }
                     flProgressBar.visibility = View.GONE
-                    btLogin.isEnabled = true
                 }
             }
 

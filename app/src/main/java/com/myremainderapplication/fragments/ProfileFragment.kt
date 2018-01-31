@@ -71,6 +71,10 @@ class ProfileFragment : Fragment() {
         mContext = context!!
     }
 
+    /**
+     * Method is used to get member data from database and then call updateData() method for update UI
+     * @param view
+     */
     private fun setDatabaseData(view: View) {
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS)
         database.addValueEventListener(object : ValueEventListener {
@@ -88,7 +92,7 @@ class ProfileFragment : Fragment() {
                     }
                     index++
                 }
-                    updateData(view)
+                updateData(view)
             }
 
             override fun onCancelled(dataSnapshot: DatabaseError?) {
@@ -97,6 +101,10 @@ class ProfileFragment : Fragment() {
         })
     }
 
+    /**
+     * Method is used to update UI
+     * @param view
+     */
     private fun updateData(view: View) {
         view.tvName.text = memberFullInfoModel!!.memberName
         view.tvEmail.text = memberFullInfoModel!!.emailId
@@ -109,6 +117,9 @@ class ProfileFragment : Fragment() {
                 .into(view.ivProfile)
     }
 
+    /**
+     * Method is used to show an Alert Dialog for select Profile image
+     */
     private fun selectImageDialog() {
         val items = arrayOf("Take Photo", "Choose from Library", "Cancel")
         val builder = AlertDialog.Builder(mContext)
@@ -124,6 +135,9 @@ class ProfileFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Method is used to select image from Album or Gallery
+     */
     private fun selectImageFromAlbum() {
         val intent = Intent()
         intent.action = Intent.ACTION_GET_CONTENT
@@ -131,6 +145,9 @@ class ProfileFragment : Fragment() {
         startActivityForResult(intent, AppConstant.REQUEST_SELECT_IMAGE_FROM_ALBUM)
     }
 
+    /**
+     * Method is used to take photo from Camera
+     */
     private fun takePhotoFromCamera() {
         val imagesFolder = File(Environment.getExternalStorageDirectory(), "MyImages")
         imagesFolder.mkdir()
@@ -157,11 +174,17 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    /**
+     * Method is used to upload profile image in storage and get URL
+     * then this URL is update in database
+     * @param file
+     */
     private fun uploadProfileImage(file: Uri) {
         val childRef = mStorageRef!!.child("images/" + file.lastPathSegment)
         val uploadTask = childRef.putFile(file)
 
-        uploadTask.addOnFailureListener { //exception ->
+        uploadTask.addOnFailureListener {
+            //exception ->
             // Handle unsuccessful uploads
         }.addOnSuccessListener { taskSnapshot ->
             val downloadUrl = taskSnapshot.downloadUrl

@@ -45,6 +45,10 @@ class NotificationFragment : Fragment() {
         return view
     }
 
+    /**
+     * Method is used to get NotificationList from database and then set in adapter for display
+     * @param view
+     */
     private fun setNotificationListData(view: View) {
         val memberId = SharedPreferencesUtils.getMemberId(mContext!!).toString()
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(memberId)

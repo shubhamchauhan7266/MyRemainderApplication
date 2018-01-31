@@ -57,6 +57,10 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         return view
     }
 
+    /**
+     * Method is used to get memberList from database and then set in adapter for display
+     * @param view
+     */
     private fun setMemberListData(view: View) {
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS)
         database.addValueEventListener(object : ValueEventListener {
@@ -94,6 +98,14 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
                 memberShortInfoModel.registrationToken, position)
     }
 
+    /**
+     * Method is used to send friend request via Notification
+     * @param senderId
+     * @param ReceiverId
+     * @param message
+     * @param registrationToken
+     * @param position
+     */
     private fun sendFriendRequest(senderId: String, ReceiverId: String, message: String, registrationToken: String, position: Int) {
         val request = getJsonBody(senderId, ReceiverId, message, registrationToken)
 
@@ -120,6 +132,14 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         requestQueue.add(jsonRequest)
     }
 
+    /**
+     * Method is used to get json payload for notification(friend request) API
+     * @param senderId
+     * @param ReceiverId
+     * @param message
+     * @param registrationToken
+     * @return JSONObject
+     */
     private fun getJsonBody(senderId: String, ReceiverId: String, message: String, registrationToken: String): JSONObject {
         val jsonObjectRequestParams = JSONObject()
 
@@ -135,6 +155,10 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         return jsonObjectRequestParams
     }
 
+    /**
+     * Method is used to add friend in sender friend list
+     * @param position
+     */
     private fun updateSenderFriendList(position: Int) {
         val receiverInfo = memberList?.get(position)
         val databaseSenderRef = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS).child(memberId)

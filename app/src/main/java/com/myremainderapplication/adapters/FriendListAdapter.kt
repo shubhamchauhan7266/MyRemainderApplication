@@ -22,7 +22,7 @@ class FriendListAdapter(private val context:Context,private val iFriendListAdapt
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int):FriendListAdapter.ViewHolder{
         if(viewType==AppConstant.VIEW_HORIZONTAL){
-            val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row, parent, false)
+            val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row_horizontal, parent, false)
             return ViewHolder(view)
         }else{
             val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row, parent, false)

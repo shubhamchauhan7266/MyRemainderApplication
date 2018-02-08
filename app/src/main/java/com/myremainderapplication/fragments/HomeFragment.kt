@@ -1,6 +1,7 @@
 package com.myremainderapplication.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -11,6 +12,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.google.firebase.database.*
 
 import com.myremainderapplication.R
+import com.myremainderapplication.activities.ProfileActivity
 import com.myremainderapplication.adapters.FriendListAdapter
 import com.myremainderapplication.adapters.MemberListAdapter
 import com.myremainderapplication.adapters.NotificationListAdapter
@@ -34,6 +36,7 @@ import org.json.JSONObject
 class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack, FriendListAdapter.IFriendListAdapterCallBack {
 
     private var memberList: ArrayList<MemberShortInfoModel>? = null
+    private var friendList: ArrayList<MemberFriendInfoModel>? = null
     private lateinit var memberListAdapter: MemberListAdapter
     private lateinit var requestQueue: RequestQueue
     private var mContext: Context? = null
@@ -52,6 +55,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack, F
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         requestQueue = VolleySingletonClass.getInstance(mContext!!)!!
         memberList = ArrayList()
+        friendList = ArrayList()
 
         setMemberListData(view)
         return view
@@ -73,12 +77,11 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack, F
 
 
                 // for FriendList
-                var friendList = ArrayList<MemberFriendInfoModel>()
                 if (dataSnapshot.child(memberId).hasChild(AppConstant.FRIEND_LIST)) {
                     val friendDataList = dataSnapshot.child(memberId).child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
                     friendList = ModelInfoUtils.getFriendList(friendDataList)
                 }
-                val friendListAdapter = FriendListAdapter(mContext!!,this@HomeFragment, friendList,AppConstant.VIEW_HORIZONTAL)
+                val friendListAdapter = FriendListAdapter(mContext!!, this@HomeFragment, friendList!!, AppConstant.VIEW_HORIZONTAL)
                 view.recyclerViewFriend.layoutManager = LinearLayoutManager(mContext, LinearLayout.HORIZONTAL, false)
                 view.recyclerViewFriend.adapter = friendListAdapter
 
@@ -91,7 +94,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack, F
                             .filter { it.type == AppConstant.SIMPE_ALERT_TYPE }
                             .forEach { notificationList.add(it) }
                 }
-                val notificationListAdapter = NotificationListAdapter(mContext!!, notificationList,AppConstant.VIEW_HORIZONTAL)
+                val notificationListAdapter = NotificationListAdapter(mContext!!, notificationList, AppConstant.VIEW_HORIZONTAL)
                 view.recyclerViewFriendRequest.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                 view.recyclerViewFriendRequest.adapter = notificationListAdapter
 
@@ -101,7 +104,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack, F
                         .filter { it.memberId != memberId }
                         .forEach { memberList!!.add(it) }
 
-                memberListAdapter = MemberListAdapter(mContext!!, memberList!!, friendList, this@HomeFragment)
+                memberListAdapter = MemberListAdapter(mContext!!, memberList!!, friendList!!, this@HomeFragment)
                 view.recyclerViewMemberList.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                 view.recyclerViewMemberList.adapter = memberListAdapter
             }
@@ -120,7 +123,10 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack, F
     }
 
     override fun onFriendViewClick(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val memberIdNameModel = friendList!![position]
+        val intent = Intent(mContext, ProfileActivity::class.java)
+        intent.putExtra(AppConstant.MEMBER_ID, memberIdNameModel.memberId)
+        startActivity(intent)
     }
 
     /**

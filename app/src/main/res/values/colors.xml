@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorGrey">#DCDCDC</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
 
     <color name="colorTextUnchecked">#6b6d73</color>
     <color name="colorTextChecked">#262933</color>

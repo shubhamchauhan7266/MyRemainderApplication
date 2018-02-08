@@ -1,5 +1,6 @@
 package com.myremainderapplication.adapters
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import com.myremainderapplication.R
 import com.myremainderapplication.fragments.FriendListFragment
 import com.myremainderapplication.models.MemberFriendInfoModel
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.friend_item_row.view.*
 
 /**
@@ -15,7 +17,7 @@ import kotlinx.android.synthetic.main.friend_item_row.view.*
  *
  * @author Shubham Chauhan
  */
-class FriendListAdapter(private val iFriendListAdapterCallBack: IFriendListAdapterCallBack, private var friendList:ArrayList<MemberFriendInfoModel>) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
+class FriendListAdapter(private val context:Context,private val iFriendListAdapterCallBack: IFriendListAdapterCallBack, private var friendList:ArrayList<MemberFriendInfoModel>) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int):FriendListAdapter.ViewHolder{
         val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row, parent, false)
@@ -26,11 +28,15 @@ class FriendListAdapter(private val iFriendListAdapterCallBack: IFriendListAdapt
         return friendList.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int)= holder!!.bind(friendList[position],position,iFriendListAdapterCallBack)
+    override fun onBindViewHolder(holder: ViewHolder?, position: Int)= holder!!.bind(context,friendList[position],position,iFriendListAdapterCallBack)
 
     class ViewHolder(itemView:View) :RecyclerView.ViewHolder(itemView){
-        fun bind(memberShortInfoModel: MemberFriendInfoModel, position: Int, iFriendListAdapterCallBack: IFriendListAdapterCallBack?) {
+        fun bind(context:Context,memberShortInfoModel: MemberFriendInfoModel, position: Int, iFriendListAdapterCallBack: IFriendListAdapterCallBack?) {
             itemView.tvName.text= memberShortInfoModel.memberName
+            Picasso.with(context)
+                    .load(memberShortInfoModel.imagePath)
+                    .resize(100, 100)
+                    .into(itemView.ivProfile)
             itemView.friendItemView.setOnClickListener {
                 iFriendListAdapterCallBack!!.onFriendViewClick(position)
             }

@@ -78,7 +78,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack, F
                     val friendDataList = dataSnapshot.child(memberId).child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
                     friendList = ModelInfoUtils.getFriendList(friendDataList)
                 }
-                val friendListAdapter = FriendListAdapter(this@HomeFragment, friendList)
+                val friendListAdapter = FriendListAdapter(mContext!!,this@HomeFragment, friendList)
                 view.recyclerViewFriend.layoutManager = LinearLayoutManager(mContext, LinearLayout.HORIZONTAL, false)
                 view.recyclerViewFriend.adapter = friendListAdapter
 

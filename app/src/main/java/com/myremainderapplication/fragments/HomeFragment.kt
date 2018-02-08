@@ -78,7 +78,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack, F
                     val friendDataList = dataSnapshot.child(memberId).child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
                     friendList = ModelInfoUtils.getFriendList(friendDataList)
                 }
-                val friendListAdapter = FriendListAdapter(mContext!!,this@HomeFragment, friendList)
+                val friendListAdapter = FriendListAdapter(mContext!!,this@HomeFragment, friendList,AppConstant.VIEW_HORIZONTAL)
                 view.recyclerViewFriend.layoutManager = LinearLayoutManager(mContext, LinearLayout.HORIZONTAL, false)
                 view.recyclerViewFriend.adapter = friendListAdapter
 
@@ -91,7 +91,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack, F
                             .filter { it.type == AppConstant.SIMPE_ALERT_TYPE }
                             .forEach { notificationList.add(it) }
                 }
-                val notificationListAdapter = NotificationListAdapter(mContext!!, notificationList)
+                val notificationListAdapter = NotificationListAdapter(mContext!!, notificationList,AppConstant.VIEW_HORIZONTAL)
                 view.recyclerViewFriendRequest.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                 view.recyclerViewFriendRequest.adapter = notificationListAdapter
 

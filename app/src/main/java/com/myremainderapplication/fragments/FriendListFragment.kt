@@ -66,7 +66,7 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
                             .filter { it.friendStatus==ModelInfoUtils.FRIEND }
                             .forEach { friendList!!.add(it) }
 
-                    val friendListAdapter = FriendListAdapter(mContext!!,this@FriendListFragment, friendList!!)
+                    val friendListAdapter = FriendListAdapter(mContext!!,this@FriendListFragment, friendList!!,AppConstant.VIEW_VERTICAL)
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                     view.recyclerView.adapter = friendListAdapter
                 }

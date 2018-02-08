@@ -56,7 +56,7 @@ class NotificationFragment : Fragment() {
                 if (dataSnapshot?.hasChild(AppConstant.NOTIFICATION_LIST)!!) {
                     val memberNotificationList = dataSnapshot.child(AppConstant.NOTIFICATION_LIST)?.value as ArrayList<*>
                     val notificationList = ModelInfoUtils.Companion.getNotificationList(memberNotificationList)
-                    val notificationListAdapter = NotificationListAdapter(mContext!!, notificationList)
+                    val notificationListAdapter = NotificationListAdapter(mContext!!, notificationList,AppConstant.VIEW_VERTICAL)
 
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                     view.recyclerView.adapter = notificationListAdapter

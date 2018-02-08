@@ -18,6 +18,8 @@ interface AppConstant {
         val SIMPE_ALERT_TYPE = 0
         val REQUEST_SELECT_IMAGE_FROM_ALBUM = 1
         val REQUEST_TAKE_PHOTO = 2
+        val VIEW_HORIZONTAL = 1
+        val VIEW_VERTICAL = 2
 
         // Firebase Id and Key
         val APP_ID = "1:303119189109:android:bf9132e50cbefbce"

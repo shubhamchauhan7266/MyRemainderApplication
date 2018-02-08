@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.myremainderapplication.R
 import com.myremainderapplication.fragments.FriendListFragment
+import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFriendInfoModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.friend_item_row.view.*
@@ -17,15 +18,27 @@ import kotlinx.android.synthetic.main.friend_item_row.view.*
  *
  * @author Shubham Chauhan
  */
-class FriendListAdapter(private val context:Context,private val iFriendListAdapterCallBack: IFriendListAdapterCallBack, private var friendList:ArrayList<MemberFriendInfoModel>) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
+class FriendListAdapter(private val context:Context,private val iFriendListAdapterCallBack: IFriendListAdapterCallBack, private var friendList:ArrayList<MemberFriendInfoModel>,private val viewType:Int) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int):FriendListAdapter.ViewHolder{
-        val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row, parent, false)
-        return ViewHolder(view)
+        if(viewType==AppConstant.VIEW_HORIZONTAL){
+            val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row, parent, false)
+            return ViewHolder(view)
+        }else{
+            val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row, parent, false)
+            return ViewHolder(view)
+        }
     }
 
     override fun getItemCount(): Int {
         return friendList.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if(viewType==AppConstant.VIEW_HORIZONTAL)
+            AppConstant.VIEW_HORIZONTAL
+        else
+            AppConstant.VIEW_VERTICAL
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int)= holder!!.bind(context,friendList[position],position,iFriendListAdapterCallBack)

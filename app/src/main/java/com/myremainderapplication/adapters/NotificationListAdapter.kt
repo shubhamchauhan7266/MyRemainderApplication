@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.notification_item_row.view.*
  *
  * @author Shubham Chauhan
  */
-class NotificationListAdapter(val context: Context, private var notificationList: ArrayList<MemberNotificationModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NotificationListAdapter(val context: Context, private var notificationList: ArrayList<MemberNotificationModel>,private val viewType: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == AppConstant.FRIEND_REQUEST_TYPE) {

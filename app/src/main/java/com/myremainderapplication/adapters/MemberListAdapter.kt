@@ -46,7 +46,7 @@ class MemberListAdapter(val context: Context, private var memberList: ArrayList<
             } else {
                 itemView.btAddFriend.setOnClickListener {
                     itemView.btAddFriend.text = context.getString(R.string.add_friend)
-                    iMemberListAdapterCallBack.onViewClick(position)
+                    iMemberListAdapterCallBack.onMemberViewClick(position)
                 }
             }
 
@@ -72,6 +72,6 @@ class MemberListAdapter(val context: Context, private var memberList: ArrayList<
     }
 
     interface IMemberListAdapterCallBack {
-        fun onViewClick(position: Int)
+        fun onMemberViewClick(position: Int)
     }
 }

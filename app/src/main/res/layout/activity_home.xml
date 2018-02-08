@@ -5,12 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.myremainderapplication.activities.HomeActivity">
+
+    <FrameLayout
+        android:id="@+id/flToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+    </FrameLayout>
+
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomNavigationView"
-        android:layout_alignParentTop="true">
+        android:layout_below="@+id/flToolbar"
+        android:layout_above="@+id/bottomNavigationView">
     </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView

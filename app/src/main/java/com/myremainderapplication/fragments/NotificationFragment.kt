@@ -29,8 +29,6 @@ import kotlinx.android.synthetic.main.fragment_notifaction.view.*
  */
 class NotificationFragment : Fragment() {
     private var mContext: Context? = null
-    private var notificationList: ArrayList<MemberNotificationModel>? = null
-    private lateinit var notificationListAdapter: NotificationListAdapter
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -57,8 +55,8 @@ class NotificationFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot?) {
                 if (dataSnapshot?.hasChild(AppConstant.NOTIFICATION_LIST)!!) {
                     val memberNotificationList = dataSnapshot.child(AppConstant.NOTIFICATION_LIST)?.value as ArrayList<*>
-                    notificationList = ModelInfoUtils.Companion.getNotificationList(memberNotificationList)
-                    notificationListAdapter = NotificationListAdapter(this@NotificationFragment, notificationList!!)
+                    val notificationList = ModelInfoUtils.Companion.getNotificationList(memberNotificationList)
+                    val notificationListAdapter = NotificationListAdapter(mContext!!, notificationList)
 
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                     view.recyclerView.adapter = notificationListAdapter

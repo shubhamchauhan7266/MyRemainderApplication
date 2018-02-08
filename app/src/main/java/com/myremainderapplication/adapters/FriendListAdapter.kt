@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.friend_item_row.view.*
  *
  * @author Shubham Chauhan
  */
-class FriendListAdapter(val iFriendListAdapterCallBack: FriendListFragment, private var friendList:ArrayList<MemberFriendInfoModel>) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
+class FriendListAdapter(private val iFriendListAdapterCallBack: IFriendListAdapterCallBack, private var friendList:ArrayList<MemberFriendInfoModel>) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int):FriendListAdapter.ViewHolder{
         val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row, parent, false)
@@ -32,12 +32,12 @@ class FriendListAdapter(val iFriendListAdapterCallBack: FriendListFragment, priv
         fun bind(memberShortInfoModel: MemberFriendInfoModel, position: Int, iFriendListAdapterCallBack: IFriendListAdapterCallBack?) {
             itemView.tvName.text= memberShortInfoModel.memberName
             itemView.friendItemView.setOnClickListener {
-                iFriendListAdapterCallBack!!.onViewClick(position)
+                iFriendListAdapterCallBack!!.onFriendViewClick(position)
             }
         }
     }
 
     interface IFriendListAdapterCallBack{
-        fun onViewClick(position:Int)
+        fun onFriendViewClick(position:Int)
     }
 }

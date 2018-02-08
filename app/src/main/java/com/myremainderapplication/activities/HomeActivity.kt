@@ -2,6 +2,9 @@ package com.myremainderapplication.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -28,8 +31,10 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        var isUpdateRequired = false
 
+        setUpToolbar()
+
+        var isUpdateRequired = false
         val database = FirebaseDatabase.getInstance().reference.child(AppConstant.MEMBERS)
         database.addValueEventListener(object : ValueEventListener {
 
@@ -75,7 +80,41 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    private fun setUpToolbar() {
+        setSupportActionBar(toolbar as Toolbar?)
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.title = "Home"
+            actionBar.setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.home_toolbar_item, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            android.R.id.home->{
+                finish()
+                true
+            }
+            R.id.action_search -> {
+                true
+            }
+            R.id.action_set_alarm -> {
+                true
+            }
+            R.id.action_logout -> {
+                true
+            }
+            else -> {
+                false
+            }
+        }
     }
 
     /**

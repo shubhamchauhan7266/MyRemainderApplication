@@ -4,18 +4,19 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import com.android.volley.*
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.firebase.database.*
 
 import com.myremainderapplication.R
+import com.myremainderapplication.adapters.FriendListAdapter
 import com.myremainderapplication.adapters.MemberListAdapter
+import com.myremainderapplication.adapters.NotificationListAdapter
 import com.myremainderapplication.interfaces.AppConstant
 import com.myremainderapplication.models.MemberFriendInfoModel
+import com.myremainderapplication.models.MemberNotificationModel
 import com.myremainderapplication.models.MemberShortInfoModel
 import com.myremainderapplication.utils.ModelInfoUtils
 import com.myremainderapplication.utils.SharedPreferencesUtils
@@ -30,10 +31,9 @@ import org.json.JSONObject
  *
  * @author Shubham Chauhan
  */
-class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
+class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack, FriendListAdapter.IFriendListAdapterCallBack {
 
     private var memberList: ArrayList<MemberShortInfoModel>? = null
-    private var friendList: ArrayList<MemberFriendInfoModel>? = null
     private lateinit var memberListAdapter: MemberListAdapter
     private lateinit var requestQueue: RequestQueue
     private var mContext: Context? = null
@@ -51,7 +51,7 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
         memberId = SharedPreferencesUtils.getMemberId(mContext!!).toString()
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         requestQueue = VolleySingletonClass.getInstance(mContext!!)!!
-        friendList = ArrayList()
+        memberList = ArrayList()
 
         setMemberListData(view)
         return view
@@ -69,20 +69,41 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
                 val memberNodeList = dataSnapshot?.child(AppConstant.MEMBERS_LIST)?.value as ArrayList<*>
                 val tempMemberList = ModelInfoUtils.getMemberList(memberNodeList)
                 currentFriendId = dataSnapshot.child(memberId).child(AppConstant.CURRENT_FRIEND_LIST_ID).value as String
-                memberList = ArrayList()
+                memberList?.clear()
 
+
+                // for FriendList
+                var friendList = ArrayList<MemberFriendInfoModel>()
                 if (dataSnapshot.child(memberId).hasChild(AppConstant.FRIEND_LIST)) {
                     val friendDataList = dataSnapshot.child(memberId).child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
                     friendList = ModelInfoUtils.getFriendList(friendDataList)
                 }
+                val friendListAdapter = FriendListAdapter(this@HomeFragment, friendList)
+                view.recyclerViewFriend.layoutManager = LinearLayoutManager(mContext, LinearLayout.HORIZONTAL, false)
+                view.recyclerViewFriend.adapter = friendListAdapter
 
+                // for NotificationList
+                val notificationList = ArrayList<MemberNotificationModel>()
+                if (dataSnapshot.child(memberId).hasChild(AppConstant.NOTIFICATION_LIST)) {
+                    val notificationDataList = dataSnapshot.child(memberId).child(AppConstant.NOTIFICATION_LIST)?.value as ArrayList<*>
+                    val tempNotificationList = ModelInfoUtils.getNotificationList(notificationDataList)
+                    tempNotificationList
+                            .filter { it.type == AppConstant.SIMPE_ALERT_TYPE }
+                            .forEach { notificationList.add(it) }
+                }
+                val notificationListAdapter = NotificationListAdapter(mContext!!, notificationList)
+                view.recyclerViewFriendRequest.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
+                view.recyclerViewFriendRequest.adapter = notificationListAdapter
+
+
+                // for MemberList
                 tempMemberList
                         .filter { it.memberId != memberId }
                         .forEach { memberList!!.add(it) }
 
-                memberListAdapter = MemberListAdapter(mContext!!, memberList!!, friendList!!, this@HomeFragment)
-                view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
-                view.recyclerView.adapter = memberListAdapter
+                memberListAdapter = MemberListAdapter(mContext!!, memberList!!, friendList, this@HomeFragment)
+                view.recyclerViewMemberList.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
+                view.recyclerViewMemberList.adapter = memberListAdapter
             }
 
             override fun onCancelled(dataSnapshot: DatabaseError?) {
@@ -92,10 +113,14 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
     }
 
 
-    override fun onViewClick(position: Int) {
+    override fun onMemberViewClick(position: Int) {
         val memberShortInfoModel = memberList?.get(position)
         sendFriendRequest(memberId, memberShortInfoModel!!.memberId, "message1",
                 memberShortInfoModel.registrationToken, position)
+    }
+
+    override fun onFriendViewClick(position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     /**
@@ -116,15 +141,16 @@ class HomeFragment : Fragment(), MemberListAdapter.IMemberListAdapterCallBack {
                         updateSenderFriendList(position)
                     }
                 },
-                Response.ErrorListener { //error: VolleyError? ->
+                Response.ErrorListener {
+                    //error: VolleyError? ->
 
                 }
         ) {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params = java.util.HashMap<String, String>()
-                params.put("Content-Type", "application/json")
-                params.put("Authorization", AppConstant.Authorization)
+                params["Content-Type"] = "application/json"
+                params["Authorization"] = AppConstant.Authorization
 
                 return params
             }

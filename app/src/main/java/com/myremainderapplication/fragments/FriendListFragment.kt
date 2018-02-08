@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.fragment_friend_list.view.*
  */
 class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallBack {
     private var friendList: ArrayList<MemberFriendInfoModel>? = null
-    private lateinit var friendListAdapter: FriendListAdapter
     private var mContext: Context? = null
 
     override fun onAttach(context: Context?) {
@@ -42,6 +41,7 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_friend_list, container, false)
+        friendList= ArrayList()
 
         setFriendListData(view)
         return view
@@ -60,13 +60,13 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
                 if(dataSnapshot?.hasChild(AppConstant.FRIEND_LIST)!!){
                     val memberList = dataSnapshot.child(AppConstant.FRIEND_LIST)?.value as ArrayList<*>
                     val tempFriendList = ModelInfoUtils.Companion.getFriendList(memberList)
-                    friendList= ArrayList()
+                    friendList?.clear()
 
                     tempFriendList
                             .filter { it.friendStatus==ModelInfoUtils.FRIEND }
                             .forEach { friendList!!.add(it) }
 
-                    friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
+                    val friendListAdapter = FriendListAdapter(this@FriendListFragment, friendList!!)
                     view.recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
                     view.recyclerView.adapter = friendListAdapter
                 }
@@ -78,7 +78,7 @@ class FriendListFragment : Fragment(), FriendListAdapter.IFriendListAdapterCallB
         })
     }
 
-    override fun onViewClick(position: Int) {
+    override fun onFriendViewClick(position: Int) {
         val memberIdNameModel = friendList!![position]
         val intent = Intent(mContext, ProfileActivity::class.java)
         intent.putExtra(AppConstant.MEMBER_ID, memberIdNameModel.memberId)

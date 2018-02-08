@@ -1,5 +1,6 @@
 package com.myremainderapplication.adapters
 
+import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.notification_item_row.view.*
  *
  * @author Shubham Chauhan
  */
-class NotificationListAdapter(val context: NotificationFragment, private var notificationList: ArrayList<MemberNotificationModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NotificationListAdapter(val context: Context, private var notificationList: ArrayList<MemberNotificationModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == AppConstant.FRIEND_REQUEST_TYPE) {
@@ -73,23 +74,23 @@ class NotificationListAdapter(val context: NotificationFragment, private var not
      * Create View holder for Friend Request
      */
     class ViewHolderFriendRequest(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        fun bindFriendRequestData(context: NotificationFragment, memberNotificationModel: MemberNotificationModel) {
+        fun bindFriendRequestData(context: Context, memberNotificationModel: MemberNotificationModel) {
             itemView.tvMessage.text = memberNotificationModel.body
 
             itemView.tvAccept.setOnClickListener {
-                val acceptIntent = Intent(context.activity, HandleFriendRequestService::class.java)
+                val acceptIntent = Intent(context, HandleFriendRequestService::class.java)
                 acceptIntent.action = context.getString(R.string.accept)
                 acceptIntent.putExtra(AppConstant.SENDER_ID_KEY, memberNotificationModel.senderId)
                 acceptIntent.putExtra(AppConstant.RECEIVER_ID_KEY, memberNotificationModel.receiverId)
-                context.activity?.startService(acceptIntent)
+                context.startService(acceptIntent)
             }
 
             itemView.tvReject.setOnClickListener {
-                val rejectIntent = Intent(context.activity, HandleFriendRequestService::class.java)
+                val rejectIntent = Intent(context, HandleFriendRequestService::class.java)
                 rejectIntent.action = context.getString(R.string.reject)
                 rejectIntent.putExtra(AppConstant.SENDER_ID_KEY, memberNotificationModel.senderId)
                 rejectIntent.putExtra(AppConstant.RECEIVER_ID_KEY, memberNotificationModel.receiverId)
-                context.activity?.startService(rejectIntent)
+                context.startService(rejectIntent)
             }
         }
 

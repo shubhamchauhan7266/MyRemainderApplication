@@ -36,4 +36,8 @@
     <string name="myimages">MyImages</string>
     <string name="friend_request_sent">Friend Request Sent</string>
     <string name="friend">Friend</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="notification">Notification</string>
+    <string name="friends">Friends</string>
 </resources>

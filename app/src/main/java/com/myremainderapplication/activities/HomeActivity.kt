@@ -2,6 +2,7 @@ package com.myremainderapplication.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.ActionBar
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
@@ -27,6 +28,7 @@ import com.myremainderapplication.utils.SharedPreferencesUtils
  * @author Shubham Chauhan
  */
 class HomeActivity : AppCompatActivity() {
+    private lateinit var actionBar: ActionBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,21 +59,25 @@ class HomeActivity : AppCompatActivity() {
 
                 R.id.action_home -> {
                     loadHomeFragment()
+                    actionBar.title = getString(R.string.home)
                     return@setOnNavigationItemSelectedListener true
                 }
 
                 R.id.action_profile -> {
                     loadProfileFragment()
+                    actionBar.title = getString(R.string.profile)
                     return@setOnNavigationItemSelectedListener true
                 }
 
                 R.id.action_notification -> {
                     loadNotifactionFragment()
+                    actionBar.title = getString(R.string.notification)
                     return@setOnNavigationItemSelectedListener true
                 }
 
                 R.id.action_friends -> {
                     loadFriendListFragment()
+                    actionBar.title = getString(R.string.friends)
                     return@setOnNavigationItemSelectedListener true
                 }
 
@@ -84,11 +90,9 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setUpToolbar() {
         setSupportActionBar(toolbar as Toolbar?)
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.title = "Home"
-            actionBar.setDisplayHomeAsUpEnabled(true)
-        }
+        actionBar = supportActionBar!!
+        actionBar.title = getString(R.string.home)
+        actionBar.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

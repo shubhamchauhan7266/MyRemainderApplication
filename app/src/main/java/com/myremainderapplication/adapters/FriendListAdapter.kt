@@ -20,12 +20,12 @@ import kotlinx.android.synthetic.main.friend_item_row.view.*
  */
 class FriendListAdapter(private val context:Context,private val iFriendListAdapterCallBack: IFriendListAdapterCallBack, private var friendList:ArrayList<MemberFriendInfoModel>,private val viewType:Int) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int):FriendListAdapter.ViewHolder{
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         if(viewType==AppConstant.VIEW_HORIZONTAL){
-            val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row_horizontal, parent, false)
+            val view= LayoutInflater.from(parent.context).inflate(R.layout.friend_item_row_horizontal, parent, false)
             return ViewHolder(view)
         }else{
-            val view= LayoutInflater.from(parent!!.context).inflate(R.layout.friend_item_row, parent, false)
+            val view= LayoutInflater.from(parent.context).inflate(R.layout.friend_item_row, parent, false)
             return ViewHolder(view)
         }
     }
@@ -41,7 +41,7 @@ class FriendListAdapter(private val context:Context,private val iFriendListAdapt
             AppConstant.VIEW_VERTICAL
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int)= holder!!.bind(context,friendList[position],position,iFriendListAdapterCallBack)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(context,friendList[position],position,iFriendListAdapterCallBack)
 
     class ViewHolder(itemView:View) :RecyclerView.ViewHolder(itemView){
         fun bind(context:Context,memberShortInfoModel: MemberFriendInfoModel, position: Int, iFriendListAdapterCallBack: IFriendListAdapterCallBack?) {

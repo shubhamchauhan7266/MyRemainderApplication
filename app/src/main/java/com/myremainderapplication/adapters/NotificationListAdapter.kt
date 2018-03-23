@@ -22,20 +22,20 @@ import kotlinx.android.synthetic.main.notification_item_row.view.*
  */
 class NotificationListAdapter(val context: Context, private var notificationList: ArrayList<MemberNotificationModel>,private val viewType: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == AppConstant.FRIEND_REQUEST_TYPE) {
-            val view = LayoutInflater.from(parent!!.context).inflate(R.layout.friend_request_notification_item_row, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.friend_request_notification_item_row, parent, false)
             return ViewHolderFriendRequest(view)
         } else if (viewType == AppConstant.EVENT_ALERT_TYPE) {
-            val view = LayoutInflater.from(parent!!.context).inflate(R.layout.notification_item_row, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.notification_item_row, parent, false)
             return ViewHolderEventAlert(view)
         } else {
-            val view = LayoutInflater.from(parent!!.context).inflate(R.layout.notification_item_row, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.notification_item_row, parent, false)
             return ViewHolderEventAlert(view)
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolderEventAlert) {
             val viewHolderEventAler: ViewHolderEventAlert = holder
             viewHolderEventAler.bindEventData(notificationList[position])

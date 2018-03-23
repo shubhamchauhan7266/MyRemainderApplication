@@ -21,12 +21,12 @@ import kotlinx.android.synthetic.main.member_item_row.view.*
 class MemberListAdapter(val context: Context, private var memberList: ArrayList<MemberShortInfoModel>, private var friendList: ArrayList<MemberFriendInfoModel>,
                         val iMemberListAdapterCallBack: IMemberListAdapterCallBack) : RecyclerView.Adapter<MemberListAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent!!.context).inflate(R.layout.member_item_row, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.member_item_row, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) = holder!!.bind(context, memberList[position],
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(context, memberList[position],
             position, friendList, iMemberListAdapterCallBack)
 
 

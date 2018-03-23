@@ -20,11 +20,10 @@ import com.myremainderapplication.models.MemberNotificationModel
 class ModelInfoUtils {
 
     companion object {
-        val FRIEND_REQUEST_SENT = 0
-        val FRIEND = 1
 
         /**
          * This method is used to get a full information of member
+         *
          * @param dataSnapshot
          * @param memberId
          * @return a oobject of MemberFullInfoModel
@@ -46,6 +45,7 @@ class ModelInfoUtils {
 
         /**
          * This method is used to get a short information of member
+         *
          * @param dataSnapshot
          * @param memberId
          * @return a oobject of MemberShortInfoModel
@@ -60,6 +60,7 @@ class ModelInfoUtils {
 
         /**
          * This method is used to get all members in a list
+         *
          * @param memberDataList
          * @return arraylist of MemberShortInfoModel
          */
@@ -82,6 +83,7 @@ class ModelInfoUtils {
 
         /**
          * This method is used to get all friends in a list
+         *
          * @param friendDataList
          * @return arraylist of MemberFriendInfoModel
          */
@@ -105,6 +107,7 @@ class ModelInfoUtils {
 
         /**
          * This method is used to get all notification in a list
+         *
          * @param notificationDataList
          * @param type
          * @return arraylist of MemberNotificationModel
@@ -129,6 +132,7 @@ class ModelInfoUtils {
 
         /**
          * This method is used to add friend data in FriendList
+         *
          * @param  databaseReference  - refrence to a friendList of Member
          * @param friendId - new FriendList id at which friend will add
          * @param friendInfo - information of friend
@@ -154,6 +158,7 @@ class ModelInfoUtils {
 
         /**
          * This method is used to remove friend data from FriendList
+         *
          * @param databaseReference - refrence to a friendList of Member
          * @param friendId - friendId
          * @param friendList - arraylist of all friends
@@ -180,6 +185,7 @@ class ModelInfoUtils {
 
         /**
          * This method is used to update friend status
+         *
          * @param databaseReference - refrence to a friendList of Member
          * @param friendId - friendId
          * @param friendList - arraylist of all friends
@@ -204,6 +210,7 @@ class ModelInfoUtils {
 
         /**
          * This method is used to add notification data in FriendList
+         *
          * @param  databaseReference  - refrence to a friendList of Member
          * @param notificationId - new Notification id at which notification will add
          * @param notificationInfo - information of notification
@@ -229,8 +236,9 @@ class ModelInfoUtils {
 
         /**
          * This method is used to update notification type
+         *
          * @param databaseReference - refrence to a friendList of Member
-         * @param receiverId - receiverId
+         * @param senderId - senderId
          * @param notificationList - arraylist of all notification
          * @param notificationType
          * @param message
@@ -263,6 +271,61 @@ class ModelInfoUtils {
             databaseMemberRef.updateChildren(hashMap as Map<String, Any>?)
             databaseMemberListRef.child(memberListId).updateChildren(hashMap as Map<String, Any>?)
         }
+    }
+
+
+    /**
+     * Method is used to add new member data in database
+     *
+     * @param currentMemberId
+     * @param currentMemberListId
+     * @param gender
+     * @param memberName
+     * @param mobileNumber
+     * @param email
+     * @param password
+     * @param downloadUrl
+     * @param registrationKey
+     */
+     fun uploadNewUserData(currentMemberId:String,currentMemberListId:String,gender:String,memberName:String,
+                                  mobileNumber:String,email:String,password:String,downloadUrl:String,registrationKey:String) {
+        val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().reference
+        val databaseCurrentMemberIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_ID)
+        val databaseCurrentMemberListIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_LIST_ID)
+        val databaseMembersRef = databaseRef.child(AppConstant.MEMBERS)
+        val databaseMemberListRef = databaseMembersRef.child(AppConstant.MEMBERS_LIST)
+
+        val newMemberId = (currentMemberId.toInt() + 1).toString()
+        val newMemberListId = (currentMemberListId.toInt() + 1).toString()
+
+        val hasMapMemberUserNode = HashMap<String, String>()
+        hasMapMemberUserNode.put(AppConstant.MEMBER_ID, newMemberId)
+        hasMapMemberUserNode.put(AppConstant.CURRENT_FRIEND_LIST_ID, (-1).toString())
+        hasMapMemberUserNode.put(AppConstant.CURRENT_NOTIFICATION_ID, (-1).toString())
+        hasMapMemberUserNode.put(AppConstant.MEMBER_NAME, memberName)
+        hasMapMemberUserNode.put(AppConstant.PHONE_NUMBER, mobileNumber)
+        hasMapMemberUserNode.put(AppConstant.EMAIL_ID, email)
+        hasMapMemberUserNode.put(AppConstant.PASSWORD, password)
+        hasMapMemberUserNode.put(AppConstant.GENDER, gender)
+        hasMapMemberUserNode.put(AppConstant.IMAGE_PATH, downloadUrl)
+        hasMapMemberUserNode.put(AppConstant.REGISTRATION_TOKEN, registrationKey)
+
+        val hasMapMemberNode = HashMap<String, HashMap<String, String>>()
+        hasMapMemberNode.put(newMemberId, hasMapMemberUserNode)
+
+        val hasMapMemberListUserNode = HashMap<String, String>()
+        hasMapMemberListUserNode.put(AppConstant.MEMBER_ID, newMemberId)
+        hasMapMemberListUserNode.put(AppConstant.MEMBER_NAME, memberName)
+        hasMapMemberListUserNode.put(AppConstant.IMAGE_PATH, downloadUrl)
+        hasMapMemberListUserNode.put(AppConstant.REGISTRATION_TOKEN, registrationKey)
+
+        val hasMapMemberListNode = HashMap<String, HashMap<String, String>>()
+        hasMapMemberListNode.put(newMemberListId, hasMapMemberListUserNode)
+
+        databaseMembersRef.updateChildren(hasMapMemberNode as Map<String, Any>?)
+        databaseMemberListRef.updateChildren(hasMapMemberListNode as Map<String, Any>?)
+        databaseCurrentMemberIdRef.setValue(newMemberId)
+        databaseCurrentMemberListIdRef.setValue(newMemberListId)
     }
 
 }

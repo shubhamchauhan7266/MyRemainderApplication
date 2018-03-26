@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 import com.google.firebase.storage.StorageReference
 import java.io.File
 import com.google.firebase.database.DatabaseReference
+import com.myremainderapplication.utils.ModelInfoUtils
 import com.myremainderapplication.utils.SharedPreferencesUtils
 import com.squareup.picasso.Picasso
 
@@ -50,7 +51,14 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
 
         btSubmit.setOnClickListener {
             if (checkValidation()) {
-                uploadNewUserData()
+
+                val gender: String = when {
+                    rbMail.isChecked -> rbMail.text.toString()
+                    else -> rbFemale.text.toString()
+                }
+
+                ModelInfoUtils.uploadNewUserData(currentMemberId,currentMemberListId,gender,etName.text.toString(),etMobileNumber.text.toString(),etEmail.text.toString(),
+                etPassword.text.toString(),downloadUrl, SharedPreferencesUtils.getRegistrationKey(this)!!)
                 finish()
             }
         }
@@ -58,54 +66,6 @@ class SignUpActivity : AppCompatActivity(), TextWatcher {
         ivProfile.setOnClickListener {
             selectImageDialog()
         }
-    }
-
-    /**
-     * Method is used to add new member data in database
-     */
-    private fun uploadNewUserData() {
-        val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().reference
-        val databaseCurrentMemberIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_ID)
-        val databaseCurrentMemberListIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_LIST_ID)
-        val databaseMembersRef = databaseRef.child(AppConstant.MEMBERS)
-        val databaseMemberListRef = databaseMembersRef.child(AppConstant.MEMBERS_LIST)
-
-        val newMemberId = (currentMemberId.toInt() + 1).toString()
-        val newMemberListId = (currentMemberListId.toInt() + 1).toString()
-
-        val gender: String = when {
-            rbMail.isChecked -> rbMail.text.toString()
-            else -> rbFemale.text.toString()
-        }
-
-        val hasMapMemberUserNode = HashMap<String, String>()
-        hasMapMemberUserNode.put(AppConstant.MEMBER_ID, newMemberId)
-        hasMapMemberUserNode.put(AppConstant.CURRENT_FRIEND_LIST_ID, (-1).toString())
-        hasMapMemberUserNode.put(AppConstant.CURRENT_NOTIFICATION_ID, (-1).toString())
-        hasMapMemberUserNode.put(AppConstant.MEMBER_NAME, etName.text.toString())
-        hasMapMemberUserNode.put(AppConstant.PHONE_NUMBER, etMobileNumber.text.toString())
-        hasMapMemberUserNode.put(AppConstant.EMAIL_ID, etEmail.text.toString())
-        hasMapMemberUserNode.put(AppConstant.PASSWORD, etPassword.text.toString())
-        hasMapMemberUserNode.put(AppConstant.GENDER, gender)
-        hasMapMemberUserNode.put(AppConstant.IMAGE_PATH, downloadUrl)
-        hasMapMemberUserNode.put(AppConstant.REGISTRATION_TOKEN, SharedPreferencesUtils.getRegistrationKey(this)!!)
-
-        val hasMapMemberNode = HashMap<String, HashMap<String, String>>()
-        hasMapMemberNode.put(newMemberId, hasMapMemberUserNode)
-
-        val hasMapMemberListUserNode = HashMap<String, String>()
-        hasMapMemberListUserNode.put(AppConstant.MEMBER_ID, newMemberId)
-        hasMapMemberListUserNode.put(AppConstant.MEMBER_NAME, etName.text.toString())
-        hasMapMemberListUserNode.put(AppConstant.IMAGE_PATH, downloadUrl)
-        hasMapMemberListUserNode.put(AppConstant.REGISTRATION_TOKEN, SharedPreferencesUtils.getRegistrationKey(this)!!)
-
-        val hasMapMemberListNode = HashMap<String, HashMap<String, String>>()
-        hasMapMemberListNode.put(newMemberListId, hasMapMemberListUserNode)
-
-        databaseMembersRef.updateChildren(hasMapMemberNode as Map<String, Any>?)
-        databaseMemberListRef.updateChildren(hasMapMemberListNode as Map<String, Any>?)
-        databaseCurrentMemberIdRef.setValue(newMemberId)
-        databaseCurrentMemberListIdRef.setValue(newMemberListId)
     }
 
     /**

@@ -271,61 +271,59 @@ class ModelInfoUtils {
             databaseMemberRef.updateChildren(hashMap as Map<String, Any>?)
             databaseMemberListRef.child(memberListId).updateChildren(hashMap as Map<String, Any>?)
         }
+
+        /**
+         * Method is used to add new member data in database
+         *
+         * @param currentMemberId
+         * @param currentMemberListId
+         * @param gender
+         * @param memberName
+         * @param mobileNumber
+         * @param email
+         * @param password
+         * @param downloadUrl
+         * @param registrationKey
+         */
+        fun uploadNewUserData(currentMemberId:String,currentMemberListId:String,gender:String,memberName:String,
+                              mobileNumber:String,email:String,password:String,downloadUrl:String,registrationKey:String) {
+            val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().reference
+            val databaseCurrentMemberIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_ID)
+            val databaseCurrentMemberListIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_LIST_ID)
+            val databaseMembersRef = databaseRef.child(AppConstant.MEMBERS)
+            val databaseMemberListRef = databaseMembersRef.child(AppConstant.MEMBERS_LIST)
+
+            val newMemberId = (currentMemberId.toInt() + 1).toString()
+            val newMemberListId = (currentMemberListId.toInt() + 1).toString()
+
+            val hasMapMemberUserNode = HashMap<String, String>()
+            hasMapMemberUserNode.put(AppConstant.MEMBER_ID, newMemberId)
+            hasMapMemberUserNode.put(AppConstant.CURRENT_FRIEND_LIST_ID, (-1).toString())
+            hasMapMemberUserNode.put(AppConstant.CURRENT_NOTIFICATION_ID, (-1).toString())
+            hasMapMemberUserNode.put(AppConstant.MEMBER_NAME, memberName)
+            hasMapMemberUserNode.put(AppConstant.PHONE_NUMBER, mobileNumber)
+            hasMapMemberUserNode.put(AppConstant.EMAIL_ID, email)
+            hasMapMemberUserNode.put(AppConstant.PASSWORD, password)
+            hasMapMemberUserNode.put(AppConstant.GENDER, gender)
+            hasMapMemberUserNode.put(AppConstant.IMAGE_PATH, downloadUrl)
+            hasMapMemberUserNode.put(AppConstant.REGISTRATION_TOKEN, registrationKey)
+
+            val hasMapMemberNode = HashMap<String, HashMap<String, String>>()
+            hasMapMemberNode.put(newMemberId, hasMapMemberUserNode)
+
+            val hasMapMemberListUserNode = HashMap<String, String>()
+            hasMapMemberListUserNode.put(AppConstant.MEMBER_ID, newMemberId)
+            hasMapMemberListUserNode.put(AppConstant.MEMBER_NAME, memberName)
+            hasMapMemberListUserNode.put(AppConstant.IMAGE_PATH, downloadUrl)
+            hasMapMemberListUserNode.put(AppConstant.REGISTRATION_TOKEN, registrationKey)
+
+            val hasMapMemberListNode = HashMap<String, HashMap<String, String>>()
+            hasMapMemberListNode.put(newMemberListId, hasMapMemberListUserNode)
+
+            databaseMembersRef.updateChildren(hasMapMemberNode as Map<String, Any>?)
+            databaseMemberListRef.updateChildren(hasMapMemberListNode as Map<String, Any>?)
+            databaseCurrentMemberIdRef.setValue(newMemberId)
+            databaseCurrentMemberListIdRef.setValue(newMemberListId)
+        }
     }
-
-
-    /**
-     * Method is used to add new member data in database
-     *
-     * @param currentMemberId
-     * @param currentMemberListId
-     * @param gender
-     * @param memberName
-     * @param mobileNumber
-     * @param email
-     * @param password
-     * @param downloadUrl
-     * @param registrationKey
-     */
-     fun uploadNewUserData(currentMemberId:String,currentMemberListId:String,gender:String,memberName:String,
-                                  mobileNumber:String,email:String,password:String,downloadUrl:String,registrationKey:String) {
-        val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().reference
-        val databaseCurrentMemberIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_ID)
-        val databaseCurrentMemberListIdRef = databaseRef.child(AppConstant.CURRENT_MEMBER_LIST_ID)
-        val databaseMembersRef = databaseRef.child(AppConstant.MEMBERS)
-        val databaseMemberListRef = databaseMembersRef.child(AppConstant.MEMBERS_LIST)
-
-        val newMemberId = (currentMemberId.toInt() + 1).toString()
-        val newMemberListId = (currentMemberListId.toInt() + 1).toString()
-
-        val hasMapMemberUserNode = HashMap<String, String>()
-        hasMapMemberUserNode.put(AppConstant.MEMBER_ID, newMemberId)
-        hasMapMemberUserNode.put(AppConstant.CURRENT_FRIEND_LIST_ID, (-1).toString())
-        hasMapMemberUserNode.put(AppConstant.CURRENT_NOTIFICATION_ID, (-1).toString())
-        hasMapMemberUserNode.put(AppConstant.MEMBER_NAME, memberName)
-        hasMapMemberUserNode.put(AppConstant.PHONE_NUMBER, mobileNumber)
-        hasMapMemberUserNode.put(AppConstant.EMAIL_ID, email)
-        hasMapMemberUserNode.put(AppConstant.PASSWORD, password)
-        hasMapMemberUserNode.put(AppConstant.GENDER, gender)
-        hasMapMemberUserNode.put(AppConstant.IMAGE_PATH, downloadUrl)
-        hasMapMemberUserNode.put(AppConstant.REGISTRATION_TOKEN, registrationKey)
-
-        val hasMapMemberNode = HashMap<String, HashMap<String, String>>()
-        hasMapMemberNode.put(newMemberId, hasMapMemberUserNode)
-
-        val hasMapMemberListUserNode = HashMap<String, String>()
-        hasMapMemberListUserNode.put(AppConstant.MEMBER_ID, newMemberId)
-        hasMapMemberListUserNode.put(AppConstant.MEMBER_NAME, memberName)
-        hasMapMemberListUserNode.put(AppConstant.IMAGE_PATH, downloadUrl)
-        hasMapMemberListUserNode.put(AppConstant.REGISTRATION_TOKEN, registrationKey)
-
-        val hasMapMemberListNode = HashMap<String, HashMap<String, String>>()
-        hasMapMemberListNode.put(newMemberListId, hasMapMemberListUserNode)
-
-        databaseMembersRef.updateChildren(hasMapMemberNode as Map<String, Any>?)
-        databaseMemberListRef.updateChildren(hasMapMemberListNode as Map<String, Any>?)
-        databaseCurrentMemberIdRef.setValue(newMemberId)
-        databaseCurrentMemberListIdRef.setValue(newMemberListId)
-    }
-
 }
